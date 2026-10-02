@@ -69,10 +69,10 @@ SPECS = [
     ("exp1_cifar10", "tab:app-attn-cifar",
      "CIFAR-10 ViT (65 tokens): pre-routed sparse attention, one seed. Columns as in Table~\\ref{tab:app-attn-mnist}.", {}),
     ("paper2_split_mnist", "tab:app-sleep-split",
-     "Split MNIST: sleep-decay schedules and distillation locality on the sparse redesign (CLS2, $k$-WTA 10\\% fast network), "
+     "Split MNIST: sleep-decay variants and distillation locality on the sparse redesign (CLS2, $k$-WTA 10\\% fast network), "
      "3 seeds. Delta is the change in final average accuracy against the reference row of each group, in points.", {}),
     ("paper2_permuted_mnist", "tab:app-sleep-perm",
-     "Permuted MNIST: sleep-decay schedules and distillation locality, 3 seeds. Columns as in Table~\\ref{tab:app-sleep-split}.", {}),
+     "Permuted MNIST: sleep-decay variants and distillation locality, 3 seeds. Columns as in Table~\\ref{tab:app-sleep-split}.", {}),
     ("exp5_dynamic", "tab:app-dynamic",
      "Input-dependent (per-sample) pruning of a CIFAR-10 ResNet-18 against fixed masks at the same per-sample budget. Active "
      "weights are the per-sample expectation; Jaccard values are overlaps of the last-stage masks of two test images of the same "

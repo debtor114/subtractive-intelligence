@@ -222,3 +222,7 @@
   2.4~3.5 배, late-only 는 "slightly higher FLOPs (0.77 vs 0.72)", SET 비용 한정, 초록 공백. 초록 1,915 자. 29 쪽, 넘침 0.
 - 11:55 원격 연결·푸시 완료: https://github.com/debtor114/subtractive-intelligence (main 885f48f, 5 커밋). 저장소 링크를 논문 재현성 문단,
   CITATION.cff, README, arXiv 코멘트 (29 pages, 4 figures, 22 tables) 에 넣고 묶음 재생성. 남은 것: 서지 대조, arXiv 제출 (사용자 승인 후).
+- 12:20 5 차 리뷰 반영: rule/schedule 정의 분리 (schedule = 크기 기준 고정, 언제·얼마나만 변경; rule = 기준·학습 규칙을 국소·활동 기반으로 교체),
+  "초록의 principle = schedule 수준 변화" 연결 문장, 수면 단계 크기 가지치기는 구조 안에서만 시험 (중립), 비용 목록에서 규칙 분리 ("규칙은 같은
+  비용의 작은 판"), decay variants 로 개칭 (부록 캡션 포함), 결론 시상 라우팅에 사전 결정 스킵 추가, 서론 "negative or mixed", 초록 지역 기준 문구
+  ("MLP 에서 약 1 점 뒤, CNN 붕괴"), "about a point behind per-layer magnitude pruning" 로 통일. 초록 1,907 자. 29 쪽, 넘침 0.
