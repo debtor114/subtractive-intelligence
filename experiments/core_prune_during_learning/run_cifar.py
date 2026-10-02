@@ -12,6 +12,9 @@ arm:
   pd_drivenorm_erk : 구동을 후뉴런별로 정규화한 항상성 판. 본 스윕에 쓰는 지역 규칙
   pd_mag_erk     : 크기 규칙, ERK 배분 (drive 와 같은 배분으로 규칙만 비교)
   ttp            : dense 학습 -> 전역 크기 한 번에 가지치기 -> 미세조정
+  ttp_gradual    : dense 학습 -> 미세조정 구간 안에서 cubic 스케줄로 점진 가지치기 (점진성 vs 타이밍 분리 대조군)
+  dense_small_shallow : 같은 예산의 얕고 넓은 CNN (conv 4 개, 가산 대조군의 깊이 변형)
+  <arm>_x<k>     : 같은 팔을 k 배 긴 학습으로 (예: rigl_x3). --set tag=... 는 결과 폴더/팔 이름에 _<tag> 를 붙임
   rigl           : ERK 밀도로 희소 시작, 끊고 gradient 로 다시 잇기
   static_sparse  : ERK 밀도 무작위 고정 마스크
 
@@ -39,7 +42,8 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
-from baselines.cnn import SmallCNN, prunable_weight_count, scaled_config, width_for_budget   # noqa: E402
+from baselines.cnn import (SmallCNN, ShallowCNN, prunable_weight_count, scaled_config, width_for_budget,   # noqa: E402
+                           scaled_config_shallow, width_for_budget_shallow)
 from baselines.resnet import prunable_weights as resnet_weights, resnet18, width_for_budget as resnet_width  # noqa: E402
 from core.masked_layers import (MASKED_TYPES, apply_masks, convert_to_masked,            # noqa: E402
                                 mask_density, masked_modules)
@@ -108,11 +112,16 @@ def run_one(cfg: dict, log=print) -> dict:
     y_te_np = y_te.cpu().numpy()
 
     arm: str = cfg["arm"]
+    kind, mult = arm, 1
+    if "_x" in arm and arm.rsplit("_x", 1)[1].isdigit():
+        kind, mult = arm.rsplit("_x", 1)[0], int(arm.rsplit("_x", 1)[1])
+    tag = str(cfg.get("tag", "") or "")
+    arm_out = arm + (f"_{tag}" if tag else "")
     model_name = str(cfg.get("model", "cnn"))
     density = float(cfg.get("density", 1.0))
     big_n = resnet_weights(resnet18(1.0)) if model_name == "resnet18" else prunable_weight_count(BIG_CH, BIG_FC)
     budget = int(round(density * big_n))
-    epochs = int(cfg.get("epochs", 20))
+    epochs = int(cfg.get("epochs", 20)) * mult
     bs = int(cfg.get("batch_size", 128))
     lr = float(cfg.get("lr", 0.1 if model_name == "resnet18" else 0.05))
 
@@ -134,23 +143,28 @@ def run_one(cfg: dict, log=print) -> dict:
     warmup = steps_per_epoch
 
     tracker, sched, dynamic = None, None, None
-    ttp = arm == "ttp"
-    if arm == "dense_small":
+    sched_phase = "main"
+    ttp = kind in ("ttp", "ttp_gradual")
+    if kind == "dense_small":
         model = make_small(budget).to(device)
-    elif arm == "dense_big":
+    elif kind == "dense_small_shallow":
+        assert model_name == "cnn", "dense_small_shallow 는 CNN 에서만"
+        ch, fc = scaled_config_shallow(width_for_budget_shallow(budget))
+        model = ShallowCNN(channels=ch, fc=fc).to(device)
+    elif kind == "dense_big":
         model = make_big().to(device)
     else:
         model = convert_to_masked(make_big()).to(device)
-        if arm in ("static_sparse", "rigl", "set"):
+        if kind in ("static_sparse", "rigl", "set"):
             random_sparse_init(model, density, per_layer=erk_densities(model, density))
-            if arm == "rigl":
+            if kind == "rigl":
                 dynamic = "gradient"
                 for _, m in masked_modules(model):
                     m.dense_grad = True
-            elif arm == "set":
+            elif kind == "set":
                 dynamic = "random"
-        elif arm.startswith("pd_"):
-            _, rule, scope = arm.split("_")
+        elif kind.startswith("pd_"):
+            _, rule, scope = kind.split("_")
             rule_name = {"mag": "magnitude", "drive": "drive", "drivenorm": "drive_norm", "act": "activity",
                          "actmag": "activity_mag", "random": "random"}[rule]
             if rule_name in ("drive", "drive_norm", "activity", "activity_mag"):
@@ -220,7 +234,7 @@ def run_one(cfg: dict, log=print) -> dict:
                 state["step"] += 1
                 done += 1
                 st = state["step"]
-                if sched is not None and phase == "main" and sched.step(st):
+                if sched is not None and phase == sched_phase and sched.step(st):
                     prune_log.append({"step": st, "density": sched.log[-1][1], "removed": sched.log[-1][2],
                                       "active": active_weights(model)})
                 if dynamic is not None and phase == "main" and st % every == 0 and st <= dyn_end:
@@ -237,11 +251,18 @@ def run_one(cfg: dict, log=print) -> dict:
 
     if ttp:
         acc_before = record({"phase": "pre_prune"})
-        prune_to_density(model, density, "magnitude", None, scope="global")
+        ft_steps = int(float(cfg.get("ft_epochs", epochs / 2)) * steps_per_epoch)
+        if kind == "ttp_gradual":
+            begin = state["step"] + int(float(cfg.get("prune_begin", 0.1)) * ft_steps)
+            end = state["step"] + int(float(cfg.get("prune_end", 0.7)) * ft_steps)
+            sched = PruningScheduler(model, rule="magnitude", d_final=density, begin_step=begin, end_step=end,
+                                     every=every, scope="global")
+            sched_phase = "finetune"
+        else:
+            prune_to_density(model, density, "magnitude", None, scope="global")
         acc_after = record({"phase": "post_prune"})
         prune_log.append({"step": state["step"], "density": mask_density(model), "removed": None,
                           "active": active_weights(model), "acc_before": acc_before, "acc_after": acc_after})
-        ft_steps = int(float(cfg.get("ft_epochs", epochs / 2)) * steps_per_epoch)
         opt = make_opt(float(cfg.get("ft_lr", 0.01)))
         train_steps(ft_steps, lambda s: cosine_lr(s, ft_steps, 0, float(cfg.get("ft_lr", 0.01))), "finetune")
 
@@ -257,7 +278,7 @@ def run_one(cfg: dict, log=print) -> dict:
     active = active_weights(model)
     dens = layer_densities(model)
     out = {
-        "cfg": cfg, "arm": arm, "density": density, "budget": budget, "seed": seed,
+        "cfg": cfg, "arm": arm_out, "density": density, "budget": budget, "seed": seed, "epochs_effective": epochs,
         "model": ({"name": "resnet18", "widths": list(model.widths)} if model_name == "resnet18"
                   else {"name": "cnn", "channels": list(model.channels), "fc": model.fc}),
         "final_active": active, "final_density_vs_big": active / big_n, "layer_densities": dens,
@@ -267,7 +288,7 @@ def run_one(cfg: dict, log=print) -> dict:
         "calibration": cal, "data_efficiency_80": data_efficiency(xs, ys, 0.80), "data_efficiency_85": data_efficiency(xs, ys, 0.85),
         "curve": curve, "prune_log": prune_log, "time_s": time.time() - t0,
     }
-    d = os.path.join(RESULTS_DIR_RESNET if model_name == "resnet18" else RESULTS_DIR, f"d{density:g}", arm)
+    d = os.path.join(RESULTS_DIR_RESNET if model_name == "resnet18" else RESULTS_DIR, f"d{density:g}", arm_out)
     os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, f"seed{seed}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)

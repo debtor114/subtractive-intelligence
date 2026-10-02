@@ -10,23 +10,23 @@ density & arm & seeds & active weights & test acc & ECE & infer FLOPs & cum. tra
 \midrule
 1 & dense big (no pruning) & 3 & 2,195,648 & 0.9133 $\pm$ 0.0010 & 0.031 $\pm$ 0.001 & $3.08\times10^{8}$ & $9.23\times10^{14}$ & 411367 $\pm$ 15611 \\
 0.1 & dense small (additive) & 3 & 219,735 & 0.8729 $\pm$ 0.0007 & 0.029 $\pm$ 0.001 & $3.10\times10^{7}$ & $9.31\times10^{13}$ & 632089 $\pm$ 19636 \\
-0.1 & train-then-prune + finetune & 3 & 219,565 & 0.9072 $\pm$ 0.0014 & 0.036 $\pm$ 0.001 & $8.19\times10^{7}$ & $1.05\times10^{15}$ & 411367 $\pm$ 15611 \\
+0.1 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 219,565 & 0.9072 $\pm$ 0.0014 & 0.036 $\pm$ 0.001 & $8.19\times10^{7}$ & $1.05\times10^{15}$ & 411367 $\pm$ 15611 \\
 0.1 & prune-during: magnitude (global) & 3 & 219,565 & 0.9028 $\pm$ 0.0029 & 0.033 $\pm$ 0.001 & $7.37\times10^{7}$ & $4.19\times10^{14}$ & 387708 $\pm$ 26819 \\
-0.1 & prune-during: magnitude (ERK layer budget) & 3 & 219,565 & 0.8930 $\pm$ 0.0004 & 0.030 $\pm$ 0.001 & $2.69\times10^{7}$ & $2.80\times10^{14}$ & 374564 $\pm$ 22672 \\
-0.1 & prune-during: synaptic drive, per-neuron normalized (ERK) & 3 & 219,565 & 0.8759 $\pm$ 0.0033 & 0.026 $\pm$ 0.003 & $2.69\times10^{7}$ & $2.80\times10^{14}$ & 633096 $\pm$ 45722 \\
-0.1 & RigL (dynamic, grad regrow) & 3 & 219,565 & 0.8759 $\pm$ 0.0005 & 0.026 $\pm$ 0.002 & $2.69\times10^{7}$ & $8.07\times10^{13}$ & 625325 $\pm$ 28326 \\
+0.1 & prune-during: magnitude (ERK per layer) & 3 & 219,565 & 0.8930 $\pm$ 0.0004 & 0.030 $\pm$ 0.001 & $2.69\times10^{7}$ & $2.80\times10^{14}$ & 374564 $\pm$ 22672 \\
+0.1 & prune-during: synaptic drive, per-neuron normalised (ERK per layer) & 3 & 219,565 & 0.8759 $\pm$ 0.0033 & 0.026 $\pm$ 0.003 & $2.69\times10^{7}$ & $2.80\times10^{14}$ & 633096 $\pm$ 45722 \\
+0.1 & RigL (dynamic sparse training, gradient regrowth) & 3 & 219,565 & 0.8759 $\pm$ 0.0005 & 0.026 $\pm$ 0.002 & $2.69\times10^{7}$ & $8.07\times10^{13}$ & 625325 $\pm$ 28326 \\
 0.03 & dense small (additive) & 3 & 67,905 & 0.8284 $\pm$ 0.0010 & 0.024 $\pm$ 0.001 & $9.72\times10^{6}$ & $2.92\times10^{13}$ & - \\
-0.03 & train-then-prune + finetune & 3 & 65,869 & 0.8838 $\pm$ 0.0022 & 0.026 $\pm$ 0.001 & $3.58\times10^{7}$ & $9.77\times10^{14}$ & 411367 $\pm$ 15611 \\
+0.03 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 65,869 & 0.8838 $\pm$ 0.0022 & 0.026 $\pm$ 0.001 & $3.58\times10^{7}$ & $9.77\times10^{14}$ & 411367 $\pm$ 15611 \\
 0.03 & prune-during: magnitude (global) & 3 & 65,869 & 0.8908 $\pm$ 0.0017 & 0.028 $\pm$ 0.002 & $2.98\times10^{7}$ & $3.40\times10^{14}$ & 391024 $\pm$ 6160 \\
-0.03 & prune-during: magnitude (ERK layer budget) & 3 & 65,870 & 0.8692 $\pm$ 0.0026 & 0.023 $\pm$ 0.003 & $8.38\times10^{6}$ & $2.39\times10^{14}$ & 495322 $\pm$ 145564 \\
-0.03 & prune-during: synaptic drive, per-neuron normalized (ERK) & 3 & 65,870 & 0.7928 $\pm$ 0.0048 & 0.020 $\pm$ 0.003 & $8.38\times10^{6}$ & $2.39\times10^{14}$ & - \\
-0.03 & RigL (dynamic, grad regrow) & 3 & 65,870 & 0.8353 $\pm$ 0.0019 & 0.018 $\pm$ 0.001 & $8.38\times10^{6}$ & $2.52\times10^{13}$ & - \\
+0.03 & prune-during: magnitude (ERK per layer) & 3 & 65,870 & 0.8692 $\pm$ 0.0026 & 0.023 $\pm$ 0.003 & $8.38\times10^{6}$ & $2.39\times10^{14}$ & 495322 $\pm$ 145564 \\
+0.03 & prune-during: synaptic drive, per-neuron normalised (ERK per layer) & 3 & 65,870 & 0.7928 $\pm$ 0.0048 & 0.020 $\pm$ 0.003 & $8.38\times10^{6}$ & $2.39\times10^{14}$ & - \\
+0.03 & RigL (dynamic sparse training, gradient regrowth) & 3 & 65,870 & 0.8353 $\pm$ 0.0019 & 0.018 $\pm$ 0.001 & $8.38\times10^{6}$ & $2.52\times10^{13}$ & - \\
 0.01 & dense small (additive) & 3 & 22,911 & 0.7709 $\pm$ 0.0036 & 0.020 $\pm$ 0.004 & $3.32\times10^{6}$ & $9.97\times10^{12}$ & - \\
-0.01 & train-then-prune + finetune & 3 & 21,956 & 0.8051 $\pm$ 0.0010 & 0.015 $\pm$ 0.003 & $1.60\times10^{7}$ & $9.47\times10^{14}$ & 411367 $\pm$ 15611 \\
+0.01 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 21,956 & 0.8051 $\pm$ 0.0010 & 0.015 $\pm$ 0.003 & $1.60\times10^{7}$ & $9.47\times10^{14}$ & 411367 $\pm$ 15611 \\
 0.01 & prune-during: magnitude (global) & 3 & 21,956 & 0.8570 $\pm$ 0.0020 & 0.023 $\pm$ 0.001 & $1.16\times10^{7}$ & $3.09\times10^{14}$ & 390029 $\pm$ 6850 \\
-0.01 & prune-during: magnitude (ERK layer budget) & 3 & 21,957 & 0.8134 $\pm$ 0.0007 & 0.015 $\pm$ 0.001 & $2.78\times10^{6}$ & $2.27\times10^{14}$ & - \\
-0.01 & prune-during: synaptic drive, per-neuron normalized (ERK) & 3 & 21,957 & 0.6004 $\pm$ 0.0141 & 0.013 $\pm$ 0.006 & $2.78\times10^{6}$ & $2.27\times10^{14}$ & - \\
-0.01 & RigL (dynamic, grad regrow) & 3 & 21,957 & 0.5392 $\pm$ 0.3110 & 0.008 $\pm$ 0.006 & $2.78\times10^{6}$ & $8.35\times10^{12}$ & - \\
+0.01 & prune-during: magnitude (ERK per layer) & 3 & 21,957 & 0.8134 $\pm$ 0.0007 & 0.015 $\pm$ 0.001 & $2.78\times10^{6}$ & $2.27\times10^{14}$ & - \\
+0.01 & prune-during: synaptic drive, per-neuron normalised (ERK per layer) & 3 & 21,957 & 0.6004 $\pm$ 0.0141 & 0.013 $\pm$ 0.006 & $2.78\times10^{6}$ & $2.27\times10^{14}$ & - \\
+0.01 & RigL (dynamic sparse training, gradient regrowth) & 3 & 21,957 & 0.5392 $\pm$ 0.3110 & 0.008 $\pm$ 0.006 & $2.78\times10^{6}$ & $8.35\times10^{12}$ & - \\
 \bottomrule
 \end{tabular}}
 \caption{CIFAR-10 CNN (2.2M weights), all arms and budgets, 3 seeds. Columns as in Table~\ref{tab:app-mnist}; the data-efficiency column is the number of training samples until 85\% test accuracy.}

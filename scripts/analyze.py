@@ -113,17 +113,28 @@ def analyze_baselines():
 # 핵심 실험
 # ---------------------------------------------------------------------------
 
+# 용어는 본문과 같게: prune-after (학습 후 가지치기), Hebbian (activity 규칙), uniform per layer (층별 균등 배분)
 ARM_LABEL = {
-    "pd_drive_layer": "prune-during: synaptic drive (layer)",
-    "pd_drive_erk": "prune-during: synaptic drive (ERK layer budget)", "pd_drivenorm_erk": "prune-during: synaptic drive, per-neuron normalized (ERK)", "pd_mag_erk": "prune-during: magnitude (ERK layer budget)",
-    "dense_small": "dense small (additive)", "dense_big": "dense big (no pruning)", "static_sparse": "static random sparse",
-    "set": "SET (dynamic, random regrow)", "rigl": "RigL (dynamic, grad regrow)",
-    "pd_mag_layer": "prune-during: magnitude (layer)", "pd_mag_global": "prune-during: magnitude (global)",
-    "pd_act_layer": "prune-during: activity (layer)", "pd_actmag_layer": "prune-during: abs(w) x activity (layer)",
-    "pd_random_layer": "prune-during: random (layer)", "ttp": "train-then-prune + finetune",
+    "pd_drive_layer": "prune-during: synaptic drive (uniform per layer)",
+    "pd_drive_erk": "prune-during: synaptic drive (ERK per layer)", "pd_drivenorm_erk": "prune-during: synaptic drive, per-neuron normalised (ERK per layer)",
+    "pd_mag_erk": "prune-during: magnitude (ERK per layer)",
+    "dense_small": "dense small (additive)", "dense_small_shallow": "dense small, shallow and wide (additive)",
+    "dense_big": "dense big (no pruning)", "static_sparse": "static random sparse",
+    "set": "SET (dynamic sparse training, random regrowth)", "rigl": "RigL (dynamic sparse training, gradient regrowth)",
+    "rigl_x3": "RigL, 3x training length",
+    "pd_mag_layer": "prune-during: magnitude (uniform per layer)", "pd_mag_global": "prune-during: magnitude (global)",
+    "pd_act_layer": "prune-during: activity, Hebbian (uniform per layer)", "pd_actmag_layer": "prune-during: abs(w) x activity, Hebbian (uniform per layer)",
+    "pd_random_layer": "prune-during: random (uniform per layer)",
+    "ttp": "prune-after: one-shot magnitude (global) + fine-tune", "ttp_gradual": "prune-after: gradual magnitude (global) during fine-tune",
 }
-ARM_ORDER = ["dense_small", "ttp", "pd_mag_layer", "pd_mag_global", "pd_mag_erk", "pd_act_layer", "pd_actmag_layer", "pd_drive_layer", "pd_drive_erk", "pd_drivenorm_erk",
-             "pd_random_layer", "set", "rigl", "static_sparse"]
+ARM_ORDER = ["dense_small", "dense_small_shallow", "ttp", "ttp_gradual", "pd_mag_layer", "pd_mag_global", "pd_mag_erk", "pd_act_layer", "pd_actmag_layer",
+             "pd_drive_layer", "pd_drive_erk", "pd_drivenorm_erk", "pd_random_layer", "set", "rigl", "rigl_x3", "static_sparse"]
+
+
+def converged(rs):
+    """발산한 시드 (우연 수준 정확도) 를 뺀 run. 그림은 이 평균을 쓰고, 표는 전 시드를 쓴다 (본문 표 2 와 같은 규칙)."""
+    ok = [r for r in rs if r["final_acc"] > 0.15]
+    return ok or rs
 
 
 def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset_label: str = "MNIST", big_weights: str = "1.86M"):
@@ -154,6 +165,7 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
     # 그림 1: 정확도 대 활성 연결 수
     densities = sorted(d for d in data if d < 1.0)
     fig, ax = plt.subplots(figsize=(8, 5))
+    diverged_pts = []
     for arm in present:
         i = cidx[arm]
         xs, ys, es = [], [], []
@@ -161,8 +173,10 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
             rs = data[d].get(arm)
             if rs:
                 xs.append(np.mean([r["final_active"] for r in rs]))
-                ys.append(np.mean([r["final_acc"] for r in rs]))
-                es.append(np.std([r["final_acc"] for r in rs]))
+                ys.append(np.mean([r["final_acc"] for r in converged(rs)]))
+                es.append(np.std([r["final_acc"] for r in converged(rs)]))
+                if len(converged(rs)) < len(rs):
+                    diverged_pts.append((xs[-1], np.mean([r["final_acc"] for r in rs]), SERIES[i % 8]))
         if xs:
             ax.errorbar(xs, ys, yerr=es, label=ARM_LABEL[arm], color=SERIES[i % 8], marker="o",
                         linestyle="-" if i < 8 else "--", capsize=2)
@@ -217,7 +231,7 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
             rs = data[d].get(arm)
             if rs:
                 xs.append(np.mean([r["cum_train_flops"] for r in rs]))
-                ys.append(np.mean([r["final_acc"] for r in rs]))
+                ys.append(np.mean([r["final_acc"] for r in converged(rs)]))
         if xs:
             ax.plot(xs, ys, marker="o", color=SERIES[i % 8], label=ARM_LABEL[arm], linestyle="-" if i < 8 else "--")
     ax.set_xscale("log")
@@ -229,6 +243,7 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
 
     # 그림 3b: 추론 FLOPs 대 정확도 (CNN 은 같은 가중치 수라도 conv 를 남기면 FLOPs 가 커진다)
     fig, ax = plt.subplots(figsize=(8, 5))
+    diverged_pts = []
     for arm in present:
         i = cidx[arm]
         xs, ys = [], []
@@ -236,14 +251,19 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
             rs = data[d].get(arm)
             if rs:
                 xs.append(np.mean([r["infer_flops"] for r in rs]))
-                ys.append(np.mean([r["final_acc"] for r in rs]))
+                ys.append(np.mean([r["final_acc"] for r in converged(rs)]))
+                if len(converged(rs)) < len(rs):
+                    diverged_pts.append((xs[-1], np.mean([r["final_acc"] for r in rs]), SERIES[i % 8]))
         if xs:
             ax.plot(xs, ys, marker="o", color=SERIES[i % 8], label=ARM_LABEL[arm], linestyle="-" if i < 8 else "--")
+    for j, (x, y, c) in enumerate(diverged_pts):
+        ax.plot([x], [y], marker="o", markerfacecolor="none", color=c, linestyle="none",
+                label="all-seed mean incl. diverged seed" if j == 0 else None)
     ax.set_xscale("log")
     ax.set_xlabel("inference FLOPs per sample (effective)")
     ax.set_ylabel(f"{dataset_label} test accuracy")
     ax.set_title(f"{dataset_label}: 추론 연산량 대 정확도 (점 = 밀도 단계)")
-    ax.legend(fontsize=8, ncol=2, loc="lower right")
+    ax.legend(fontsize=8, ncol=1, loc="lower right")
     save(fig, f"core_inferflops_vs_acc{suffix}")
 
     # 그림 4: 데이터 효율 (초기 학습곡선, 가장 희소한 밀도)
@@ -476,6 +496,23 @@ def analyze_exp3():
 # 실험 4
 # ---------------------------------------------------------------------------
 
+def mnist_background_fraction(thresh: float = 0.01) -> dict:
+    """STDP 희소화의 대조: 클래스 평균 이미지에서 배경 (최대값의 thresh 미만) 픽셀 비율. 뉴런이 숫자 프로토타입으로 수렴하면
+    그 클래스의 배경 픽셀 가중치는 자연히 감쇠하므로, 이 비율이 프로토타입 형성만으로 설명되는 희소화의 상한이다."""
+    from torchvision import datasets
+    ds = datasets.MNIST(os.path.join(os.path.dirname(RES), "data"), train=True, download=False)
+    x = ds.data.numpy().astype(np.float64) / 255.0
+    y = ds.targets.numpy()
+    per_class = []
+    for c in range(10):
+        m = x[y == c].mean(0)
+        per_class.append(float((m < thresh * m.max()).mean()))
+    g = x.mean(0)
+    return {"class_mean_below_1pct": float(np.mean(per_class)), "per_class_min": float(min(per_class)),
+            "per_class_max": float(max(per_class)), "global_mean_below_1pct": float((g < thresh * g.max()).mean()),
+            "zero_in_99pct": float(((x == 0).mean(0) >= 0.99).mean())}
+
+
 def analyze_exp4():
     groups = defaultdict(list)
     for f in glob.glob(os.path.join(RES, "exp4", "n*", "seed*.json")):
@@ -494,11 +531,15 @@ def analyze_exp4():
                      ms([r["data_efficiency_80"]["backprop"]["samples_to_target"] for r in rs], "{:.0f}"),
                      ms([r["weight_stats"][-1]["frac_below_1pct"] for r in rs], "{:.3f}"),
                      ms([r["train_time_s"] for r in rs], "{:.0f}")])
+    bg = mnist_background_fraction()
     write_table("exp4", ["n_e", "seeds", "STDP acc", "backprop MLP acc (same width, same samples)", "SNN infer SOP/img",
                          "MLP infer FLOPs/img", "SNN train ops (total)", "MLP train FLOPs (total)", "SNN samples to 80%",
                          "MLP samples to 80%", "weights < 1% wmax (final)", "train time (s)"], rows,
                 "SOP = 사건 구동 시냅스 연산 (누산). 에너지 비교는 하지 않는다 (GPU 에서 실행). "
-                "backprop MLP 는 784-n_e-10, Adam, 같은 표본을 한 번 훑음.")
+                "backprop MLP 는 784-n_e-10, Adam, 같은 표본을 한 번 훑음. "
+                f"배경 픽셀 대조 (프로토타입 형성만으로 설명되는 희소화의 상한): MNIST 클래스 평균 이미지에서 최대값의 1% 미만인 픽셀 비율 "
+                f"{bg['class_mean_below_1pct']:.3f} (클래스별 {bg['per_class_min']:.3f}~{bg['per_class_max']:.3f}), "
+                f"전체 평균 이미지 {bg['global_mean_below_1pct']:.3f}, 학습 이미지의 99% 이상에서 0 인 픽셀 {bg['zero_in_99pct']:.3f}.")
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
     for i, n_e in enumerate(sorted(groups)):
         rs = sorted(groups[n_e], key=lambda r: -len(r["curve"]))   # 평가점이 가장 촘촘한 시드를 앞에
@@ -601,10 +642,12 @@ PT_LABEL = {
     "pt_pd_erk": "pre-trained, prune-during adaptation (ERK layer budget)",
     "pt_oneshot": "pre-trained, one-shot prune then fine-tune",
     "pt_rigl": "pre-trained, random ERK mask + RigL regrow",
+    "pt_rigl_mag": "pre-trained, magnitude mask + RigL regrow (keeps inherited structure)",
+    "pt_pd_end50": "pre-trained, prune-during adaptation, pruning ends at 50% of adaptation (global magnitude)",
     "scratch_pd": "from scratch, prune-during (global magnitude)",
     "scratch_small": "from scratch, dense small (width-scaled)",
 }
-PT_ORDER = ["scratch_small", "scratch_pd", "pt_oneshot", "pt_rigl", "pt_pd_erk", "pt_pd"]
+PT_ORDER = ["scratch_small", "scratch_pd", "pt_oneshot", "pt_rigl", "pt_rigl_mag", "pt_pd_erk", "pt_pd", "pt_pd_end50"]
 
 
 def analyze_core_pretrained():

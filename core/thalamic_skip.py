@@ -68,6 +68,15 @@ class ThalamicSkip(nn.Module):
         h = self.embed(x)
         for blk in vit.blocks[: self.n_front]:
             h = blk(h)
+        if mode == "drop_late":
+            # 대조군: 뒤쪽 블록을 통째로 제거 (토큰 선택도 대체도 없음). 라우터/예측기는 쓰지 않는다
+            self.last_computed_frac = 0.0
+            h = vit.norm(h)
+            pooled = h[:, 0] if vit.pool == "cls" else h[:, 1:].mean(1)
+            logits = vit.head(pooled)
+            if with_aux:
+                return logits, h.new_zeros(()), h.new_zeros(())
+            return logits
         scores_all = self.router(h)                                   # (B, N, n_late)
         B, N, _ = h.shape
         aux_router, aux_pred = h.new_zeros(()), h.new_zeros(())

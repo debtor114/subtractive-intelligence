@@ -9,6 +9,8 @@ arm:
   pt_pd_erk     : 같은 것, ERK 층별 배분 (추론 FLOPs 를 dense small 수준으로 묶음)
   pt_oneshot    : 사전 학습 가중치를 즉시 한 번에 전역 크기 가지치기 -> 미세조정 (학습 후 가지치기의 전이판)
   pt_rigl       : 사전 학습 가중치 위에 ERK 무작위 마스크 -> RigL (끊고 gradient 로 잇기)
+  pt_rigl_mag   : 사전 학습 가중치의 전역 크기 마스크에서 출발 -> RigL (상속 구조를 버리지 않는 공정한 RigL)
+  --set tag=... : 결과 폴더/팔 이름에 _<tag> 를 붙여 변형 설정 (예: prune_end=0.5 tag=end50) 을 구분
   scratch_pd    : 무작위 초기화 + 학습 중 전역 크기 가지치기 (같은 해상도/에폭, 비용 대조)
   scratch_small : 무작위 초기화 dense small (예산에 맞춘 폭)
 
@@ -171,6 +173,8 @@ def run_one(cfg: dict, log=print) -> dict:
     pretrained = arm.startswith("pt_")
     lr = float(cfg.get("lr", 0.01 if pretrained else 0.1))
 
+    tag = str(cfg.get("tag", "") or "")
+    arm_out = arm + (f"_{tag}" if tag else "")
     sched, dynamic = None, None
     if arm == "scratch_small":
         model = build_tv_resnet18(False, width_for_budget(budget)).to(device)
@@ -180,8 +184,11 @@ def run_one(cfg: dict, log=print) -> dict:
         model = convert_to_masked(build_tv_resnet18(pretrained, 1.0), skip=("fc",)).to(device)
         if arm == "pt_oneshot":
             prune_to_density(model, density, "magnitude", None, scope="global")
-        elif arm == "pt_rigl":
-            random_sparse_init(model, density, per_layer=erk_densities(model, density))
+        elif arm in ("pt_rigl", "pt_rigl_mag"):
+            if arm == "pt_rigl":
+                random_sparse_init(model, density, per_layer=erk_densities(model, density))
+            else:
+                prune_to_density(model, density, "magnitude", None, scope="global")
             dynamic = "gradient"
             for _, m in masked_modules(model):
                 m.dense_grad = True
@@ -265,13 +272,13 @@ def run_one(cfg: dict, log=print) -> dict:
     main = [c for c in curve if c.get("phase") in ("main", "final")]
     xs, ys = [c["samples_seen"] for c in main], [c["test_acc"] for c in main]
     out = {
-        "cfg": cfg, "arm": arm, "density": density, "budget": budget, "seed": seed, "res": res, "pretrained": pretrained,
+        "cfg": cfg, "arm": arm_out, "density": density, "budget": budget, "seed": seed, "res": res, "pretrained": pretrained,
         "init_acc": acc0, "final_active": active_weights(model), "final_acc": final_acc, "best_acc": max(ys),
         "infer_flops": eff_flops(), "adapt_train_flops": state["cum_flops"], "samples_seen": state["samples"],
         "calibration": cal, "data_efficiency_90": data_efficiency(xs, ys, 0.90), "curve": curve, "prune_log": prune_log,
         "layer_densities": layer_densities(model), "time_s": time.time() - t0,
     }
-    d = os.path.join(RESULTS_DIR, f"d{density:g}", arm)
+    d = os.path.join(RESULTS_DIR, f"d{density:g}", arm_out)
     os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, f"seed{seed}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)

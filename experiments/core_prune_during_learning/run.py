@@ -11,6 +11,9 @@ arm (방식):
   pd_<rule>_<scope> : 과잉 망을 학습 중에 cubic 스케줄로 밀도 1 -> d 로 깎음. 재성장 없음 (순수 감산).
                       rule = mag | act | actmag | random, scope = layer | global
   ttp           : 과잉 망을 dense 로 끝까지 학습 -> 한 번에 전역 크기 가지치기 -> 미세조정 (학습 후 가지치기)
+  ttp_gradual   : dense 로 끝까지 학습 -> 미세조정 구간 안에서 cubic 스케줄로 점진 가지치기 (점진성 vs 학습 중 타이밍 분리 대조군)
+  <arm>_x<k>    : 같은 팔을 k 배 긴 학습으로 (예: rigl_x3). 결과는 별도 팔 이름으로 저장
+  --set tag=... : 결과 폴더/팔 이름에 _<tag> 를 붙여 변형 설정을 구분
 
 기록: 정확도(최종/최고), 학습곡선(표본 수, 활성 연결, 누적 학습 FLOPs), 가지치기 궤적, 추론 FLOPs,
       확신도 보정, 데이터 효율.
@@ -94,10 +97,15 @@ def run_one(cfg: dict, log=print) -> dict:
     y_te_np = y_te.cpu().numpy()
 
     arm: str = cfg["arm"]
+    kind, mult = arm, 1
+    if "_x" in arm and arm.rsplit("_x", 1)[1].isdigit():
+        kind, mult = arm.rsplit("_x", 1)[0], int(arm.rsplit("_x", 1)[1])
+    tag = str(cfg.get("tag", "") or "")
+    arm_out = arm + (f"_{tag}" if tag else "")
     big_h = int(cfg.get("big_hidden", 1024))
     density = float(cfg.get("density", 1.0))
     budget = int(round(density * n_weights(big_h)))
-    epochs = int(cfg.get("epochs", 20))
+    epochs = int(cfg.get("epochs", 20)) * mult
     bs = int(cfg.get("batch_size", 128))
     lr = float(cfg.get("lr", 1e-3))
     every = int(cfg.get("update_every", 100))
@@ -110,24 +118,25 @@ def run_one(cfg: dict, log=print) -> dict:
     tracker = None
     sched = None
     dynamic = None            # ("random"|"gradient")
-    ttp = arm == "ttp"
-    if arm == "dense_small":
+    ttp = kind in ("ttp", "ttp_gradual")
+    sched_phase = "main"
+    if kind == "dense_small":
         h = dense_hidden_for_budget(budget)
         model = MLP((1, 28, 28), 10, hidden=(h, h)).to(device)
-    elif arm == "dense_big":
+    elif kind == "dense_big":
         model = MLP((1, 28, 28), 10, hidden=(big_h, big_h)).to(device)
     else:
         model = convert_to_masked(MLP((1, 28, 28), 10, hidden=(big_h, big_h))).to(device)
-        if arm == "static_sparse":
+        if kind == "static_sparse":
             random_sparse_init(model, density)
-        elif arm in ("set", "rigl"):
+        elif kind in ("set", "rigl"):
             random_sparse_init(model, density)
-            dynamic = "random" if arm == "set" else "gradient"
+            dynamic = "random" if kind == "set" else "gradient"
             if dynamic == "gradient":
                 for _, m in masked_modules(model):
                     m.dense_grad = True
-        elif arm.startswith("pd_"):
-            _, rule, scope = arm.split("_")
+        elif kind.startswith("pd_"):
+            _, rule, scope = kind.split("_")
             rule_name = {"mag": "magnitude", "act": "activity", "actmag": "activity_mag", "random": "random",
                          "drive": "drive"}[rule]
             if rule_name.startswith("activity") or rule_name == "drive":
@@ -185,7 +194,7 @@ def run_one(cfg: dict, log=print) -> dict:
                 samples_seen += idx.numel()
                 step += 1
                 done += 1
-                if sched is not None and phase == "main" and sched.step(step):
+                if sched is not None and phase == sched_phase and sched.step(step):
                     prune_log.append({"step": step, "density": sched.log[-1][1], "removed": sched.log[-1][2],
                                       "active": linear_active_weights(model)})
                 if dynamic is not None and phase == "main" and step % every == 0 and step <= dyn_end:
@@ -204,11 +213,19 @@ def run_one(cfg: dict, log=print) -> dict:
     # ---- 학습 후 가지치기 (ttp) ----
     if ttp:
         acc_before = record(step, {"phase": "pre_prune"})
-        prune_to_density(model, density, "magnitude", None, scope="global")
+        ft_steps = int(float(cfg.get("ft_epochs", epochs / 2)) * steps_per_epoch)
+        if kind == "ttp_gradual":
+            # 학습 후 점진 가지치기: 미세조정 구간의 10~70% 에 걸쳐 cubic 스케줄로 1 -> d (총 스텝은 ttp 와 같음)
+            begin = step + int(float(cfg.get("prune_begin", 0.1)) * ft_steps)
+            end = step + int(float(cfg.get("prune_end", 0.7)) * ft_steps)
+            sched = PruningScheduler(model, rule="magnitude", d_final=density, begin_step=begin, end_step=end,
+                                     every=every, scope="global")
+            sched_phase = "finetune"
+        else:
+            prune_to_density(model, density, "magnitude", None, scope="global")
         acc_after = record(step, {"phase": "post_prune"})
         prune_log.append({"step": step, "density": mask_density(model), "removed": None,
                           "active": linear_active_weights(model), "acc_before": acc_before, "acc_after": acc_after})
-        ft_steps = int(float(cfg.get("ft_epochs", epochs / 2)) * steps_per_epoch)
         opt = torch.optim.Adam(model.parameters(), lr=lr)
         train_steps(ft_steps, lambda s: cosine_lr(s, ft_steps, 0, lr), "finetune")
 
@@ -225,7 +242,7 @@ def run_one(cfg: dict, log=print) -> dict:
     de98 = data_efficiency([c["samples_seen"] for c in main_curve], [c["test_acc"] for c in main_curve], target_acc=0.98)
     active = linear_active_weights(model)
     out = {
-        "cfg": cfg, "arm": arm, "density": density, "budget": budget, "seed": seed,
+        "cfg": cfg, "arm": arm_out, "density": density, "budget": budget, "seed": seed, "epochs_effective": epochs,
         "hidden": model.hidden_dims if hasattr(model, "hidden_dims") else None,
         "final_active": active, "final_density_vs_big": active / n_weights(big_h),
         "final_acc": final_acc, "best_acc": max(c["test_acc"] for c in curve),
@@ -233,7 +250,7 @@ def run_one(cfg: dict, log=print) -> dict:
         "calibration": cal, "data_efficiency_97": de, "data_efficiency_98": de98,
         "curve": curve, "prune_log": prune_log, "time_s": time.time() - t0,
     }
-    d = os.path.join(RESULTS_DIR, f"d{density:g}", arm)
+    d = os.path.join(RESULTS_DIR, f"d{density:g}", arm_out)
     os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, f"seed{seed}.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, indent=1, ensure_ascii=False)

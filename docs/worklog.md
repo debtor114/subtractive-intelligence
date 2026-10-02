@@ -239,3 +239,10 @@
   refs.bib: DOI 없는 학회·저널 9 건에 공식 페이지 url 추가 (NeurIPS hash 는 연도 색인에서 제목 대조, PMLR·JMLR 페이지 제목 대조, OpenReview 는 Chrome 으로 포럼 제목 확인).
 - 13:30 8 차 리뷰 (선택): 초록 'collapses on CNNs' → 'collapses on the CNN without per-neuron normalisation' (Table 5 와 같은 강도). 한도 때문에 Finally·'; it'·'not a conclusion'·'one follow-up'·어순을 줄여 1,914 자.
   README 세 항목 (about a point behind·사전학습 0.5% 예외·MNIST ViT 명령) 은 c9fa12c 에 이미 반영됨 — raw.githubusercontent 가 max-age=300 캐시 (x-cache HIT) 로 옛 사본을 보여 준 것.
+- 14:07 9 차 리뷰 (novelty·대조군·숫자·프레이밍) 1 단계: Gale 2019·Liu 2019 인용과 '무엇이 새로운가' 재정의, RigL 은 '같은 학습 길이' 조건 명시 (Evci 2–5x 인용),
+  초록 (CIFAR-10 명시·3.6–4.7%·compute–memory 문장 삭제), Hebbian>random 은 5% 이하로, ResNet 5% 문장 (magnitude 세 경로·dense 대비 0.2–0.6·RigL 1 점 뒤),
+  그림 2 발산 시드 (수렴 평균 + 속 빈 마커), Permuted MNIST 는 balanced ER 기준 (+0.3 @2.5x, +0.8 @5x), FLOPs 과장 문장 주어, CLS2 세 행 동일 (해마→피질 경로 없음 증거),
+  STDP 배경 픽셀 대조 (클래스 평균 1% 미만 49.8%, 99% 이미지에서 0 인 픽셀 37%; analyze.py mnist_background_fraction), 단일 시드는 indistinguishable,
+  세는 단위는 Table 5 기준, dense big 대비 학습 비용 26–45%, 재현성 예외 (부록 B 다섯 진술), 표·그림 라벨 통일 (prune-after / Hebbian / uniform per layer).
+  대조군 실험 추가 (scripts/review9_controls.cmd, 로컬 3060 Ti 순차): ttp_gradual (학습 후 점진 가지치기), rigl_x3, exp12 drop_late, dense_small_shallow,
+  pt_rigl_mag, pt_pd end50. MNIST 결과: ttp_gradual 0.5% 96.9 (one-shot 94.5, prune-during 97.8) → 점진성이 격차의 대부분, 학습 중 타이밍이 0.9 점; rigl_x3 1% 97.7 (1x 97.4).

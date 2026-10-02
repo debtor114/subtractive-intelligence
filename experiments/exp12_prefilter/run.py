@@ -85,24 +85,26 @@ def run_one(cfg: dict, log=print) -> dict:
     t0 = time.time()
 
     # 0. 기준 (미세조정 전): 스킵 없음
-    base = evaluate(model, test_loader, device, [0.0] * n_late, mode)
+    # 스킵 0 이면 모드와 무관하게 전 블록을 계산하므로, drop_late 도 원본 (뒤쪽 블록 포함) 정확도를 기준으로 기록한다
+    base = evaluate(model, test_loader, device, [0.0] * n_late, "thalamic" if mode == "drop_late" else mode)
     log(f"  [exp12 {ds} {mode}/{late_attn} s{smax}] before: full {base['acc']:.4f}")
 
-    # 1. 워밍업: ViT 고정, 예측기 + 라우터만 1 에폭
-    aux_params = list(model.predictors.parameters()) + list(model.router.parameters())
-    opt_aux = torch.optim.Adam(aux_params, lr=1e-3)
-    model.train()
-    for p in vit.parameters():
-        p.requires_grad_(False)
-    for x, y in train_loader:
-        x = x.to(device, non_blocking=True)
-        _, ar, ap = model(x, [0.0] * n_late, mode, with_aux=True)
-        loss = ar + ap
-        opt_aux.zero_grad(set_to_none=True)
-        loss.backward()
-        opt_aux.step()
-    for p in vit.parameters():
-        p.requires_grad_(True)
+    # 1. 워밍업: ViT 고정, 예측기 + 라우터만 1 에폭 (drop_late 대조군은 라우터/예측기를 쓰지 않으므로 생략)
+    if mode != "drop_late":
+        aux_params = list(model.predictors.parameters()) + list(model.router.parameters())
+        opt_aux = torch.optim.Adam(aux_params, lr=1e-3)
+        model.train()
+        for p in vit.parameters():
+            p.requires_grad_(False)
+        for x, y in train_loader:
+            x = x.to(device, non_blocking=True)
+            _, ar, ap = model(x, [0.0] * n_late, mode, with_aux=True)
+            loss = ar + ap
+            opt_aux.zero_grad(set_to_none=True)
+            loss.backward()
+            opt_aux.step()
+        for p in vit.parameters():
+            p.requires_grad_(True)
     warm = evaluate(model, test_loader, device, [smax] * n_late, mode)
     log(f"  [exp12 {ds} {mode}/{late_attn} s{smax}] after warmup (no finetune), skip {smax}: {warm['acc']:.4f}")
 
@@ -136,7 +138,13 @@ def run_one(cfg: dict, log=print) -> dict:
 
     # 3. 평가: 스킵 비율 x 선택 기준
     rows = []
-    for s in [0.0, 0.3, 0.5, 0.7, 0.8, 0.9]:
+    if mode == "drop_late":
+        # 뒤쪽 블록 제거: 앞쪽 블록만의 비용 (라우터/예측기 없음)
+        r = evaluate(model, test_loader, device, [1.0] * n_late, mode)
+        full = analytic_flops(dim, n_tokens, depth, n_front, [0.0] * n_late, 16, 64, fixed)["full"]
+        front_only = analytic_flops(dim, n_tokens, n_front, n_front, [], 0, 0, fixed)["skip"]
+        rows.append({"skip_frac": 1.0, "eval_mode": "drop_late", **r, "flops_ratio": front_only / full, "flops": front_only})
+    for s in ([] if mode == "drop_late" else [0.0, 0.3, 0.5, 0.7, 0.8, 0.9]):
         for ev_mode in (["thalamic", "layerwise", "random"] if s > 0 else [mode]):
             r = evaluate(model, test_loader, device, [s] * n_late, ev_mode)
             fl = analytic_flops(dim, n_tokens, depth, n_front, [s] * n_late, model.rank, model.router.hidden, fixed,
@@ -161,7 +169,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--ckpt", required=True)
     ap.add_argument("--dataset", default="mnist")
-    ap.add_argument("--mode", default="thalamic", choices=["thalamic", "layerwise", "random"])
+    ap.add_argument("--mode", default="thalamic", choices=["thalamic", "layerwise", "random", "drop_late"])
     ap.add_argument("--late_attn", default="full", choices=["full", "pre"])
     ap.add_argument("--smax", type=float, default=0.7)
     ap.add_argument("--epochs", type=int, default=4)

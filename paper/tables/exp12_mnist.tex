@@ -4,25 +4,25 @@
 \footnotesize
 \setlength{\tabcolsep}{3pt}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{llrrrrrrrrr}
+\begin{tabular}{llrrrrrrrrrr}
 \toprule
-train mode / late attn & seeds & no skip & warm-up only, skip $s_{\max}$ & skip 0 & skip 0.3 & skip 0.5 & skip 0.7 & skip 0.8 & skip 0.9 & FLOPs ratio (by skip level) \\
+train mode / late attn & seeds & no skip & warm-up only, skip $s_{\max}$ & skip 0 & skip 0.3 & skip 0.5 & skip 0.7 & skip 0.8 & skip 0.9 & FLOPs ratio (by skip level) & late blocks removed: acc \\
 \midrule
-layerwise / late attn full & 3 & 0.9827 $\pm$ 0.0003 & 0.9806 $\pm$ 0.0004 & 0.9785 $\pm$ 0.0012 & 0.9787 $\pm$ 0.0016 & 0.9788 $\pm$ 0.0015 & 0.9788 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0015 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 \\
-(eval thalamic) & 3 & -- & -- & -- & 0.9788 $\pm$ 0.0015 & 0.9789 $\pm$ 0.0016 & 0.9786 $\pm$ 0.0015 & 0.9786 $\pm$ 0.0013 & 0.9784 $\pm$ 0.0013 & -- \\
-(eval random) & 3 & -- & -- & -- & 0.9783 $\pm$ 0.0015 & 0.9787 $\pm$ 0.0009 & 0.9786 $\pm$ 0.0014 & 0.9784 $\pm$ 0.0014 & 0.9784 $\pm$ 0.0014 & -- \\
-random / late attn full & 3 & 0.9827 $\pm$ 0.0003 & 0.9809 $\pm$ 0.0003 & 0.9794 $\pm$ 0.0020 & 0.9791 $\pm$ 0.0019 & 0.9792 $\pm$ 0.0015 & 0.9790 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0016 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 \\
-(eval thalamic) & 3 & -- & -- & -- & 0.9795 $\pm$ 0.0019 & 0.9793 $\pm$ 0.0021 & 0.9793 $\pm$ 0.0021 & 0.9791 $\pm$ 0.0021 & 0.9790 $\pm$ 0.0017 & -- \\
-(eval layerwise) & 3 & -- & -- & -- & 0.9789 $\pm$ 0.0016 & 0.9789 $\pm$ 0.0018 & 0.9790 $\pm$ 0.0018 & 0.9789 $\pm$ 0.0016 & 0.9789 $\pm$ 0.0017 & -- \\
-thalamic / late attn full / identity substitution & 3 & 0.9827 $\pm$ 0.0003 & 0.9805 $\pm$ 0.0015 & 0.9785 $\pm$ 0.0015 & 0.9788 $\pm$ 0.0018 & 0.9789 $\pm$ 0.0017 & 0.9789 $\pm$ 0.0018 & 0.9787 $\pm$ 0.0015 & 0.9787 $\pm$ 0.0017 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 \\
-(eval layerwise) & 3 & -- & -- & -- & 0.9787 $\pm$ 0.0017 & 0.9788 $\pm$ 0.0018 & 0.9788 $\pm$ 0.0014 & 0.9788 $\pm$ 0.0015 & 0.9788 $\pm$ 0.0016 & -- \\
-(eval random) & 3 & -- & -- & -- & 0.9789 $\pm$ 0.0016 & 0.9790 $\pm$ 0.0020 & 0.9785 $\pm$ 0.0015 & 0.9790 $\pm$ 0.0016 & 0.9790 $\pm$ 0.0018 & -- \\
-thalamic / late attn full & 3 & 0.9827 $\pm$ 0.0003 & 0.9810 $\pm$ 0.0010 & 0.9788 $\pm$ 0.0015 & 0.9790 $\pm$ 0.0019 & 0.9787 $\pm$ 0.0018 & 0.9786 $\pm$ 0.0016 & 0.9783 $\pm$ 0.0014 & 0.9783 $\pm$ 0.0012 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 \\
-(eval layerwise) & 3 & -- & -- & -- & 0.9783 $\pm$ 0.0019 & 0.9782 $\pm$ 0.0021 & 0.9781 $\pm$ 0.0019 & 0.9780 $\pm$ 0.0018 & 0.9779 $\pm$ 0.0016 & -- \\
-(eval random) & 3 & -- & -- & -- & 0.9784 $\pm$ 0.0018 & 0.9788 $\pm$ 0.0013 & 0.9786 $\pm$ 0.0015 & 0.9780 $\pm$ 0.0013 & 0.9781 $\pm$ 0.0012 & -- \\
-thalamic / late attn pre & 3 & 0.9168 $\pm$ 0.0088 & 0.9140 $\pm$ 0.0089 & 0.9773 $\pm$ 0.0021 & 0.9774 $\pm$ 0.0027 & 0.9773 $\pm$ 0.0029 & 0.9773 $\pm$ 0.0027 & 0.9771 $\pm$ 0.0026 & 0.9773 $\pm$ 0.0022 & 0.99 / 0.87 / 0.80 / 0.72 / 0.68 / 0.64 \\
-(eval layerwise) & 3 & -- & -- & -- & 0.9776 $\pm$ 0.0026 & 0.9773 $\pm$ 0.0025 & 0.9772 $\pm$ 0.0024 & 0.9771 $\pm$ 0.0023 & 0.9769 $\pm$ 0.0024 & -- \\
-(eval random) & 3 & -- & -- & -- & 0.9771 $\pm$ 0.0019 & 0.9772 $\pm$ 0.0025 & 0.9772 $\pm$ 0.0020 & 0.9771 $\pm$ 0.0022 & 0.9772 $\pm$ 0.0019 & -- \\
+layerwise / late attn full & 3 & 0.9827 $\pm$ 0.0003 & 0.9806 $\pm$ 0.0004 & 0.9785 $\pm$ 0.0012 & 0.9787 $\pm$ 0.0016 & 0.9788 $\pm$ 0.0015 & 0.9788 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0015 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 & - \\
+(eval thalamic) & 3 & -- & -- & -- & 0.9788 $\pm$ 0.0015 & 0.9789 $\pm$ 0.0016 & 0.9786 $\pm$ 0.0015 & 0.9786 $\pm$ 0.0013 & 0.9784 $\pm$ 0.0013 & -- & -- \\
+(eval random) & 3 & -- & -- & -- & 0.9783 $\pm$ 0.0015 & 0.9787 $\pm$ 0.0009 & 0.9786 $\pm$ 0.0014 & 0.9784 $\pm$ 0.0014 & 0.9784 $\pm$ 0.0014 & -- & -- \\
+random / late attn full & 3 & 0.9827 $\pm$ 0.0003 & 0.9809 $\pm$ 0.0003 & 0.9794 $\pm$ 0.0020 & 0.9791 $\pm$ 0.0019 & 0.9792 $\pm$ 0.0015 & 0.9790 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0016 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 & - \\
+(eval thalamic) & 3 & -- & -- & -- & 0.9795 $\pm$ 0.0019 & 0.9793 $\pm$ 0.0021 & 0.9793 $\pm$ 0.0021 & 0.9791 $\pm$ 0.0021 & 0.9790 $\pm$ 0.0017 & -- & -- \\
+(eval layerwise) & 3 & -- & -- & -- & 0.9789 $\pm$ 0.0016 & 0.9789 $\pm$ 0.0018 & 0.9790 $\pm$ 0.0018 & 0.9789 $\pm$ 0.0016 & 0.9789 $\pm$ 0.0017 & -- & -- \\
+thalamic / late attn full / identity substitution & 3 & 0.9827 $\pm$ 0.0003 & 0.9805 $\pm$ 0.0015 & 0.9785 $\pm$ 0.0015 & 0.9788 $\pm$ 0.0018 & 0.9789 $\pm$ 0.0017 & 0.9789 $\pm$ 0.0018 & 0.9787 $\pm$ 0.0015 & 0.9787 $\pm$ 0.0017 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 & - \\
+(eval layerwise) & 3 & -- & -- & -- & 0.9787 $\pm$ 0.0017 & 0.9788 $\pm$ 0.0018 & 0.9788 $\pm$ 0.0014 & 0.9788 $\pm$ 0.0015 & 0.9788 $\pm$ 0.0016 & -- & -- \\
+(eval random) & 3 & -- & -- & -- & 0.9789 $\pm$ 0.0016 & 0.9790 $\pm$ 0.0020 & 0.9785 $\pm$ 0.0015 & 0.9790 $\pm$ 0.0016 & 0.9790 $\pm$ 0.0018 & -- & -- \\
+thalamic / late attn full & 3 & 0.9827 $\pm$ 0.0003 & 0.9810 $\pm$ 0.0010 & 0.9788 $\pm$ 0.0015 & 0.9790 $\pm$ 0.0019 & 0.9787 $\pm$ 0.0018 & 0.9786 $\pm$ 0.0016 & 0.9783 $\pm$ 0.0014 & 0.9783 $\pm$ 0.0012 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 & - \\
+(eval layerwise) & 3 & -- & -- & -- & 0.9783 $\pm$ 0.0019 & 0.9782 $\pm$ 0.0021 & 0.9781 $\pm$ 0.0019 & 0.9780 $\pm$ 0.0018 & 0.9779 $\pm$ 0.0016 & -- & -- \\
+(eval random) & 3 & -- & -- & -- & 0.9784 $\pm$ 0.0018 & 0.9788 $\pm$ 0.0013 & 0.9786 $\pm$ 0.0015 & 0.9780 $\pm$ 0.0013 & 0.9781 $\pm$ 0.0012 & -- & -- \\
+thalamic / late attn pre & 3 & 0.9168 $\pm$ 0.0088 & 0.9140 $\pm$ 0.0089 & 0.9773 $\pm$ 0.0021 & 0.9774 $\pm$ 0.0027 & 0.9773 $\pm$ 0.0029 & 0.9773 $\pm$ 0.0027 & 0.9771 $\pm$ 0.0026 & 0.9773 $\pm$ 0.0022 & 0.99 / 0.87 / 0.80 / 0.72 / 0.68 / 0.64 & - \\
+(eval layerwise) & 3 & -- & -- & -- & 0.9776 $\pm$ 0.0026 & 0.9773 $\pm$ 0.0025 & 0.9772 $\pm$ 0.0024 & 0.9771 $\pm$ 0.0023 & 0.9769 $\pm$ 0.0024 & -- & -- \\
+(eval random) & 3 & -- & -- & -- & 0.9771 $\pm$ 0.0019 & 0.9772 $\pm$ 0.0025 & 0.9772 $\pm$ 0.0020 & 0.9771 $\pm$ 0.0022 & 0.9772 $\pm$ 0.0019 & -- & -- \\
 \bottomrule
 \end{tabular}}
 \caption{MNIST ViT: token skipping in the late blocks. Skipped tokens receive the predicted residual, except in the rows marked identity substitution, where they are left unchanged. Each cell is test accuracy at the given skip ratio after fine-tuning that ramps the skip ratio from 0 to 0.7; the warm-up-only column is measured after the one-epoch warm-up of predictor and router with the ViT frozen, at the maximum skip ratio and before fine-tuning. Rows marked (eval thalamic) evaluate the same model with the thalamic router choosing the skipped tokens. For the pre-routed variant (late attn pre) the no-skip and warm-up columns are measured right after the late-block attention is swapped for pre-routed attention and before fine-tuning, which is why they are low; the skip columns are after fine-tuning.}

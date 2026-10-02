@@ -33,6 +33,12 @@ def main():
         rows = []
         for key in sorted(groups):
             g = groups[key]
+            if key[0] == "drop_late":
+                dl = [row for r in g for row in r["rows"] if row["eval_mode"] == "drop_late"]
+                rows.append(["late blocks removed, same fine-tuning (control)", len(g), ms([r["baseline_full"]["acc"] for r in g]),
+                             ms([r["after_warmup_at_smax"]["acc"] for r in g]) + " (removed, no fine-tune)"] + ["-"] * len(fracs)
+                            + [f"{np.mean([x['flops_ratio'] for x in dl]):.2f}", ms([x["acc"] for x in dl])])
+                continue
             cells = []
             for s in fracs:
                 vals = [row["acc"] for r in g for row in r["rows"]
@@ -41,7 +47,7 @@ def main():
             fl = {s: np.mean([row["flops_ratio"] for r in g for row in r["rows"] if row["skip_frac"] == s]) for s in fracs}
             rows.append([f"{key[0]} / late attn {key[1]}" + (" / identity substitution" if key[2] == "identity" else ""), len(g), ms([r["baseline_full"]["acc"] for r in g]),
                          ms([r["after_warmup_at_smax"]["acc"] for r in g])] + cells
-                        + [" / ".join(f"{fl[s]:.2f}" for s in fracs)])
+                        + [" / ".join(f"{fl[s]:.2f}" for s in fracs), "-"])
             # 교차 평가: 학습 기준과 다른 기준으로 평가
             for ev in ("thalamic", "layerwise", "random"):
                 if ev == key[0]:
@@ -50,14 +56,21 @@ def main():
                 for s in fracs[1:]:
                     vals = [row["acc"] for r in g for row in r["rows"] if row["skip_frac"] == s and row["eval_mode"] == ev]
                     cells.append(ms(vals) if vals else "-")
-                rows.append([f"  (eval {ev})", len(g), "", ""] + ["" ] + cells + [""])
+                rows.append([f"  (eval {ev})", len(g), "", ""] + ["" ] + cells + ["", ""])
         write_table(f"exp12_{ds}", ["train mode / late attn", "seeds", "원본 (스킵 없음)", "워밍업만, 스킵 smax"]
-                    + [f"스킵 {s:g}" for s in fracs] + ["FLOPs 비율 (스킵 순서대로)"], rows,
+                    + [f"스킵 {s:g}" for s in fracs] + ["FLOPs 비율 (스킵 순서대로)", "late blocks removed: acc"], rows,
                     "뒤쪽 절반 블록에만 적용. 건너뛴 토큰은 예측 잔차를 더해 통과. 미세조정은 스킵 비율을 0 에서 0.7 로 올리며 진행. "
-                    "late attn pre = 뒤쪽 블록 어텐션을 사전 라우팅(키 25%) 으로 교체.")
+                    "late attn pre = 뒤쪽 블록 어텐션을 사전 라우팅(키 25%) 으로 교체. "
+                    "late blocks removed = 뒤쪽 블록을 통째로 떼고 같은 에폭을 미세조정한 대조군 (워밍업만 열은 떼기만 하고 미세조정 전); "
+                    "FLOPs 비율은 앞쪽 블록만의 비용.")
         fig, ax = plt.subplots(figsize=(8, 4.8))
         for i, key in enumerate(sorted(groups)):
             g = groups[key]
+            if key[0] == "drop_late":
+                dl = [row for r in g for row in r["rows"] if row["eval_mode"] == "drop_late"]
+                ax.plot([np.mean([x["flops_ratio"] for x in dl])], [np.mean([x["acc"] for x in dl])], marker="*", markersize=11,
+                        color=INK2, linestyle="none", label="late blocks removed, same fine-tuning")
+                continue
             xs = [np.mean([row["flops_ratio"] for r in g for row in r["rows"] if row["skip_frac"] == s]) for s in fracs]
             ys = [np.mean([row["acc"] for r in g for row in r["rows"] if row["skip_frac"] == s and (row["eval_mode"] == key[0] or s == 0.0)]) for s in fracs]
             ax.plot(xs, ys, marker="o", color=SERIES[i % 8], label=f"{key[0]} / late attn {key[1]}" + (" / identity substitution" if key[2] == "identity" else ""), linestyle="-" if key[1] == "full" else "--")

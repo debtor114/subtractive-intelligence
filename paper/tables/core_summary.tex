@@ -10,59 +10,59 @@ density & arm & seeds & active weights & test acc & ECE & infer FLOPs & cum. tra
 \midrule
 1 & dense big (no pruning) & 3 & 1,861,632 & 0.9871 $\pm$ 0.0003 & 0.009 $\pm$ 0.000 & $3.72\times10^{6}$ & $1.01\times10^{13}$ & 87336 $\pm$ 7781 \\
 0.1 & dense small (additive) & 3 & 185,787 & 0.9836 $\pm$ 0.0003 & 0.009 $\pm$ 0.000 & $3.72\times10^{5}$ & $1.00\times10^{12}$ & 133096 $\pm$ 6988 \\
-0.1 & train-then-prune + finetune & 3 & 186,163 & 0.9869 $\pm$ 0.0003 & 0.008 $\pm$ 0.000 & $3.72\times10^{5}$ & $1.06\times10^{13}$ & 87336 $\pm$ 7781 \\
-0.1 & prune-during: magnitude (layer) & 3 & 186,164 & 0.9867 $\pm$ 0.0003 & 0.007 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.1 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 186,163 & 0.9869 $\pm$ 0.0003 & 0.008 $\pm$ 0.000 & $3.72\times10^{5}$ & $1.06\times10^{13}$ & 87336 $\pm$ 7781 \\
+0.1 & prune-during: magnitude (uniform per layer) & 3 & 186,164 & 0.9867 $\pm$ 0.0003 & 0.007 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
 0.1 & prune-during: magnitude (global) & 3 & 186,163 & 0.9867 $\pm$ 0.0002 & 0.008 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.1 & prune-during: activity (layer) & 3 & 186,164 & 0.9819 $\pm$ 0.0007 & 0.004 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.1 & prune-during: abs(w) $\times$ activity (layer) & 3 & 186,164 & 0.9857 $\pm$ 0.0004 & 0.006 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.1 & prune-during: synaptic drive (layer) & 3 & 186,164 & 0.9853 $\pm$ 0.0004 & 0.007 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.1 & prune-during: random (layer) & 3 & 186,164 & 0.9823 $\pm$ 0.0012 & 0.004 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.1 & SET (dynamic, random regrow) & 3 & 186,164 & 0.9838 $\pm$ 0.0004 & 0.010 $\pm$ 0.001 & $3.72\times10^{5}$ & $1.01\times10^{12}$ & 138766 $\pm$ 2328 \\
-0.1 & RigL (dynamic, grad regrow) & 3 & 186,164 & 0.9853 $\pm$ 0.0011 & 0.008 $\pm$ 0.001 & $3.72\times10^{5}$ & $1.01\times10^{12}$ & 123519 $\pm$ 1928 \\
+0.1 & prune-during: activity, Hebbian (uniform per layer) & 3 & 186,164 & 0.9819 $\pm$ 0.0007 & 0.004 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.1 & prune-during: abs(w) $\times$ activity, Hebbian (uniform per layer) & 3 & 186,164 & 0.9857 $\pm$ 0.0004 & 0.006 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.1 & prune-during: synaptic drive (uniform per layer) & 3 & 186,164 & 0.9853 $\pm$ 0.0004 & 0.007 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.1 & prune-during: random (uniform per layer) & 3 & 186,164 & 0.9823 $\pm$ 0.0012 & 0.004 $\pm$ 0.000 & $3.72\times10^{5}$ & $3.33\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.1 & SET (dynamic sparse training, random regrowth) & 3 & 186,164 & 0.9838 $\pm$ 0.0004 & 0.010 $\pm$ 0.001 & $3.72\times10^{5}$ & $1.01\times10^{12}$ & 138766 $\pm$ 2328 \\
+0.1 & RigL (dynamic sparse training, gradient regrowth) & 3 & 186,164 & 0.9853 $\pm$ 0.0011 & 0.008 $\pm$ 0.001 & $3.72\times10^{5}$ & $1.01\times10^{12}$ & 123519 $\pm$ 1928 \\
 0.1 & static random sparse & 3 & 186,164 & 0.9818 $\pm$ 0.0002 & 0.006 $\pm$ 0.000 & $3.72\times10^{5}$ & $1.01\times10^{12}$ & 206096 $\pm$ 4555 \\
 0.05 & dense small (additive) & 3 & 93,392 & 0.9801 $\pm$ 0.0003 & 0.009 $\pm$ 0.001 & $1.87\times10^{5}$ & $5.04\times10^{11}$ & 186445 $\pm$ 12401 \\
-0.05 & train-then-prune + finetune & 3 & 93,082 & 0.9873 $\pm$ 0.0003 & 0.006 $\pm$ 0.000 & $1.86\times10^{5}$ & $1.03\times10^{13}$ & 87336 $\pm$ 7781 \\
-0.05 & prune-during: magnitude (layer) & 3 & 93,082 & 0.9868 $\pm$ 0.0006 & 0.006 $\pm$ 0.001 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.05 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 93,082 & 0.9873 $\pm$ 0.0003 & 0.006 $\pm$ 0.000 & $1.86\times10^{5}$ & $1.03\times10^{13}$ & 87336 $\pm$ 7781 \\
+0.05 & prune-during: magnitude (uniform per layer) & 3 & 93,082 & 0.9868 $\pm$ 0.0006 & 0.006 $\pm$ 0.001 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
 0.05 & prune-during: magnitude (global) & 3 & 93,082 & 0.9872 $\pm$ 0.0003 & 0.006 $\pm$ 0.001 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.05 & prune-during: activity (layer) & 3 & 93,082 & 0.9787 $\pm$ 0.0001 & 0.005 $\pm$ 0.001 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.05 & prune-during: abs(w) $\times$ activity (layer) & 3 & 93,082 & 0.9842 $\pm$ 0.0004 & 0.004 $\pm$ 0.000 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.05 & prune-during: synaptic drive (layer) & 3 & 93,082 & 0.9850 $\pm$ 0.0003 & 0.005 $\pm$ 0.000 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.05 & prune-during: random (layer) & 3 & 93,082 & 0.9713 $\pm$ 0.0011 & 0.015 $\pm$ 0.000 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.05 & SET (dynamic, random regrow) & 3 & 93,082 & 0.9819 $\pm$ 0.0009 & 0.006 $\pm$ 0.001 & $1.86\times10^{5}$ & $5.03\times10^{11}$ & 209140 $\pm$ 5774 \\
-0.05 & RigL (dynamic, grad regrow) & 3 & 93,082 & 0.9822 $\pm$ 0.0004 & 0.008 $\pm$ 0.000 & $1.86\times10^{5}$ & $5.03\times10^{11}$ & 153687 $\pm$ 5905 \\
+0.05 & prune-during: activity, Hebbian (uniform per layer) & 3 & 93,082 & 0.9787 $\pm$ 0.0001 & 0.005 $\pm$ 0.001 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.05 & prune-during: abs(w) $\times$ activity, Hebbian (uniform per layer) & 3 & 93,082 & 0.9842 $\pm$ 0.0004 & 0.004 $\pm$ 0.000 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.05 & prune-during: synaptic drive (uniform per layer) & 3 & 93,082 & 0.9850 $\pm$ 0.0003 & 0.005 $\pm$ 0.000 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.05 & prune-during: random (uniform per layer) & 3 & 93,082 & 0.9713 $\pm$ 0.0011 & 0.015 $\pm$ 0.000 & $1.86\times10^{5}$ & $2.96\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.05 & SET (dynamic sparse training, random regrowth) & 3 & 93,082 & 0.9819 $\pm$ 0.0009 & 0.006 $\pm$ 0.001 & $1.86\times10^{5}$ & $5.03\times10^{11}$ & 209140 $\pm$ 5774 \\
+0.05 & RigL (dynamic sparse training, gradient regrowth) & 3 & 93,082 & 0.9822 $\pm$ 0.0004 & 0.008 $\pm$ 0.000 & $1.86\times10^{5}$ & $5.03\times10^{11}$ & 153687 $\pm$ 5905 \\
 0.05 & static random sparse & 3 & 93,082 & 0.9754 $\pm$ 0.0003 & 0.004 $\pm$ 0.001 & $1.86\times10^{5}$ & $5.03\times10^{11}$ & 378278 $\pm$ 18120 \\
 0.02 & dense small (additive) & 3 & 36,872 & 0.9730 $\pm$ 0.0010 & 0.006 $\pm$ 0.000 & $7.37\times10^{4}$ & $1.99\times10^{11}$ & 436301 $\pm$ 46700 \\
-0.02 & train-then-prune + finetune & 3 & 37,233 & 0.9838 $\pm$ 0.0008 & 0.003 $\pm$ 0.001 & $7.45\times10^{4}$ & $1.02\times10^{13}$ & 87336 $\pm$ 7781 \\
-0.02 & prune-during: magnitude (layer) & 3 & 37,233 & 0.9855 $\pm$ 0.0007 & 0.003 $\pm$ 0.000 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.02 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 37,233 & 0.9838 $\pm$ 0.0008 & 0.003 $\pm$ 0.001 & $7.45\times10^{4}$ & $1.02\times10^{13}$ & 87336 $\pm$ 7781 \\
+0.02 & prune-during: magnitude (uniform per layer) & 3 & 37,233 & 0.9855 $\pm$ 0.0007 & 0.003 $\pm$ 0.000 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
 0.02 & prune-during: magnitude (global) & 3 & 37,233 & 0.9865 $\pm$ 0.0002 & 0.003 $\pm$ 0.001 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.02 & prune-during: activity (layer) & 3 & 37,233 & 0.9655 $\pm$ 0.0009 & 0.020 $\pm$ 0.001 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.02 & prune-during: abs(w) $\times$ activity (layer) & 3 & 37,233 & 0.9805 $\pm$ 0.0004 & 0.005 $\pm$ 0.001 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.02 & prune-during: synaptic drive (layer) & 3 & 37,233 & 0.9822 $\pm$ 0.0003 & 0.004 $\pm$ 0.000 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.02 & prune-during: random (layer) & 3 & 37,233 & 0.9339 $\pm$ 0.0015 & 0.034 $\pm$ 0.002 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.02 & SET (dynamic, random regrow) & 3 & 37,233 & 0.9743 $\pm$ 0.0006 & 0.005 $\pm$ 0.000 & $7.45\times10^{4}$ & $2.01\times10^{11}$ & 467683 $\pm$ 20709 \\
-0.02 & RigL (dynamic, grad regrow) & 3 & 37,233 & 0.9785 $\pm$ 0.0004 & 0.005 $\pm$ 0.001 & $7.45\times10^{4}$ & $2.01\times10^{11}$ & 245749 $\pm$ 12815 \\
+0.02 & prune-during: activity, Hebbian (uniform per layer) & 3 & 37,233 & 0.9655 $\pm$ 0.0009 & 0.020 $\pm$ 0.001 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.02 & prune-during: abs(w) $\times$ activity, Hebbian (uniform per layer) & 3 & 37,233 & 0.9805 $\pm$ 0.0004 & 0.005 $\pm$ 0.001 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.02 & prune-during: synaptic drive (uniform per layer) & 3 & 37,233 & 0.9822 $\pm$ 0.0003 & 0.004 $\pm$ 0.000 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.02 & prune-during: random (uniform per layer) & 3 & 37,233 & 0.9339 $\pm$ 0.0015 & 0.034 $\pm$ 0.002 & $7.45\times10^{4}$ & $2.73\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.02 & SET (dynamic sparse training, random regrowth) & 3 & 37,233 & 0.9743 $\pm$ 0.0006 & 0.005 $\pm$ 0.000 & $7.45\times10^{4}$ & $2.01\times10^{11}$ & 467683 $\pm$ 20709 \\
+0.02 & RigL (dynamic sparse training, gradient regrowth) & 3 & 37,233 & 0.9785 $\pm$ 0.0004 & 0.005 $\pm$ 0.001 & $7.45\times10^{4}$ & $2.01\times10^{11}$ & 245749 $\pm$ 12815 \\
 0.02 & static random sparse & 3 & 37,233 & 0.9590 $\pm$ 0.0013 & 0.009 $\pm$ 0.001 & $7.45\times10^{4}$ & $2.01\times10^{11}$ & - \\
 0.01 & dense small (additive) & 3 & 18,791 & 0.9630 $\pm$ 0.0012 & 0.004 $\pm$ 0.001 & $3.76\times10^{4}$ & $1.01\times10^{11}$ & - \\
-0.01 & train-then-prune + finetune & 3 & 18,616 & 0.9752 $\pm$ 0.0020 & 0.006 $\pm$ 0.000 & $3.72\times10^{4}$ & $1.01\times10^{13}$ & 87336 $\pm$ 7781 \\
-0.01 & prune-during: magnitude (layer) & 3 & 18,616 & 0.9823 $\pm$ 0.0001 & 0.007 $\pm$ 0.000 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.01 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 18,616 & 0.9752 $\pm$ 0.0020 & 0.006 $\pm$ 0.000 & $3.72\times10^{4}$ & $1.01\times10^{13}$ & 87336 $\pm$ 7781 \\
+0.01 & prune-during: magnitude (uniform per layer) & 3 & 18,616 & 0.9823 $\pm$ 0.0001 & 0.007 $\pm$ 0.000 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
 0.01 & prune-during: magnitude (global) & 3 & 18,616 & 0.9844 $\pm$ 0.0003 & 0.004 $\pm$ 0.000 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.01 & prune-during: activity (layer) & 3 & 18,616 & 0.9366 $\pm$ 0.0015 & 0.037 $\pm$ 0.001 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.01 & prune-during: abs(w) $\times$ activity (layer) & 3 & 18,616 & 0.9725 $\pm$ 0.0008 & 0.012 $\pm$ 0.001 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.01 & prune-during: synaptic drive (layer) & 3 & 18,616 & 0.9756 $\pm$ 0.0010 & 0.012 $\pm$ 0.000 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.01 & prune-during: random (layer) & 3 & 18,616 & 0.8913 $\pm$ 0.0060 & 0.071 $\pm$ 0.003 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.01 & SET (dynamic, random regrow) & 3 & 18,616 & 0.9603 $\pm$ 0.0010 & 0.008 $\pm$ 0.001 & $3.72\times10^{4}$ & $1.01\times10^{11}$ & - \\
-0.01 & RigL (dynamic, grad regrow) & 3 & 18,616 & 0.9741 $\pm$ 0.0016 & 0.004 $\pm$ 0.001 & $3.72\times10^{4}$ & $1.01\times10^{11}$ & 444658 $\pm$ 67026 \\
+0.01 & prune-during: activity, Hebbian (uniform per layer) & 3 & 18,616 & 0.9366 $\pm$ 0.0015 & 0.037 $\pm$ 0.001 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.01 & prune-during: abs(w) $\times$ activity, Hebbian (uniform per layer) & 3 & 18,616 & 0.9725 $\pm$ 0.0008 & 0.012 $\pm$ 0.001 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.01 & prune-during: synaptic drive (uniform per layer) & 3 & 18,616 & 0.9756 $\pm$ 0.0010 & 0.012 $\pm$ 0.000 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.01 & prune-during: random (uniform per layer) & 3 & 18,616 & 0.8913 $\pm$ 0.0060 & 0.071 $\pm$ 0.003 & $3.72\times10^{4}$ & $2.66\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.01 & SET (dynamic sparse training, random regrowth) & 3 & 18,616 & 0.9603 $\pm$ 0.0010 & 0.008 $\pm$ 0.001 & $3.72\times10^{4}$ & $1.01\times10^{11}$ & - \\
+0.01 & RigL (dynamic sparse training, gradient regrowth) & 3 & 18,616 & 0.9741 $\pm$ 0.0016 & 0.004 $\pm$ 0.001 & $3.72\times10^{4}$ & $1.01\times10^{11}$ & 444658 $\pm$ 67026 \\
 0.01 & static random sparse & 3 & 18,616 & 0.9259 $\pm$ 0.0034 & 0.015 $\pm$ 0.001 & $3.72\times10^{4}$ & $1.01\times10^{11}$ & - \\
 0.005 & dense small (additive) & 3 & 9,672 & 0.9407 $\pm$ 0.0010 & 0.009 $\pm$ 0.001 & $1.93\times10^{4}$ & $5.22\times10^{10}$ & - \\
-0.005 & train-then-prune + finetune & 3 & 9,308 & 0.9451 $\pm$ 0.0060 & 0.017 $\pm$ 0.006 & $1.86\times10^{4}$ & $1.01\times10^{13}$ & 87336 $\pm$ 7781 \\
-0.005 & prune-during: magnitude (layer) & 3 & 9,308 & 0.9704 $\pm$ 0.0005 & 0.015 $\pm$ 0.001 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.005 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 9,308 & 0.9451 $\pm$ 0.0060 & 0.017 $\pm$ 0.006 & $1.86\times10^{4}$ & $1.01\times10^{13}$ & 87336 $\pm$ 7781 \\
+0.005 & prune-during: magnitude (uniform per layer) & 3 & 9,308 & 0.9704 $\pm$ 0.0005 & 0.015 $\pm$ 0.001 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
 0.005 & prune-during: magnitude (global) & 3 & 9,308 & 0.9781 $\pm$ 0.0002 & 0.006 $\pm$ 0.000 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.005 & prune-during: activity (layer) & 3 & 9,322 & 0.8885 $\pm$ 0.0109 & 0.100 $\pm$ 0.037 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.005 & prune-during: abs(w) $\times$ activity (layer) & 3 & 9,308 & 0.9522 $\pm$ 0.0013 & 0.038 $\pm$ 0.016 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.005 & prune-during: synaptic drive (layer) & 3 & 9,308 & 0.9603 $\pm$ 0.0020 & 0.025 $\pm$ 0.000 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.005 & prune-during: random (layer) & 3 & 9,308 & 0.7184 $\pm$ 0.0230 & 0.157 $\pm$ 0.017 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
-0.005 & SET (dynamic, random regrow) & 3 & 9,308 & 0.9365 $\pm$ 0.0011 & 0.012 $\pm$ 0.001 & $1.86\times10^{4}$ & $5.03\times10^{10}$ & - \\
-0.005 & RigL (dynamic, grad regrow) & 3 & 9,308 & 0.9631 $\pm$ 0.0027 & 0.005 $\pm$ 0.001 & $1.86\times10^{4}$ & $5.03\times10^{10}$ & - \\
+0.005 & prune-during: activity, Hebbian (uniform per layer) & 3 & 9,322 & 0.8885 $\pm$ 0.0109 & 0.100 $\pm$ 0.037 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.005 & prune-during: abs(w) $\times$ activity, Hebbian (uniform per layer) & 3 & 9,308 & 0.9522 $\pm$ 0.0013 & 0.038 $\pm$ 0.016 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.005 & prune-during: synaptic drive (uniform per layer) & 3 & 9,308 & 0.9603 $\pm$ 0.0020 & 0.025 $\pm$ 0.000 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.005 & prune-during: random (uniform per layer) & 3 & 9,308 & 0.7184 $\pm$ 0.0230 & 0.157 $\pm$ 0.017 & $1.86\times10^{4}$ & $2.62\times10^{12}$ & 87336 $\pm$ 7781 \\
+0.005 & SET (dynamic sparse training, random regrowth) & 3 & 9,308 & 0.9365 $\pm$ 0.0011 & 0.012 $\pm$ 0.001 & $1.86\times10^{4}$ & $5.03\times10^{10}$ & - \\
+0.005 & RigL (dynamic sparse training, gradient regrowth) & 3 & 9,308 & 0.9631 $\pm$ 0.0027 & 0.005 $\pm$ 0.001 & $1.86\times10^{4}$ & $5.03\times10^{10}$ & - \\
 0.005 & static random sparse & 3 & 9,308 & 0.7271 $\pm$ 0.0271 & 0.053 $\pm$ 0.012 & $1.86\times10^{4}$ & $5.03\times10^{10}$ & - \\
 \bottomrule
 \end{tabular}}

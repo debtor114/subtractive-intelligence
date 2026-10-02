@@ -27,6 +27,30 @@ CLS2 + sparse fast (k-WTA 10\%) & 3 & 0.8903 $\pm$ 0.0020 & 0.0662 $\pm$ 0.0024 
 CLS2 + sparse fast 10\%, sleep 300 steps lr 1e-3 [predict: fast] & 3 & 0.4080 $\pm$ 0.0138 & 0.6248 $\pm$ 0.0162 & 0.357 $\pm$ 0.016 & - & - & - & - & - \\
 CLS2 + sparse fast 10\%, sleep 300 steps lr 1e-3 [predict: max\_conf] & 3 & 0.8503 $\pm$ 0.0029 & 0.1330 $\pm$ 0.0034 & 0.863 $\pm$ 0.003 & - & - & - & - & - \\
 CLS2 + sparse fast 10\%, sleep 300 steps lr 1e-3 & 3 & 0.8851 $\pm$ 0.0027 & 0.0617 $\pm$ 0.0043 & 0.935 $\pm$ 0.004 & 0.097 $\pm$ 0.022 & $9.97\times10^{12}$ & 269,322 & - & - \\
+CLS2 + sleep decay: one-shot 10\% at boundary [predict: fast] & 3 & 0.4422 $\pm$ 0.0101 & 0.5866 $\pm$ 0.0112 & 0.396 $\pm$ 0.012 & - & - & - & - & - \\
+CLS2 + sleep decay: one-shot 10\% at boundary [predict: max\_conf] & 3 & 0.8163 $\pm$ 0.0127 & 0.1725 $\pm$ 0.0142 & 0.823 $\pm$ 0.015 & - & - & - & - & - \\
+CLS2 + sleep decay: one-shot 10\% at boundary & 3 & 0.8503 $\pm$ 0.0042 & 0.1125 $\pm$ 0.0042 & 0.882 $\pm$ 0.004 & 0.136 $\pm$ 0.004 & $1.18\times10^{13}$ & 269,322 & - & - \\
+CLS2 + sleep decay: periodic gradual, total 10\% [predict: fast] & 3 & 0.4422 $\pm$ 0.0101 & 0.5866 $\pm$ 0.0112 & 0.396 $\pm$ 0.012 & - & - & - & - & - \\
+CLS2 + sleep decay: periodic gradual, total 10\% [predict: max\_conf] & 3 & 0.8139 $\pm$ 0.0164 & 0.1753 $\pm$ 0.0184 & 0.820 $\pm$ 0.019 & - & - & - & - & - \\
+CLS2 + sleep decay: periodic gradual, total 10\% & 3 & 0.8550 $\pm$ 0.0035 & 0.1075 $\pm$ 0.0028 & 0.888 $\pm$ 0.003 & 0.118 $\pm$ 0.008 & $1.18\times10^{13}$ & 269,322 & - & - \\
+CLS2 + sleep decay: periodic gradual, total 3\% [predict: fast] & 3 & 0.4422 $\pm$ 0.0101 & 0.5866 $\pm$ 0.0112 & 0.396 $\pm$ 0.012 & - & - & - & - & - \\
+CLS2 + sleep decay: periodic gradual, total 3\% [predict: max\_conf] & 3 & 0.8567 $\pm$ 0.0129 & 0.1277 $\pm$ 0.0146 & 0.869 $\pm$ 0.015 & - & - & - & - & - \\
+CLS2 + sleep decay: periodic gradual, total 3\% & 3 & 0.8873 $\pm$ 0.0047 & 0.0718 $\pm$ 0.0047 & 0.925 $\pm$ 0.005 & 0.098 $\pm$ 0.011 & $1.18\times10^{13}$ & 269,322 & - & - \\
+CLS2 + sleep decay: continuous weight decay 1e-4 [predict: fast] & 3 & 0.4422 $\pm$ 0.0101 & 0.5866 $\pm$ 0.0112 & 0.396 $\pm$ 0.012 & - & - & - & - & - \\
+CLS2 + sleep decay: continuous weight decay 1e-4 [predict: max\_conf] & 3 & 0.8514 $\pm$ 0.0155 & 0.1338 $\pm$ 0.0173 & 0.862 $\pm$ 0.018 & - & - & - & - & - \\
+CLS2 + sleep decay: continuous weight decay 1e-4 & 3 & 0.8850 $\pm$ 0.0058 & 0.0743 $\pm$ 0.0056 & 0.922 $\pm$ 0.006 & 0.094 $\pm$ 0.009 & $1.18\times10^{13}$ & 269,322 & - & - \\
+CLS2 (fast width 256), no distillation [predict: fast] & 3 & 0.4215 $\pm$ 0.0056 & 0.6076 $\pm$ 0.0068 & 0.373 $\pm$ 0.007 & - & - & - & - & - \\
+CLS2 (fast width 256), no distillation [predict: max\_conf] & 3 & 0.8705 $\pm$ 0.0033 & 0.1110 $\pm$ 0.0035 & 0.886 $\pm$ 0.004 & - & - & - & - & - \\
+CLS2 (fast width 256), no distillation & 3 & 0.8939 $\pm$ 0.0023 & 0.0636 $\pm$ 0.0019 & 0.934 $\pm$ 0.002 & 0.107 $\pm$ 0.010 & $4.75\times10^{12}$ & 269,322 & - & - \\
+CLS2 (fast 256) + global logit distillation [predict: fast] & 3 & 0.4300 $\pm$ 0.0207 & 0.5982 $\pm$ 0.0228 & 0.382 $\pm$ 0.024 & - & - & - & - & - \\
+CLS2 (fast 256) + global logit distillation [predict: max\_conf] & 3 & 0.8412 $\pm$ 0.0043 & 0.1426 $\pm$ 0.0041 & 0.853 $\pm$ 0.004 & - & - & - & - & - \\
+CLS2 (fast 256) + global logit distillation & 3 & 0.8782 $\pm$ 0.0064 & 0.0941 $\pm$ 0.0070 & 0.902 $\pm$ 0.007 & 0.120 $\pm$ 0.011 & $4.75\times10^{12}$ & 269,322 & - & - \\
+CLS2 (fast 256) + local per-layer feature distillation [predict: fast] & 3 & 0.4300 $\pm$ 0.0207 & 0.5982 $\pm$ 0.0228 & 0.382 $\pm$ 0.024 & - & - & - & - & - \\
+CLS2 (fast 256) + local per-layer feature distillation [predict: max\_conf] & 3 & 0.8258 $\pm$ 0.0067 & 0.1580 $\pm$ 0.0075 & 0.837 $\pm$ 0.008 & - & - & - & - & - \\
+CLS2 (fast 256) + local per-layer feature distillation & 3 & 0.8516 $\pm$ 0.0047 & 0.1067 $\pm$ 0.0049 & 0.888 $\pm$ 0.005 & 0.178 $\pm$ 0.021 & $4.75\times10^{12}$ & 269,322 & - & - \\
+CLS2 (fast 256) + local features + logits [predict: fast] & 3 & 0.4300 $\pm$ 0.0207 & 0.5982 $\pm$ 0.0228 & 0.382 $\pm$ 0.024 & - & - & - & - & - \\
+CLS2 (fast 256) + local features + logits [predict: max\_conf] & 3 & 0.8087 $\pm$ 0.0088 & 0.1744 $\pm$ 0.0095 & 0.820 $\pm$ 0.010 & - & - & - & - & - \\
+CLS2 (fast 256) + local features + logits & 3 & 0.8355 $\pm$ 0.0079 & 0.1266 $\pm$ 0.0076 & 0.867 $\pm$ 0.008 & 0.172 $\pm$ 0.017 & $4.75\times10^{12}$ & 269,322 & - & - \\
 joint retraining (upper bound) & 3 & 0.9633 $\pm$ 0.0061 & 0.0034 $\pm$ 0.0005 & 0.998 $\pm$ 0.001 & 0.007 $\pm$ 0.002 & $8.87\times10^{12}$ & 269,322 & - & - \\
 \bottomrule
 \end{tabular}}
