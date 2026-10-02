@@ -10,10 +10,11 @@ gradual synaptic pruning during learning, hippocampus--cortex sleep consolidatio
 token skipping, and STDP, plus one follow-up (per-input pruning at inference time). One principle transferred:
 at matched final connection budgets, removing connections gradually *while* training beats training small, pruning once
 after training and dynamic sparse training at tight budgets, with a margin that grows with sparsity (MNIST MLP, CIFAR-10
-CNN, CIFAR-10 ResNet-18, and an ImageNet-pre-trained ResNet-18 adapted to CIFAR-10). Four structures did not transfer
-(sleep consolidation, thalamic routing, predictive coding, per-input pruning); the local pruning rules were mixed (near
-parity on the MLP, collapse on the CNN) and STDP reproduced its known accuracy ceiling while sparsifying itself. Everything
-in the paper is produced from the stored run files in `results/`.
+CNN, CIFAR-10 ResNet-18, and an ImageNet-pre-trained ResNet-18 adapted to CIFAR-10; from the pre-trained start the
+order against one-shot pruning reverses at the tightest budget, 0.5%). Four structures did not transfer (sleep
+consolidation, thalamic routing, predictive coding, per-input pruning); the local pruning rules were mixed (about a
+point behind per-layer magnitude pruning on the MLP, collapse on the CNN) and STDP reproduced its known accuracy
+ceiling while sparsifying itself. Everything in the paper is produced from the stored run files in `results/`.
 
 The paper PDF is `paper/main.pdf`; the Korean working report with every table and figure is `docs/report/REPORT.md`.
 
@@ -65,8 +66,24 @@ python experiments/core_prune_during_learning/run_all_pretrained.py --skip_exist
 # negative results
 python experiments/exp3_dual_learning/run_all.py --skip_existing
 python experiments/exp1_prerouting_attention/run_all.py
-python experiments/exp2_predictive_coding/run.py --dataset cifar10
-python experiments/exp12_prefilter/run.py --ckpt "results/baseline_vit_cifar10/seed0_*/model_final.pt" --dataset cifar10 --mode thalamic
+# baseline ViTs the skipping experiments start from (the checkpoints are included in results/; this retrains them)
+for s in 0 1 2; do python scripts/train_baseline.py --config configs/vit_mnist.yaml --set seed=$s; done
+python scripts/train_baseline.py --config configs/vit_cifar10.yaml
+# predictive-coding token skipping (Tables 13-14): skip curves, then fine-tuning with predicted vs random skip scores
+for s in 0 1 2; do python experiments/exp2_predictive_coding/run.py --ckpt "results/baseline_vit_mnist/seed${s}_*/model_final.pt" --dataset mnist --seed $s; done
+for s in 0 1; do for sc in predicted random; do python experiments/exp2_predictive_coding/finetune.py --ckpt "results/baseline_vit_mnist/seed${s}_*/model_final.pt" --dataset mnist --score $sc --skip 0.5 --epochs 2 --seed $s; done; done
+python experiments/exp2_predictive_coding/run.py --ckpt "results/baseline_vit_cifar10/seed0_*/model_final.pt" --dataset cifar10
+for sc in predicted random; do python experiments/exp2_predictive_coding/finetune.py --ckpt "results/baseline_vit_cifar10/seed0_*/model_final.pt" --dataset cifar10 --score $sc --skip 0.5 --epochs 3; done
+# thalamic pre-decision (Tables 15-16): three selectors, pre-routed late attention, and the identity-substitution control
+for s in 0 1 2; do CK="results/baseline_vit_mnist/seed${s}_*/model_final.pt"
+  for m in thalamic layerwise random; do python experiments/exp12_prefilter/run.py --ckpt "$CK" --dataset mnist --mode $m --seed $s; done
+  python experiments/exp12_prefilter/run.py --ckpt "$CK" --dataset mnist --mode thalamic --late_attn pre --seed $s
+  python experiments/exp12_prefilter/run.py --ckpt "$CK" --dataset mnist --mode thalamic --substitute identity --seed $s
+done
+CK="results/baseline_vit_cifar10/seed0_*/model_final.pt"
+for m in thalamic layerwise random; do python experiments/exp12_prefilter/run.py --ckpt "$CK" --dataset cifar10 --mode $m --epochs 6; done
+python experiments/exp12_prefilter/run.py --ckpt "$CK" --dataset cifar10 --mode thalamic --late_attn pre --epochs 6
+python experiments/exp12_prefilter/run.py --ckpt "$CK" --dataset cifar10 --mode thalamic --substitute identity --epochs 6
 python experiments/exp5_dynamic_pruning/run_all.py --skip_existing
 python experiments/exp4_stdp_temporal/run.py
 # tables and figures, then the paper
