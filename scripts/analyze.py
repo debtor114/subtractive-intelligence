@@ -127,15 +127,16 @@ ARM_LABEL = {
     "pd_random_layer": "prune-during: random (uniform per layer)",
     "ttp": "prune-after: one-shot magnitude (global) + fine-tune", "ttp_gradual": "prune-after: gradual magnitude (global) during fine-tune",
     "ttp_ftlr05": "prune-after: one-shot magnitude (global) + fine-tune at lr 0.05", "ttp_ftlr10": "prune-after: one-shot magnitude (global) + fine-tune at lr 0.1", "ttp_gradual_ftlr05": "prune-after: gradual magnitude (global) during fine-tune at lr 0.05",
+    "ttp_gradual_ftlr10": "prune-after: gradual magnitude (global) during fine-tune at lr 0.1",
 }
-ARM_ORDER = ["dense_small", "dense_small_shallow", "ttp", "ttp_gradual", "ttp_ftlr05", "ttp_ftlr10", "ttp_gradual_ftlr05", "pd_mag_layer", "pd_mag_global", "pd_mag_erk", "pd_act_layer", "pd_actmag_layer",
+ARM_ORDER = ["dense_small", "dense_small_shallow", "ttp", "ttp_gradual", "ttp_ftlr05", "ttp_ftlr10", "ttp_gradual_ftlr05", "ttp_gradual_ftlr10", "pd_mag_layer", "pd_mag_global", "pd_mag_erk", "pd_act_layer", "pd_actmag_layer",
              "pd_drive_layer", "pd_drive_erk", "pd_drivenorm_erk", "pd_random_layer", "set", "rigl", "rigl_x3", "static_sparse"]
 
 
 # 팔별 고정 색과 선 모양 (팔을 추가해도 기존 색이 바뀌지 않도록 이름으로 고정; 본문 캡션의 색 이름이 여기에 맞춰져 있다)
 ARM_STYLE = {
     "dense_small": ("#2a78d6", "-"), "dense_small_shallow": ("#2a78d6", "--"),
-    "ttp": ("#eb6834", "-"), "ttp_gradual": ("#eb6834", "--"), "ttp_ftlr05": ("#eb6834", ":"), "ttp_ftlr10": ("#eb6834", (0, (1, 3))), "ttp_gradual_ftlr05": ("#eb6834", "-."),
+    "ttp": ("#eb6834", "-"), "ttp_gradual": ("#eb6834", "--"), "ttp_ftlr05": ("#eb6834", ":"), "ttp_ftlr10": ("#eb6834", (0, (1, 3))), "ttp_gradual_ftlr05": ("#eb6834", "-."), "ttp_gradual_ftlr10": ("#eb6834", (0, (3, 1, 1, 1, 1, 1))),
     "pd_mag_global": ("#eda100", "-"), "pd_mag_erk": ("#eda100", "--"), "pd_mag_layer": ("#1baf7a", "-"),
     "pd_act_layer": ("#4a3aa7", "-"), "pd_actmag_layer": ("#4a3aa7", "--"),
     "pd_drive_layer": ("#e87ba4", "-"), "pd_drive_erk": ("#e87ba4", "--"), "pd_drivenorm_erk": ("#e87ba4", "-"),
@@ -146,7 +147,7 @@ ARM_STYLE = {
 ARM_SHORT = {
     "dense_small": "dense small (additive)", "dense_small_shallow": "dense small, shallow and wide",
     "ttp": "prune-after, one-shot", "ttp_gradual": "prune-after, gradual",
-    "ttp_ftlr05": "prune-after, one-shot, fine-tune lr 0.05", "ttp_ftlr10": "prune-after, one-shot, fine-tune lr 0.1", "ttp_gradual_ftlr05": "prune-after, gradual, fine-tune lr 0.05",
+    "ttp_ftlr05": "prune-after, one-shot, fine-tune lr 0.05", "ttp_ftlr10": "prune-after, one-shot, fine-tune lr 0.1", "ttp_gradual_ftlr05": "prune-after, gradual, fine-tune lr 0.05", "ttp_gradual_ftlr10": "prune-after, gradual, fine-tune lr 0.1",
     "pd_mag_global": "prune-during, magnitude (global)", "pd_mag_erk": "prune-during, magnitude (ERK)",
     "pd_mag_layer": "prune-during, magnitude (uniform per layer)",
     "pd_act_layer": "prune-during, activity (Hebbian)", "pd_actmag_layer": "prune-during, |w| x activity (Hebbian)",

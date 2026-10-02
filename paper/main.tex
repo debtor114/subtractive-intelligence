@@ -78,10 +78,10 @@ unity, appears only as a hypothesis in Section~\ref{sec:discussion}.
   \item \textbf{The benefit is mostly in the gradual schedule; pruning while learning adds up to a point.} Pruning the same
   network once after training collapses accuracy at the pruning step (to below 60\% at 0.5\% density on MNIST) and recovers
   only partially; pruning it gradually after training, with the same schedule and the same total steps, recovers most of
-  the loss (96.9\% against 94.5\% at 0.5\% on MNIST; 84.8\% against 81.1\% at 1\% on the CNN when fine-tuning runs at
-  the training learning rate); removing connections gradually while learning ends a further 0.9 points higher on both
-  models at their tightest budget (97.8\% and 85.7\%), is level at 3\% on the CNN, and costs 23--31\% of the training
-  compute of pruning the trained network gradually; on MNIST it never falls below 97\% on the way (Figure~\ref{fig:traj}).
+  the loss (96.9\% against 94.5\% at 0.5\% on MNIST, 84.8\% against 81.1\% at 1\% on the CNN and 88.3\% against 85.6\%
+  at 0.5\% on ResNet-18, with fine-tuning at the training learning rate); removing connections gradually while learning
+  ends a further 0.7--0.9 points higher on all three models at their tightest budget (97.8\%, 85.7\% and 89.0\%), is level
+  at 3\% on the CNN, and costs 23--31\% of the training compute of pruning the trained network gradually; on MNIST it never falls below 97\% on the way (Figure~\ref{fig:traj}).
   \item \textbf{Honest cost accounting.} Prune-during costs 3--59$\times$ the cumulative training FLOPs of the dense small
   network because it starts large, and 26--45\% of the cost of training the dense network it starts from, the usual
   train-then-compress baseline; RigL costs about the same as the dense small network on the MLP and CNN and 2.3--2.5$\times$
@@ -293,10 +293,13 @@ prune-after matched one-shot prune-after at 10\% and 3\% (90.5\% against 90.7\% 
 only 1.4 points at 1\% (81.9\% against 80.5\%), 3.8 points behind prune-during (85.7\%). That gap was the learning rate,
 not the timing: with fine-tuning restarted at the training rate (0.05, cosine), gradual prune-after reaches 89.2\% at 3\%
 and 84.8\% at 1\%, level with prune-during at 3\% (89.1\%) and 0.9 points behind at 1\%, while one-shot prune-after
-stays at 88.4\% and 81.1\% (Table~\ref{tab:cifar}). The decomposition is then the same on both models: the gradual
-schedule carries most of the benefit, and removing connections while the function is still being learned adds 0.5--0.9
-points at the tightest budgets, at 28\% of the training cost of pruning the finished network gradually (3.1e14 against
-1.1e15 FLOPs at 1\%). Sparsity itself is not
+stays at 88.4\% and 81.1\% (Table~\ref{tab:cifar}). The decomposition is then the same on both models, and on ResNet-18
+as well, where at 0.5\% gradual prune-after fine-tuned at the training rate reaches 88.3\% against 85.6\% for one-shot
+prune-after and 89.0\% for prune-during (Table~\ref{tab:resnet}). On all three models the gradual schedule carries most of
+the benefit, 73--81\% of the gap at the tightest budget, and removing connections while the function is still being
+learned adds 0.7--0.9 points there (0.5 on MNIST at 1\%), at 23--31\% of the training cost of pruning the finished network
+gradually (3.1e14 against
+1.1e15 FLOPs on the CNN at 1\%, 1.1e15 against 3.9e15 on ResNet-18 at 0.5\%). Sparsity itself is not
 the point: on MNIST the two routes that impose a random
 pattern, a static random mask and random removal during training, are the worst at every budget below 10\% (72.7\% and
 71.8\% at 0.5\%).
@@ -379,7 +382,8 @@ whether the route matters; on the larger network the budget below which pruning 
 \caption{CIFAR-10 ResNet-18 (11.2M weights, 92.5\% dense): test accuracy (\%) and inference FLOPs per image at matched
 budgets, three seeds. Per-layer criteria use the ERK allocation. Prune-after fine-tunes at lr 0.01, a tenth of the training
 rate (the standard protocol), or at the training rate 0.1 (cosine restart); at 0.5\% a rate of 0.05 gives 85.4\%. At 2\%
-the two bold entries are 91.48 and 91.46.}
+the two bold entries are 91.48 and 91.46. Prune-after, gradual applies the cubic schedule during the fine-tuning phase,
+as in Table~\ref{tab:cifar}; run at 0.5\% only.}
 \label{tab:resnet}
 \begin{tabular}{lcccccc}
 \toprule
@@ -390,6 +394,7 @@ Route (criterion) & 5\% & 2\% & 0.5\% & 5\% & 2\% & 0.5\% \\
 Dense small (additive)           & 88.7 & 86.5 & 81.3 & 5.6e7 & 2.3e7 & 6.1e6 \\
 Prune-after + fine-tune          & 92.3 & 90.9 & 83.6 & 2.7e8 & 1.5e8 & 5.3e7 \\
 Prune-after + fine-tune at lr 0.1 & \textbf{92.6} & \textbf{91.5} & 85.6 & 2.7e8 & 1.5e8 & 5.4e7 \\
+Prune-after, gradual, fine-tune at lr 0.1 & -- & -- & 88.3 & -- & -- & 3.8e7 \\
 Prune-during, magnitude (global) & 92.0 & \textbf{91.5} & \textbf{89.0} & 1.9e8 & 1.1e8 & 3.4e7 \\
 Prune-during, magnitude (ERK)    & 92.0 & 91.3 & 87.8 & 1.4e8 & 5.7e7 & 1.4e7 \\
 RigL (ERK)                       & 91.0 & 89.5 & 84.9 & 1.4e8 & 5.7e7 & 1.4e7 \\
@@ -645,7 +650,7 @@ layer.
 removing connections gradually while learning, with a global magnitude criterion, is better than learning small, better
 than removing them afterwards in one shot, and better than rewiring from a sparse start at equal training length, part of
 that last margin being the global allocation that RigL lacks. Against removing them gradually afterwards it gains only
-0.5--0.9 points at the tightest budgets and is level at 3\% on the CNN, but costs 23--31\% as much to train, so for that
+0.7--0.9 points at the tightest budget of each model and is level at 3\% on the CNN, but costs 23--31\% as much to train, so for that
 comparison the case for pruning while learning is mainly one of cost. The advantage grows with sparsity, and at loose
 budgets it shrinks to a tie with removing them afterwards or reverses (by 0.6 points at 5\% on ResNet-18). How tight
 a budget must be depends on the model and on how well the one-shot baseline is tuned: against prune-after fine-tuned at

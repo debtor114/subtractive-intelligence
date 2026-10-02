@@ -604,3 +604,9 @@ ResNet 은 학습률 0.1 인데 표준 prune-after 는 0.01 (1/10) 로 미세조
 0.5% 에서만 이기고 (+3.3, 표준 대비 +5.3), 2% 는 동률 (91.48 vs 91.46), 5% 는 0.6 뒤. RigL (84.9) 은 0.5% 에서 prune-after 뒤로 밀린다.
 본문의 "2% 이하 모든 예산에서 가장 정확" 은 MNIST·CNN 과 ResNet 0.5% 로 한정했고, 초록 수치 (83.6 -> 85.6) 와 Scope·Scale·결론을 고쳤다.
 교훈: 기준선의 미세조정 학습률은 모든 모델에서 학습률과 맞춰 둘 것 (CNN 1/5, ResNet 1/10 이 같은 방향으로 기준선을 약하게 만들었다).
+
+### 11-3. ResNet 분해 (14 차 리뷰, `scripts/review14_controls.cmd`)
+
+ResNet 0.5% 에서 gradual prune-after (학습률 0.1) = 88.3 ± 0.3 (one-shot 85.6, prune-during 89.0). 세 모델 모두 같은 분해:
+점진 스케줄이 가장 빡빡한 예산 격차의 73~81% (MNIST 0.5% 73%, CNN 1% 81%, ResNet 0.5% 80%), 학습 중 타이밍이 0.7~0.9 점 (MNIST 1% 에서는 0.5).
+비용은 gradual-after 의 23~31% (MNIST 23%, CNN 28~31%, ResNet 27.6%; ResNet gradual-after 는 3.9e15 로 one-shot 3.4e15 보다 비쌈).

@@ -100,6 +100,7 @@ for s in 0 1; do for d in 0.05 0.02 0.005; do python experiments/core_prune_duri
 for s in 0 1 2; do for d in 0.01 0.03; do for a in ttp_gradual ttp; do python experiments/core_prune_during_learning/run_cifar.py --model cnn --arm $a --density $d --seed $s --set ft_lr=0.05 tag=ftlr05; done; done; done
 for s in 0 1 2; do for d in 0.05 0.02 0.005; do python experiments/core_prune_during_learning/run_cifar.py --model resnet18 --arm ttp --density $d --seed $s --set ft_lr=0.1 tag=ftlr10; done; done
 for s in 0 1 2; do python experiments/core_prune_during_learning/run_cifar.py --model resnet18 --arm ttp --density 0.005 --seed $s --set ft_lr=0.05 tag=ftlr05; done
+for s in 0 1 2; do python experiments/core_prune_during_learning/run_cifar.py --model resnet18 --arm ttp_gradual --density 0.005 --seed $s --set ft_lr=0.1 tag=ftlr10; done
 for s in 0 1; do python experiments/core_prune_during_learning/run_pretrained.py --arm pt_pd --density 0.005 --seed $s --set prune_end=0.5 tag=end50; done
 # tables and figures, then the paper
 python scripts/analyze.py && python scripts/analyze_exp12.py

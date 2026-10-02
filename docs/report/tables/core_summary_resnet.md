@@ -21,6 +21,7 @@
 | 0.005 | prune-after: one-shot magnitude (global) + fine-tune | 3 | 55,822 | 0.8364 +- 0.0015 | 0.016 +- 0.001 | 5.27e+07 | 3.41e+15 | 445811 +- 28637 |
 | 0.005 | prune-after: one-shot magnitude (global) + fine-tune at lr 0.05 | 3 | 55,822 | 0.8539 +- 0.0013 | 0.021 +- 0.001 | 5.28e+07 | 3.41e+15 | 449667 +- 21963 |
 | 0.005 | prune-after: one-shot magnitude (global) + fine-tune at lr 0.1 | 3 | 55,822 | 0.8563 +- 0.0029 | 0.022 +- 0.002 | 5.36e+07 | 3.41e+15 | 450406 +- 14435 |
+| 0.005 | prune-after: gradual magnitude (global) during fine-tune at lr 0.1 | 3 | 55,822 | 0.8830 +- 0.0026 | 0.024 +- 0.003 | 3.83e+07 | 3.94e+15 | 443359 +- 6279 |
 | 0.005 | prune-during: magnitude (uniform per layer) | 2 | 55,819 | 0.8311 +- 0.0006 | 0.022 +- 0.001 | 5.55e+06 | 8.67e+14 | 392455 +- 2533 |
 | 0.005 | prune-during: magnitude (global) | 3 | 55,822 | 0.8896 +- 0.0003 | 0.027 +- 0.001 | 3.40e+07 | 1.09e+15 | 401879 +- 17074 |
 | 0.005 | prune-during: magnitude (ERK per layer) | 3 | 55,820 | 0.8783 +- 0.0022 | 0.024 +- 0.001 | 1.38e+07 | 1.18e+15 | 391071 +- 8159 |

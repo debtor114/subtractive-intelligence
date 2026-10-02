@@ -268,3 +268,5 @@
   prune-during 은 ResNet 에서 0.5% 만 승 (+3.3), 2% 동률, 5% −0.6. 초록 (85.6, 'ties or trails'), 기여 1, 관련연구 RigL 문장, 4 절 정확도·비용·ResNet 문단, 표 3 (행 추가·굵게·캡션), Scope (모델별 임계 예산), Scale, 결론, 부록 A, README.
 - 19:00 14 차 리뷰 1 부: '88–22%' 는 PDF 텍스트 추출에서 쪽 번호 8 이 다음 쪽 첫 줄 '8–22%' 앞에 붙은 것 (원문 이상 없음). RigL 순위를 '네 가지 주요 경로 중' 으로,
   관련연구 'the strongest of the routes that start sparse', 초록 'and saves' 복원 (한도: 'of the cost', 'of FLOPs', 1,918 자). 2 부: ResNet 0.5% gradual prune-after lr 0.1 × 3 시드 진행 중.
+- 19:28 14 차 리뷰 2 부: ResNet 0.5% gradual prune-after lr 0.1 = 88.3 (one-shot 85.6, during 89.0) → 분해가 세 모델에서 같음 (점진 73–81%, 타이밍 0.7–0.9, 비용 23–31%, ResNet 27.6%).
+  기여 2·4 절 분해 단락·Scope 를 세 모델로, 다섯 곳 수치를 '가장 빡빡한 예산에서 0.7–0.9' 로 통일 (초록·결론은 'up to a point', 'a quarter to a third' 로 이미 포함). 표 3 행·캡션, 부록 표 9 자동, README 명령.
