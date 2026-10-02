@@ -237,3 +237,5 @@
 - 13:19 7 차 리뷰: schedule 비교에 'when training from scratch' 한정 (pre-trained 는 0.5% 에서 one-shot 81.7 > gradual 80.9), Scope 'all fail' → CNN 에서 돌린 drive 규칙만,
   Table 5 행 주어 명시, 초록 'ResNet-18's connections' 복원 (1,915 자), README 요약 (about a point behind, transfer 예외) + ViT 재현 명령 전체 (baseline 학습·exp2 finetune.py·exp12 5 종).
   refs.bib: DOI 없는 학회·저널 9 건에 공식 페이지 url 추가 (NeurIPS hash 는 연도 색인에서 제목 대조, PMLR·JMLR 페이지 제목 대조, OpenReview 는 Chrome 으로 포럼 제목 확인).
+- 13:30 8 차 리뷰 (선택): 초록 'collapses on CNNs' → 'collapses on the CNN without per-neuron normalisation' (Table 5 와 같은 강도). 한도 때문에 Finally·'; it'·'not a conclusion'·'one follow-up'·어순을 줄여 1,915 자 유지.
+  README 세 항목 (about a point behind·사전학습 0.5% 예외·MNIST ViT 명령) 은 c9fa12c 에 이미 반영됨 — raw.githubusercontent 가 max-age=300 캐시 (x-cache HIT) 로 옛 사본을 보여 준 것.
