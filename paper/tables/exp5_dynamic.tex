@@ -14,7 +14,7 @@ density & arm & seeds & active/sample & test acc & ECE & infer FLOPs & cum. trai
 0.2 & dynamic, connection-level, random selection & 2 & 2,238,912 & 0.7614 $\pm$ 0.0023 & 0.024 $\pm$ 0.003 & $2.25\times10^{8}$ & $1.36\times10^{15}$ & 0.111 $\pm$ 0.000 & 0.111 $\pm$ 0.000 & 1.000 $\pm$ 0.000 \\
 0.2 & dynamic, connection-level, local rule (abs(w) $\times$ input magnitude) & 2 & 2,238,912 & 0.9183 $\pm$ 0.0010 & 0.038 $\pm$ 0.000 & $2.25\times10^{8}$ & $1.36\times10^{15}$ & 0.613 $\pm$ 0.005 & 0.462 $\pm$ 0.008 & 0.429 $\pm$ 0.003 \\
 0.05 & static: dense small (additive) & 3 & 562,229 & 0.8866 $\pm$ 0.0018 & 0.030 $\pm$ 0.002 & $5.58\times10^{7}$ & $1.67\times10^{14}$ & - & - & - \\
-0.05 & static: train-then-prune + finetune & 3 & 558,218 & 0.9227 $\pm$ 0.0006 & 0.035 $\pm$ 0.001 & $2.71\times10^{8}$ & $3.74\times10^{15}$ & - & - & - \\
+0.05 & static: prune-after, one-shot magnitude + fine-tune & 3 & 558,218 & 0.9227 $\pm$ 0.0006 & 0.035 $\pm$ 0.001 & $2.71\times10^{8}$ & $3.74\times10^{15}$ & - & - & - \\
 0.05 & static: RigL & 3 & 558,213 & 0.9097 $\pm$ 0.0016 & 0.034 $\pm$ 0.001 & $1.39\times10^{8}$ & $4.17\times10^{14}$ & - & - & - \\
 0.05 & static: prune-during, magnitude (ERK) & 3 & 558,213 & 0.9203 $\pm$ 0.0009 & 0.034 $\pm$ 0.001 & $1.39\times10^{8}$ & $1.43\times10^{15}$ & - & - & - \\
 0.05 & static: prune-during, magnitude (global) & 3 & 558,218 & 0.9196 $\pm$ 0.0023 & 0.034 $\pm$ 0.001 & $1.85\times10^{8}$ & $1.33\times10^{15}$ & - & - & - \\
@@ -22,7 +22,7 @@ density & arm & seeds & active/sample & test acc & ECE & infer FLOPs & cum. trai
 0.05 & dynamic, connection-level, random selection & 2 & 564,160 & 0.5229 $\pm$ 0.0005 & 0.029 $\pm$ 0.001 & $5.91\times10^{7}$ & $9.86\times10^{14}$ & 0.026 $\pm$ 0.000 & 0.026 $\pm$ 0.000 & 1.000 $\pm$ 0.000 \\
 0.05 & dynamic, connection-level, local rule (abs(w) $\times$ input magnitude) & 2 & 564,160 & 0.8983 $\pm$ 0.0011 & 0.039 $\pm$ 0.003 & $5.91\times10^{7}$ & $9.86\times10^{14}$ & 0.439 $\pm$ 0.003 & 0.274 $\pm$ 0.002 & 0.207 $\pm$ 0.003 \\
 0.005 & static: dense small (additive) & 3 & 55,872 & 0.8131 $\pm$ 0.0026 & 0.021 $\pm$ 0.001 & $6.12\times10^{6}$ & $1.84\times10^{13}$ & - & - & - \\
-0.005 & static: train-then-prune + finetune & 3 & 55,822 & 0.8364 $\pm$ 0.0015 & 0.016 $\pm$ 0.001 & $5.27\times10^{7}$ & $3.41\times10^{15}$ & - & - & - \\
+0.005 & static: prune-after, one-shot magnitude + fine-tune & 3 & 55,822 & 0.8364 $\pm$ 0.0015 & 0.016 $\pm$ 0.001 & $5.27\times10^{7}$ & $3.41\times10^{15}$ & - & - & - \\
 0.005 & static: RigL & 3 & 55,820 & 0.8486 $\pm$ 0.0030 & 0.026 $\pm$ 0.001 & $1.38\times10^{7}$ & $4.15\times10^{13}$ & - & - & - \\
 0.005 & static: prune-during, magnitude (ERK) & 3 & 55,820 & 0.8783 $\pm$ 0.0022 & 0.024 $\pm$ 0.001 & $1.38\times10^{7}$ & $1.18\times10^{15}$ & - & - & - \\
 0.005 & static: prune-during, magnitude (global) & 3 & 55,822 & 0.8896 $\pm$ 0.0003 & 0.027 $\pm$ 0.001 & $3.40\times10^{7}$ & $1.09\times10^{15}$ & - & - & - \\

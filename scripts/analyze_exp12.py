@@ -84,13 +84,13 @@ def main():
                     xs.append(np.mean([x["flops_ratio"] for x in v]))
                     ys.append(np.mean([x["acc"] for x in v]))
             if xs:
-                ax.plot(xs, ys, marker="s", color=MUTED, linestyle=":", label="exp2 post-hoc, late blocks only, identity")
+                ax.plot(xs, ys, marker="s", color=MUTED, linestyle=":", label="post-hoc identity skipping, late blocks only, no fine-tuning")
         base = np.mean([r["baseline_full"]["acc"] for r in rs])
         ax.axhline(base, color=MUTED, linewidth=1, linestyle=":")
         ax.set_xlabel("FLOPs ratio vs full model")
         ax.set_ylabel("test accuracy")
         ax.set_title(f"{ds}: 사전 필터링 (시상 라우터 + 예측 잔차 + 점진 스킵 미세조정), 스킵 0 ~ 0.9")
-        ax.legend(fontsize=7, loc="lower left")
+        ax.legend(fontsize=7, loc="lower right")
         save(fig, f"exp12_{ds}")
 
 

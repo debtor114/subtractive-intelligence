@@ -246,3 +246,7 @@
   세는 단위는 Table 5 기준, dense big 대비 학습 비용 26–45%, 재현성 예외 (부록 B 다섯 진술), 표·그림 라벨 통일 (prune-after / Hebbian / uniform per layer).
   대조군 실험 추가 (scripts/review9_controls.cmd, 로컬 3060 Ti 순차): ttp_gradual (학습 후 점진 가지치기), rigl_x3, exp12 drop_late, dense_small_shallow,
   pt_rigl_mag, pt_pd end50. MNIST 결과: ttp_gradual 0.5% 96.9 (one-shot 94.5, prune-during 97.8) → 점진성이 격차의 대부분, 학습 중 타이밍이 0.9 점; rigl_x3 1% 97.7 (1x 97.4).
+- 14:24 10 차 리뷰 + MNIST 대조군 반영: 팔별 고정 색 (ARM_STYLE) 과 짧은 범례 라벨 (ARM_SHORT) 로 그림 1 캡션 색 복원, 범례 잘림 해소, 그림 2 범례 한 열, 그림 4 내부 ID 제거·범례 우하단,
+  exp4 표에 배경 픽셀 대조 행 (Table 22 출처), exp5 표 옛 이름 교체, 표 1 에 'prune-after, gradual' 과 'RigL 3x' 행, 본문에 점진 prune-after 대조군 (0.5% 96.9 vs 94.5 vs 97.8),
+  RigL 3x (1% 97.7, 0.5% 97.5), late block 제거 대조군 (MNIST −1.7, CIFAR −9.0 @50% FLOPs vs 스킵 90% −0.4/−2 @64–65%), ResNet 0.2–0.5, local rules 'at 5% and below',
+  초록 gain 문장을 두 겹으로 (1,915 자). 궤적 그림에서 _x 팔 제외. CNN·사전학습 대조군은 아직 돌아가는 중.

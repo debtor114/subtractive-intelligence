@@ -131,6 +131,34 @@ ARM_ORDER = ["dense_small", "dense_small_shallow", "ttp", "ttp_gradual", "pd_mag
              "pd_drive_layer", "pd_drive_erk", "pd_drivenorm_erk", "pd_random_layer", "set", "rigl", "rigl_x3", "static_sparse"]
 
 
+# 팔별 고정 색과 선 모양 (팔을 추가해도 기존 색이 바뀌지 않도록 이름으로 고정; 본문 캡션의 색 이름이 여기에 맞춰져 있다)
+ARM_STYLE = {
+    "dense_small": ("#2a78d6", "-"), "dense_small_shallow": ("#2a78d6", "--"),
+    "ttp": ("#eb6834", "-"), "ttp_gradual": ("#eb6834", "--"),
+    "pd_mag_global": ("#eda100", "-"), "pd_mag_erk": ("#eda100", "--"), "pd_mag_layer": ("#1baf7a", "-"),
+    "pd_act_layer": ("#4a3aa7", "-"), "pd_actmag_layer": ("#4a3aa7", "--"),
+    "pd_drive_layer": ("#e87ba4", "-"), "pd_drive_erk": ("#e87ba4", "--"), "pd_drivenorm_erk": ("#e87ba4", "-"),
+    "pd_random_layer": ("#e34948", "-"), "set": ("#008300", "--"), "rigl": ("#008300", "-"), "rigl_x3": ("#008300", ":"),
+    "static_sparse": ("#8a8a8a", ":"), "dense_big": ("#303030", "-"),
+}
+# 범례용 짧은 라벨 (표는 ARM_LABEL 의 긴 이름을 쓴다)
+ARM_SHORT = {
+    "dense_small": "dense small (additive)", "dense_small_shallow": "dense small, shallow and wide",
+    "ttp": "prune-after, one-shot", "ttp_gradual": "prune-after, gradual",
+    "pd_mag_global": "prune-during, magnitude (global)", "pd_mag_erk": "prune-during, magnitude (ERK)",
+    "pd_mag_layer": "prune-during, magnitude (uniform per layer)",
+    "pd_act_layer": "prune-during, activity (Hebbian)", "pd_actmag_layer": "prune-during, |w| x activity (Hebbian)",
+    "pd_drive_layer": "prune-during, synaptic drive", "pd_drive_erk": "prune-during, drive (ERK)",
+    "pd_drivenorm_erk": "prune-during, drive, per-neuron normalised (ERK)",
+    "pd_random_layer": "prune-during, random", "set": "SET", "rigl": "RigL", "rigl_x3": "RigL, 3x training",
+    "static_sparse": "static random sparse", "dense_big": "dense big",
+}
+
+
+def style(arm):
+    return ARM_STYLE.get(arm, ("#303030", "-"))
+
+
 def converged(rs):
     """발산한 시드 (우연 수준 정확도) 를 뺀 run. 그림은 이 평균을 쓰고, 표는 전 시드를 쓴다 (본문 표 2 와 같은 규칙)."""
     ok = [r for r in rs if r["final_acc"] > 0.15]
@@ -176,10 +204,10 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
                 ys.append(np.mean([r["final_acc"] for r in converged(rs)]))
                 es.append(np.std([r["final_acc"] for r in converged(rs)]))
                 if len(converged(rs)) < len(rs):
-                    diverged_pts.append((xs[-1], np.mean([r["final_acc"] for r in rs]), SERIES[i % 8]))
+                    diverged_pts.append((xs[-1], np.mean([r["final_acc"] for r in rs]), style(arm)[0]))
         if xs:
-            ax.errorbar(xs, ys, yerr=es, label=ARM_LABEL[arm], color=SERIES[i % 8], marker="o",
-                        linestyle="-" if i < 8 else "--", capsize=2)
+            ax.errorbar(xs, ys, yerr=es, label=ARM_SHORT.get(arm, arm), color=style(arm)[0], linestyle=style(arm)[1], marker="o",
+                        capsize=2)
     ax.set_xscale("log")
     if big:
         big_acc = np.mean([r["final_acc"] for r in big])
@@ -199,14 +227,14 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
         for arm in present:
             i = cidx[arm]
             rs = data[d_show].get(arm)
-            if not rs:
+            if not rs or "_x" in arm:   # k 배 긴 학습 팔은 축이 늘어나 궤적 그림에서는 뺀다 (표에는 있음)
                 continue
             r = sorted(rs, key=lambda x: x["seed"])[0]
             c = [x for x in r["curve"] if x.get("phase") in ("main", "finetune", "post_prune", "pre_prune", "final")]
-            axes[0].plot([x["step"] for x in c], [x["active"] for x in c], color=SERIES[i % 8], label=ARM_LABEL[arm],
-                         linestyle="-" if i < 8 else "--")
-            axes[1].plot([x["step"] for x in c], [x["test_acc"] for x in c], color=SERIES[i % 8],
-                         linestyle="-" if i < 8 else "--")
+            axes[0].plot([x["step"] for x in c], [x["active"] for x in c], color=style(arm)[0], label=ARM_SHORT.get(arm, arm),
+                         linestyle=style(arm)[1])
+            axes[1].plot([x["step"] for x in c], [x["test_acc"] for x in c], color=style(arm)[0],
+                         linestyle=style(arm)[1])
         axes[0].set_yscale("log")
         axes[0].set_xlabel("training step")
         axes[0].set_ylabel("active weights")
@@ -216,8 +244,8 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
         axes[1].set_ylim(ylim[0] - 0.25, ylim[1])
         axes[1].set_title("정확도 궤적 (학습 후 가지치기는 본 학습 끝에 한 번에 깎임)")
         handles, labels = axes[0].get_legend_handles_labels()
-        fig.legend(handles, labels, loc="lower center", ncol=4, fontsize=7, frameon=False)
-        fig.tight_layout(rect=[0, 0.14, 1, 1])
+        fig.legend(handles, labels, loc="lower center", ncol=3, fontsize=7.5, frameon=False)
+        fig.tight_layout(rect=[0, 0.2, 1, 1])
         fig.savefig(os.path.join(FIG, f"core_trajectory{suffix}.png"), dpi=150)
         plt.close(fig)
         print(f"[figure] core_trajectory{suffix}")
@@ -233,7 +261,7 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
                 xs.append(np.mean([r["cum_train_flops"] for r in rs]))
                 ys.append(np.mean([r["final_acc"] for r in converged(rs)]))
         if xs:
-            ax.plot(xs, ys, marker="o", color=SERIES[i % 8], label=ARM_LABEL[arm], linestyle="-" if i < 8 else "--")
+            ax.plot(xs, ys, marker="o", color=style(arm)[0], label=ARM_SHORT.get(arm, arm), linestyle=style(arm)[1])
     ax.set_xscale("log")
     ax.set_xlabel("cumulative training FLOPs (forward x3, actual density per step)")
     ax.set_ylabel(f"{dataset_label} test accuracy")
@@ -253,9 +281,9 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
                 xs.append(np.mean([r["infer_flops"] for r in rs]))
                 ys.append(np.mean([r["final_acc"] for r in converged(rs)]))
                 if len(converged(rs)) < len(rs):
-                    diverged_pts.append((xs[-1], np.mean([r["final_acc"] for r in rs]), SERIES[i % 8]))
+                    diverged_pts.append((xs[-1], np.mean([r["final_acc"] for r in rs]), style(arm)[0]))
         if xs:
-            ax.plot(xs, ys, marker="o", color=SERIES[i % 8], label=ARM_LABEL[arm], linestyle="-" if i < 8 else "--")
+            ax.plot(xs, ys, marker="o", color=style(arm)[0], label=ARM_SHORT.get(arm, arm), linestyle=style(arm)[1])
     for j, (x, y, c) in enumerate(diverged_pts):
         ax.plot([x], [y], marker="o", markerfacecolor="none", color=c, linestyle="none",
                 label="all-seed mean incl. diverged seed" if j == 0 else None)
@@ -282,7 +310,7 @@ def analyze_core(root: str = "core", suffix: str = "", ylim=(0.85, 1.0), dataset
             xs = np.array(curves[0][0][:n])
             ys = np.mean([c[1][:n] for c in curves], axis=0)
             m = xs <= (240000 if root == "core" else 400000)
-            ax.plot(xs[m], ys[m], color=SERIES[i % 8], label=ARM_LABEL[arm], linestyle="-" if i < 8 else "--")
+            ax.plot(xs[m], ys[m], color=style(arm)[0], label=ARM_SHORT.get(arm, arm), linestyle=style(arm)[1])
         ax.set_xlabel("training samples seen")
         ax.set_ylabel("test accuracy")
         ax.set_ylim(*ylim)
@@ -532,6 +560,9 @@ def analyze_exp4():
                      ms([r["weight_stats"][-1]["frac_below_1pct"] for r in rs], "{:.3f}"),
                      ms([r["train_time_s"] for r in rs], "{:.0f}")])
     bg = mnist_background_fraction()
+    rows.append(["control: MNIST class-mean background pixels", "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                 f"{bg['class_mean_below_1pct']:.3f} (per class {bg['per_class_min']:.2f}-{bg['per_class_max']:.2f}; "
+                 f"zero in 99% of images {bg['zero_in_99pct']:.3f})", "-"])
     write_table("exp4", ["n_e", "seeds", "STDP acc", "backprop MLP acc (same width, same samples)", "SNN infer SOP/img",
                          "MLP infer FLOPs/img", "SNN train ops (total)", "MLP train FLOPs (total)", "SNN samples to 80%",
                          "MLP samples to 80%", "weights < 1% wmax (final)", "train time (s)"], rows,
@@ -836,7 +867,7 @@ EXP5_LABEL = {
     "pd_mag_erk": "static: prune-during, magnitude (ERK)",
     "dense_small": "static: dense small (additive)",
     "rigl": "static: RigL",
-    "ttp": "static: train-then-prune + finetune",
+    "ttp": "static: prune-after, one-shot magnitude + fine-tune",
 }
 EXP5_ORDER = ["dense_small", "ttp", "rigl", "pd_mag_erk", "pd_mag_global", "kwta_in", "dyn_random", "dyn_local"]
 

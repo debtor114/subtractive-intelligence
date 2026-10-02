@@ -39,7 +39,7 @@
 | 0.02 | static random sparse | 3 | 37,233 | 0.9590 +- 0.0013 | 0.009 +- 0.001 | 7.45e+04 | 2.01e+11 | - |
 | 0.01 | dense small (additive) | 3 | 18,791 | 0.9630 +- 0.0012 | 0.004 +- 0.001 | 3.76e+04 | 1.01e+11 | - |
 | 0.01 | prune-after: one-shot magnitude (global) + fine-tune | 3 | 18,616 | 0.9752 +- 0.0020 | 0.006 +- 0.000 | 3.72e+04 | 1.01e+13 | 87336 +- 7781 |
-| 0.01 | prune-after: gradual magnitude (global) during fine-tune | 2 | 18,616 | 0.9795 +- 0.0006 | 0.010 +- 0.000 | 3.72e+04 | 1.14e+13 | 84378 +- 8034 |
+| 0.01 | prune-after: gradual magnitude (global) during fine-tune | 3 | 18,616 | 0.9794 +- 0.0006 | 0.009 +- 0.000 | 3.72e+04 | 1.14e+13 | 87336 +- 7781 |
 | 0.01 | prune-during: magnitude (uniform per layer) | 3 | 18,616 | 0.9823 +- 0.0001 | 0.007 +- 0.000 | 3.72e+04 | 2.66e+12 | 87336 +- 7781 |
 | 0.01 | prune-during: magnitude (global) | 3 | 18,616 | 0.9844 +- 0.0003 | 0.004 +- 0.000 | 3.72e+04 | 2.66e+12 | 87336 +- 7781 |
 | 0.01 | prune-during: activity, Hebbian (uniform per layer) | 3 | 18,616 | 0.9366 +- 0.0015 | 0.037 +- 0.001 | 3.72e+04 | 2.66e+12 | 87336 +- 7781 |
@@ -48,9 +48,11 @@
 | 0.01 | prune-during: random (uniform per layer) | 3 | 18,616 | 0.8913 +- 0.0060 | 0.071 +- 0.003 | 3.72e+04 | 2.66e+12 | 87336 +- 7781 |
 | 0.01 | SET (dynamic sparse training, random regrowth) | 3 | 18,616 | 0.9603 +- 0.0010 | 0.008 +- 0.001 | 3.72e+04 | 1.01e+11 | - |
 | 0.01 | RigL (dynamic sparse training, gradient regrowth) | 3 | 18,616 | 0.9741 +- 0.0016 | 0.004 +- 0.001 | 3.72e+04 | 1.01e+11 | 444658 +- 67026 |
+| 0.01 | RigL, 3x training length | 3 | 18,616 | 0.9772 +- 0.0008 | 0.013 +- 0.001 | 3.72e+04 | 3.02e+11 | 445880 +- 52617 |
 | 0.01 | static random sparse | 3 | 18,616 | 0.9259 +- 0.0034 | 0.015 +- 0.001 | 3.72e+04 | 1.01e+11 | - |
 | 0.005 | dense small (additive) | 3 | 9,672 | 0.9407 +- 0.0010 | 0.009 +- 0.001 | 1.93e+04 | 5.22e+10 | - |
 | 0.005 | prune-after: one-shot magnitude (global) + fine-tune | 3 | 9,308 | 0.9451 +- 0.0060 | 0.017 +- 0.006 | 1.86e+04 | 1.01e+13 | 87336 +- 7781 |
+| 0.005 | prune-after: gradual magnitude (global) during fine-tune | 3 | 9,308 | 0.9692 +- 0.0012 | 0.020 +- 0.001 | 1.86e+04 | 1.14e+13 | 87336 +- 7781 |
 | 0.005 | prune-during: magnitude (uniform per layer) | 3 | 9,308 | 0.9704 +- 0.0005 | 0.015 +- 0.001 | 1.86e+04 | 2.62e+12 | 87336 +- 7781 |
 | 0.005 | prune-during: magnitude (global) | 3 | 9,308 | 0.9781 +- 0.0002 | 0.006 +- 0.000 | 1.86e+04 | 2.62e+12 | 87336 +- 7781 |
 | 0.005 | prune-during: activity, Hebbian (uniform per layer) | 3 | 9,322 | 0.8885 +- 0.0109 | 0.100 +- 0.037 | 1.86e+04 | 2.62e+12 | 87336 +- 7781 |
@@ -59,6 +61,7 @@
 | 0.005 | prune-during: random (uniform per layer) | 3 | 9,308 | 0.7184 +- 0.0230 | 0.157 +- 0.017 | 1.86e+04 | 2.62e+12 | 87336 +- 7781 |
 | 0.005 | SET (dynamic sparse training, random regrowth) | 3 | 9,308 | 0.9365 +- 0.0011 | 0.012 +- 0.001 | 1.86e+04 | 5.03e+10 | - |
 | 0.005 | RigL (dynamic sparse training, gradient regrowth) | 3 | 9,308 | 0.9631 +- 0.0027 | 0.005 +- 0.001 | 1.86e+04 | 5.03e+10 | - |
+| 0.005 | RigL, 3x training length | 3 | 9,308 | 0.9746 +- 0.0010 | 0.008 +- 0.001 | 1.86e+04 | 1.51e+11 | 844057 +- 92020 |
 | 0.005 | static random sparse | 3 | 9,308 | 0.7271 +- 0.0271 | 0.053 +- 0.012 | 1.86e+04 | 5.03e+10 | - |
 
 density 는 과잉 초기화 망(784-1024-1024-10, 1,861,632 가중치) 대비 최종 활성 비율. dense small 은 같은 예산의 작은 망. 학습 FLOPs 는 매 스텝 실제 활성 연결 기준 누적 (순전파 x3).

@@ -1,0 +1,73 @@
+{
+ "cfg": {
+  "ckpt": "results/baseline_vit_mnist\\seed0_20261001-011134\\model_final.pt",
+  "dataset": "mnist",
+  "mode": "drop_late",
+  "late_attn": "full",
+  "smax": 1.0,
+  "epochs": 4,
+  "seed": 0,
+  "substitute": "predicted"
+ },
+ "dataset": "mnist",
+ "seed": 0,
+ "mode": "drop_late",
+ "late_attn": "full",
+ "smax": 1.0,
+ "epochs": 4,
+ "substitute": "predicted",
+ "n_front": 2,
+ "n_tokens": 50,
+ "baseline_full": {
+  "acc": 0.9831,
+  "ece": 0.004400178653001704,
+  "nll": 0.05499485250589885,
+  "computed_frac": 1.0
+ },
+ "after_warmup_at_smax": {
+  "acc": 0.899,
+  "ece": 0.011825139939784988,
+  "nll": 0.2997771448908389,
+  "computed_frac": 0.0
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "train_acc": 0.9409833333333333,
+   "test_acc_at_smax": 0.9576,
+   "s_end": 0.416
+  },
+  {
+   "epoch": 2,
+   "train_acc": 0.9562666666666667,
+   "test_acc_at_smax": 0.9625,
+   "s_end": 0.8328888888888889
+  },
+  {
+   "epoch": 3,
+   "train_acc": 0.9604333333333334,
+   "test_acc_at_smax": 0.966,
+   "s_end": 1.0
+  },
+  {
+   "epoch": 4,
+   "train_acc": 0.9628166666666667,
+   "test_acc_at_smax": 0.9655,
+   "s_end": 1.0
+  }
+ ],
+ "rows": [
+  {
+   "skip_frac": 1.0,
+   "eval_mode": "drop_late",
+   "acc": 0.9655,
+   "ece": 0.004850661414861753,
+   "nll": 0.11409311350909636,
+   "computed_frac": 0.0,
+   "flops_ratio": 0.5012103879949024,
+   "flops": 42084864.0
+  }
+ ],
+ "flops_full": 83966464.0,
+ "time_s": 17.250292539596558
+}
