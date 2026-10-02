@@ -21,6 +21,8 @@ density & arm & seeds & active weights & test acc & ECE & infer FLOPs & cum. tra
 0.03 & dense small, shallow and wide (additive) & 3 & 68,264 & 0.8391 $\pm$ 0.0008 & 0.019 $\pm$ 0.001 & $2.57\times10^{7}$ & $7.72\times10^{13}$ & - \\
 0.03 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 65,869 & 0.8838 $\pm$ 0.0022 & 0.026 $\pm$ 0.001 & $3.58\times10^{7}$ & $9.77\times10^{14}$ & 411367 $\pm$ 15611 \\
 0.03 & prune-after: gradual magnitude (global) during fine-tune & 3 & 65,869 & 0.8797 $\pm$ 0.0011 & 0.022 $\pm$ 0.001 & $3.42\times10^{7}$ & $1.11\times10^{15}$ & 440414 $\pm$ 23340 \\
+0.03 & prune-after: one-shot magnitude (global) + fine-tune at lr 0.05 & 3 & 65,869 & 0.8837 $\pm$ 0.0012 & 0.031 $\pm$ 0.002 & $3.59\times10^{7}$ & $9.77\times10^{14}$ & 410359 $\pm$ 20729 \\
+0.03 & prune-after: gradual magnitude (global) during fine-tune at lr 0.05 & 3 & 65,869 & 0.8922 $\pm$ 0.0015 & 0.028 $\pm$ 0.003 & $3.09\times10^{7}$ & $1.11\times10^{15}$ & 404766 $\pm$ 38638 \\
 0.03 & prune-during: magnitude (global) & 3 & 65,869 & 0.8908 $\pm$ 0.0017 & 0.028 $\pm$ 0.002 & $2.98\times10^{7}$ & $3.40\times10^{14}$ & 391024 $\pm$ 6160 \\
 0.03 & prune-during: magnitude (ERK per layer) & 3 & 65,870 & 0.8692 $\pm$ 0.0026 & 0.023 $\pm$ 0.003 & $8.38\times10^{6}$ & $2.39\times10^{14}$ & 495322 $\pm$ 145564 \\
 0.03 & prune-during: synaptic drive, per-neuron normalised (ERK per layer) & 3 & 65,870 & 0.7928 $\pm$ 0.0048 & 0.020 $\pm$ 0.003 & $8.38\times10^{6}$ & $2.39\times10^{14}$ & - \\
@@ -30,6 +32,8 @@ density & arm & seeds & active weights & test acc & ECE & infer FLOPs & cum. tra
 0.01 & dense small, shallow and wide (additive) & 3 & 22,074 & 0.7836 $\pm$ 0.0026 & 0.016 $\pm$ 0.002 & $8.53\times10^{6}$ & $2.56\times10^{13}$ & - \\
 0.01 & prune-after: one-shot magnitude (global) + fine-tune & 3 & 21,956 & 0.8051 $\pm$ 0.0010 & 0.015 $\pm$ 0.003 & $1.60\times10^{7}$ & $9.47\times10^{14}$ & 411367 $\pm$ 15611 \\
 0.01 & prune-after: gradual magnitude (global) during fine-tune & 3 & 21,956 & 0.8192 $\pm$ 0.0021 & 0.012 $\pm$ 0.002 & $1.47\times10^{7}$ & $1.09\times10^{15}$ & 440414 $\pm$ 23340 \\
+0.01 & prune-after: one-shot magnitude (global) + fine-tune at lr 0.05 & 3 & 21,956 & 0.8113 $\pm$ 0.0026 & 0.020 $\pm$ 0.001 & $1.60\times10^{7}$ & $9.47\times10^{14}$ & 410804 $\pm$ 17276 \\
+0.01 & prune-after: gradual magnitude (global) during fine-tune at lr 0.05 & 3 & 21,956 & 0.8481 $\pm$ 0.0018 & 0.021 $\pm$ 0.000 & $1.27\times10^{7}$ & $1.09\times10^{15}$ & 419317 $\pm$ 25110 \\
 0.01 & prune-during: magnitude (global) & 3 & 21,956 & 0.8570 $\pm$ 0.0020 & 0.023 $\pm$ 0.001 & $1.16\times10^{7}$ & $3.09\times10^{14}$ & 390029 $\pm$ 6850 \\
 0.01 & prune-during: magnitude (ERK per layer) & 3 & 21,957 & 0.8134 $\pm$ 0.0007 & 0.015 $\pm$ 0.001 & $2.78\times10^{6}$ & $2.27\times10^{14}$ & - \\
 0.01 & prune-during: synaptic drive, per-neuron normalised (ERK per layer) & 3 & 21,957 & 0.6004 $\pm$ 0.0141 & 0.013 $\pm$ 0.006 & $2.78\times10^{6}$ & $2.27\times10^{14}$ & - \\

@@ -13,6 +13,8 @@
 | 0.03 | dense small, shallow and wide (additive) | 3 | 68,264 | 0.8391 +- 0.0008 | 0.019 +- 0.001 | 2.57e+07 | 7.72e+13 | - |
 | 0.03 | prune-after: one-shot magnitude (global) + fine-tune | 3 | 65,869 | 0.8838 +- 0.0022 | 0.026 +- 0.001 | 3.58e+07 | 9.77e+14 | 411367 +- 15611 |
 | 0.03 | prune-after: gradual magnitude (global) during fine-tune | 3 | 65,869 | 0.8797 +- 0.0011 | 0.022 +- 0.001 | 3.42e+07 | 1.11e+15 | 440414 +- 23340 |
+| 0.03 | prune-after: one-shot magnitude (global) + fine-tune at lr 0.05 | 3 | 65,869 | 0.8837 +- 0.0012 | 0.031 +- 0.002 | 3.59e+07 | 9.77e+14 | 410359 +- 20729 |
+| 0.03 | prune-after: gradual magnitude (global) during fine-tune at lr 0.05 | 3 | 65,869 | 0.8922 +- 0.0015 | 0.028 +- 0.003 | 3.09e+07 | 1.11e+15 | 404766 +- 38638 |
 | 0.03 | prune-during: magnitude (global) | 3 | 65,869 | 0.8908 +- 0.0017 | 0.028 +- 0.002 | 2.98e+07 | 3.40e+14 | 391024 +- 6160 |
 | 0.03 | prune-during: magnitude (ERK per layer) | 3 | 65,870 | 0.8692 +- 0.0026 | 0.023 +- 0.003 | 8.38e+06 | 2.39e+14 | 495322 +- 145564 |
 | 0.03 | prune-during: synaptic drive, per-neuron normalised (ERK per layer) | 3 | 65,870 | 0.7928 +- 0.0048 | 0.020 +- 0.003 | 8.38e+06 | 2.39e+14 | - |
@@ -22,6 +24,8 @@
 | 0.01 | dense small, shallow and wide (additive) | 3 | 22,074 | 0.7836 +- 0.0026 | 0.016 +- 0.002 | 8.53e+06 | 2.56e+13 | - |
 | 0.01 | prune-after: one-shot magnitude (global) + fine-tune | 3 | 21,956 | 0.8051 +- 0.0010 | 0.015 +- 0.003 | 1.60e+07 | 9.47e+14 | 411367 +- 15611 |
 | 0.01 | prune-after: gradual magnitude (global) during fine-tune | 3 | 21,956 | 0.8192 +- 0.0021 | 0.012 +- 0.002 | 1.47e+07 | 1.09e+15 | 440414 +- 23340 |
+| 0.01 | prune-after: one-shot magnitude (global) + fine-tune at lr 0.05 | 3 | 21,956 | 0.8113 +- 0.0026 | 0.020 +- 0.001 | 1.60e+07 | 9.47e+14 | 410804 +- 17276 |
+| 0.01 | prune-after: gradual magnitude (global) during fine-tune at lr 0.05 | 3 | 21,956 | 0.8481 +- 0.0018 | 0.021 +- 0.000 | 1.27e+07 | 1.09e+15 | 419317 +- 25110 |
 | 0.01 | prune-during: magnitude (global) | 3 | 21,956 | 0.8570 +- 0.0020 | 0.023 +- 0.001 | 1.16e+07 | 3.09e+14 | 390029 +- 6850 |
 | 0.01 | prune-during: magnitude (ERK per layer) | 3 | 21,957 | 0.8134 +- 0.0007 | 0.015 +- 0.001 | 2.78e+06 | 2.27e+14 | - |
 | 0.01 | prune-during: synaptic drive, per-neuron normalised (ERK per layer) | 3 | 21,957 | 0.6004 +- 0.0141 | 0.013 +- 0.006 | 2.78e+06 | 2.27e+14 | - |

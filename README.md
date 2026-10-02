@@ -95,8 +95,8 @@ python experiments/core_prune_during_learning/run_all_cifar.py --model cnn --arm
 python experiments/core_prune_during_learning/run_all_cifar.py --model cnn --arms rigl_x3 --densities 0.01 0.03 --skip_dense_big --skip_existing
 for s in 0 1 2; do python experiments/exp12_prefilter/run.py --ckpt "results/baseline_vit_mnist/seed${s}_*/model_final.pt" --dataset mnist --mode drop_late --smax 1.0 --seed $s; done
 python experiments/exp12_prefilter/run.py --ckpt "results/baseline_vit_cifar10/seed0_*/model_final.pt" --dataset cifar10 --mode drop_late --smax 1.0 --epochs 6
-for d in 0.05 0.02 0.005; do python experiments/core_prune_during_learning/run_pretrained.py --arm pt_rigl_mag --density $d; done
-python experiments/core_prune_during_learning/run_pretrained.py --arm pt_rigl_mag --density 0.005 --seed 1
+for s in 0 1; do for d in 0.05 0.02 0.005; do python experiments/core_prune_during_learning/run_pretrained.py --arm pt_rigl_mag --density $d --seed $s; done; done
+for s in 0 1 2; do for d in 0.01 0.03; do for a in ttp_gradual ttp; do python experiments/core_prune_during_learning/run_cifar.py --model cnn --arm $a --density $d --seed $s --set ft_lr=0.05 tag=ftlr05; done; done; done
 for s in 0 1; do python experiments/core_prune_during_learning/run_pretrained.py --arm pt_pd --density 0.005 --seed $s --set prune_end=0.5 tag=end50; done
 # tables and figures, then the paper
 python scripts/analyze.py && python scripts/analyze_exp12.py
