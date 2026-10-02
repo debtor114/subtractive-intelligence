@@ -261,3 +261,6 @@
   2 부 실험 (scripts/review11_controls.cmd): CNN prune-after 미세조정 lr 0.05 (점진·one-shot, 1%·3%, 3 시드), pt_rigl_mag 5%·2% 시드 1.
 - 16:52 11 차 2 부 + 12 차: CNN 미세조정 lr 0.05 대조군 → 타이밍 효과는 학습률 교란 (gradual-after 3% 89.2 = during 89.1, 1% 84.8 vs 85.7; one-shot 88.4/81.1). 초록·기여 2·4 절·결론을 '점진 스케줄이 대부분, 학습 중은 최대 1 점' 으로.
   전이: 2 시드 (93.3/90.7), '시간 + 선택 중인 연결' 논리 (one-shot 은 10 에폭에도 81.7), parity 표현 통일 (결론·그림 3·초록 'given time at the final density'), 재배선 시드 구분, 'largely closes', Scope 전역 할당. 표 2 두 행, 표 4·캡션, 부록 A, README.
+- 17:05 13 차 리뷰 1 부: Scope 를 one-shot (우위) / gradual-after (0.5–0.9 점, 비용 23–31%) 로 나눠 '학습 중' 의 근거를 비용으로, 초록·결론에 비용 근거 (a quarter to a third),
+  기여 2 의 97% 를 MNIST 로 한정, CNN 1% 헤드라인 4.6 (표준 프로토콜 5.2), 그림 2 캡션 (주황 네 선·파란 점선), 부록 A 미세조정 학습률 (CNN 1/5, ResNet 1/10)·ResNet lr 0.1.
+  초록 1,920 자 (sleep·thalamic 묘사 축약, 'best local rule'). 2 부: ResNet 0.5% one-shot 미세조정 lr 0.1 / 0.05, 3 시드 (scripts/review13_controls.cmd) 진행 중.

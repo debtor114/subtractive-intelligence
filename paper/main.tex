@@ -32,7 +32,7 @@ Learning Is Pruning, and Four Mechanisms That Did Not Transfer}
 \maketitle
 
 \begin{abstract}
-Which brain mechanisms survive translation to a von~Neumann machine? We ported five mechanisms and a follow-up to GPU training under one protocol: gradual synaptic pruning during learning, a fast hippocampus consolidating into a slow cortex during sleep, thalamic routing that decides what to process, predictive coding that skips the predictable, and spike-timing-dependent plasticity. One principle transfers. At matched final connection budgets, removing connections gradually while training beats training small, pruning once after training and dynamic sparse training (RigL at equal training length) at tight budgets, ties prune-after at loose ones, and its margin grows with sparsity: at 0.5\% it reaches 97.8\% on MNIST against 94.1\%, 94.5\% and 96.3\%, and 89.0\% on a CIFAR-10 ResNet-18 against 81.3\%, 83.6\% and 84.9\%. The gain comes from the gradual schedule, plus up to a point from pruning while learning, not from sparsity; it survives at matched inference FLOPs and costs 3--59$\times$ the small network's training compute. A pre-trained start adds 3.5--5.3 points over pruning from scratch and saves no adaptation compute (93.7\% on CIFAR-10 at 5\% of an ImageNet-pre-trained ResNet-18's connections); RigL from the inherited mask comes within 0.4 points at 28--42\% of the compute, and at 0.5\% the start breaks even only given time at the final density. The best local criterion, synaptic drive, ends about a point behind per-layer magnitude pruning on the MLP and collapses on the CNN unless normalised per neuron. Four structures fail: sleep consolidation matches class-balanced replay; thalamic routing picks tokens no better than random and, as pre-routed attention, saves only 3.6--4.7\% of compute; predictive coding neither picks tokens better than chance nor fills gaps better than leaving them; per-input subnetworks are input-specific yet worse than a fixed mask. STDP alone sparsifies a spiking network.
+Which brain mechanisms survive translation to a von~Neumann machine? We ported five mechanisms and a follow-up to GPU training under one protocol: gradual synaptic pruning during learning, hippocampus-to-cortex consolidation in sleep, thalamic routing of what to process, predictive coding that skips the predictable, and spike-timing-dependent plasticity. One principle transfers. At matched final connection budgets, removing connections gradually while training beats training small, pruning once after training and dynamic sparse training (RigL at equal training length) at tight budgets, ties prune-after at loose ones, and its margin grows with sparsity: at 0.5\% it reaches 97.8\% on MNIST against 94.1\%, 94.5\% and 96.3\%, and 89.0\% on a CIFAR-10 ResNet-18 against 81.3\%, 83.6\% and 84.9\%. The gain comes mostly from the gradual schedule, not from sparsity, and survives at matched inference FLOPs; pruning while learning adds up to a point at a quarter to a third of the cost of pruning after training and 3--59$\times$ that of training small. A pre-trained start adds 3.5--5.3 points over pruning from scratch and saves no adaptation compute (93.7\% on CIFAR-10 at 5\% of an ImageNet-pre-trained ResNet-18's connections); RigL from the inherited mask comes within 0.4 points at 28--42\% of the compute, and at 0.5\% the start breaks even only given time at the final density. The best local rule, synaptic drive, ends about a point behind per-layer magnitude pruning on the MLP and collapses on the CNN unless normalised per neuron. Four structures fail: sleep consolidation matches class-balanced replay; thalamic routing picks tokens no better than random and, as pre-routed attention, saves only 3.6--4.7\% of compute; predictive coding neither picks tokens better than chance nor fills gaps better than leaving them; per-input subnetworks are input-specific yet worse than a fixed mask. STDP alone sparsifies a spiking network.
 \end{abstract}
 
 \section{Introduction}
@@ -79,9 +79,9 @@ unity, appears only as a hypothesis in Section~\ref{sec:discussion}.
   network once after training collapses accuracy at the pruning step (to below 60\% at 0.5\% density on MNIST) and recovers
   only partially; pruning it gradually after training, with the same schedule and the same total steps, recovers most of
   the loss (96.9\% against 94.5\% at 0.5\% on MNIST; 84.8\% against 81.1\% at 1\% on the CNN when fine-tuning runs at
-  the training learning rate); gradual removal interleaved with learning never falls below 97\% and ends a further 0.9
-  points higher on both models at their tightest budget (97.8\% and 85.7\%; Figure~\ref{fig:traj}), and level at 3\% on
-  the CNN.
+  the training learning rate); removing connections gradually while learning ends a further 0.9 points higher on both
+  models at their tightest budget (97.8\% and 85.7\%), is level at 3\% on the CNN, and costs 23--31\% of the training
+  compute of pruning the trained network gradually; on MNIST it never falls below 97\% on the way (Figure~\ref{fig:traj}).
   \item \textbf{Honest cost accounting.} Prune-during costs 3--59$\times$ the cumulative training FLOPs of the dense small
   network because it starts large, and 26--45\% of the cost of training the dense network it starts from, the usual
   train-then-compress baseline; RigL costs about the same as the dense small network on the MLP and CNN and 2.3--2.5$\times$
@@ -258,8 +258,9 @@ a global magnitude criterion is the most accurate route at every budget of 2\% a
 is level with it or slightly ahead: by 0.02 points at 10\% and 0.01 at 5\% on MNIST, 0.4 at 10\% on CIFAR-10 and 0.3 at 5\% on
 ResNet-18 (Table~\ref{tab:resnet}). Its margin over the additive baseline grows as the budget shrinks: on MNIST from 0.3
 points at 10\% to 3.7 points at 0.5\%, on CIFAR-10 from 3.0 points at 10\% to 8.6 points at 1\%. It also beats RigL by 1.5
-(MNIST, 0.5\%) and 9.8 points (CIFAR-10, 1\%, against the two RigL seeds that converged), and prune-after by 3.3 and 5.2
-points. The additive baseline is the width-scaled network; a depth variant with four convolutional layers instead of six at
+(MNIST, 0.5\%) and 9.8 points (CIFAR-10, 1\%, against the two RigL seeds that converged), and prune-after by 3.3 and 4.6
+points (the CNN figure is against prune-after fine-tuned at the training rate, the stronger variant; under the standard
+lower fine-tuning rate it is 5.2). The additive baseline is the width-scaled network; a depth variant with four convolutional layers instead of six at
 the same weight count (wider stages, 2.6$\times$ the inference FLOPs) does 1.1--1.3 points better than the width-scaled one
 at 3\% and 1\% (83.9\% and 78.4\%) and 0.4 points worse at 10\%, still 3.4--7.3 points behind prune-during
 (Table~\ref{tab:cifar}); the claim that learning small loses is about these two shapes of small network, not about every
@@ -318,7 +319,9 @@ at 3\%, 8.5e6 against 1.2e7 at 1\%), so the two are matched in both currencies, 
 \includegraphics[width=0.8\linewidth]{core_inferflops_vs_acc_cifar}
 \caption{CIFAR-10 accuracy against inference FLOPs; each point is one budget. At equal FLOPs and equal training length, prune-during with the
 ERK allocation (yellow, dashed) dominates RigL (dark green) and the dense small network (blue); RigL trained three times
-longer (dark green, dotted) reaches the ERK line at 3\%. RigL at 1\% is plotted as the mean of the two seeds that
+longer (dark green, dotted) reaches the ERK line at 3\%. Orange: prune-after, one-shot (solid) and gradual (dashed) at the
+standard fine-tuning rate and both at the training rate (dotted, dash-dotted); blue dashed: the shallow-and-wide dense
+small network. RigL at 1\% is plotted as the mean of the two seeds that
 converged (75.9\%), as in Table~\ref{tab:cifar}; the hollow markers are three-seed means that include a diverged seed
 (53.9\% for RigL, 56.7\% for RigL at 3$\times$ training length).}
 \label{fig:flops}
@@ -631,10 +634,12 @@ layer.
 \label{sec:discussion}
 
 \paragraph{Scope of the claim.} The claim that survives is narrow and, we think, useful: at a tight final connection budget,
-removing connections gradually while learning is better than learning small, better than removing them afterwards and better
-than rewiring from a sparse start at equal training length and with a global allocation; the advantage grows with
-sparsity, and at loose budgets it shrinks to a tie with removing
-them afterwards. The claim is about accuracy per connection, measured against small networks that are width-scaled or shallower-and-wider
+removing connections gradually while learning, with a global magnitude criterion, is better than learning small, better
+than removing them afterwards in one shot, and better than rewiring from a sparse start at equal training length, part of
+that last margin being the global allocation that RigL lacks. Against removing them gradually afterwards it gains only
+0.5--0.9 points at the tightest budgets and is level at 3\% on the CNN, but costs 23--31\% as much to train, so for that
+comparison the case for pruning while learning is mainly one of cost. The advantage grows with sparsity, and at loose
+budgets it shrinks to a tie with removing them afterwards. The claim is about accuracy per connection, measured against small networks that are width-scaled or shallower-and-wider
 versions of the same architecture. It is not a claim about training cost, where RigL wins, and on
 convolutional networks it must be stated per FLOP as well as per connection. It is also not a claim that local rules suffice:
 the best of them ends about a point behind per-layer magnitude pruning on the MLP, and the drive rules we ran on the CNN
@@ -707,7 +712,8 @@ continual learning \citep{mallya2018,golkar2019} but tests the developmental cla
 
 Pruning during learning, with a plain global magnitude criterion and a gradual schedule, is the best route to a sparse network
 at tight budgets on the three models we tried, ties with pruning afterwards at loose budgets, and its advantage comes mostly
-from the gradual schedule, with pruning while learning adding up to a point at the tightest budgets, not from sparsity. Starting from a pre-trained network adds 3.5--5.3 points over pruning from scratch
+from the gradual schedule, not from sparsity; doing it while learning adds up to a point at the tightest budgets and costs
+a quarter to a third as much as pruning the trained network gradually. Starting from a pre-trained network adds 3.5--5.3 points over pruning from scratch
 down to about 2\% of the connections without saving adaptation compute, and at 0.5\% only breaks even with pruning from
 scratch, and only when the network is given time at the final density; dynamic sparse training from the inherited mask
 matches it at a fraction of the compute. The same programme's attempts at sleep consolidation, predictive skipping, thalamic routing (pre-decided skips and
@@ -736,7 +742,7 @@ tied scores (common with activity traces) cannot inflate the count.
 \paragraph{Schedules.} Prune-during: density $d(t)=d_f+(1-d_f)(1-t)^3$ for $t\in[0,1]$ spanning 10--70\% of training, pruning
 every 100 steps, with a final pruning step at 70\% so that the target is met exactly. RigL/SET: drop fraction
 $0.3\cdot\frac{1}{2}(1+\cos(\pi s/S))$ every 100 steps up to $S$ = 75\% of training. Prune-after: fine-tuning for half the
-original epochs at lr 0.01 (CNN) or the original lr (MLP); the rows marked lr 0.05 in Table~\ref{tab:cifar} restart the
+original epochs at lr 0.01 (CNN and ResNet-18, a fifth and a tenth of their training rates) or the original lr (MLP); the rows marked lr 0.05 in Table~\ref{tab:cifar} restart the
 cosine schedule at the training rate instead. RigL regrowth is skipped on steps whose mixed-precision gradients
 are non-finite; without this guard one CIFAR-10 seed lost 93\% of its connections in the first 1{,}000 steps. With the guard
 in place one CIFAR-10 seed at 1\% still diverged to chance (Table~\ref{tab:cifar}).
@@ -750,6 +756,7 @@ $4\times4$ as in the six-layer network (fc 256), scaled the same way; at 1\% it 
 \paragraph{Training.} MLP: Adam, lr $10^{-3}$, batch 128, one warm-up epoch then cosine, 15 epochs, no augmentation, full
 training and test sets resident on the GPU. CNN: SGD with Nesterov momentum 0.9, lr 0.05, weight decay $5\times10^{-4}$ on
 weights only, batch 128, mixed precision, 20 epochs, random crop (padding 4) and horizontal flip performed on the GPU.
+ResNet-18: the same with lr 0.1.
 
 \paragraph{Spiking network.} 784 Poisson inputs at 32\,Hz per unit intensity, 250\,ms per image, 1\,ms steps; 400 LIF
 neurons with adaptive thresholds ($\theta^+=0.05$), 5\,ms refractory period, recurrent inhibition of 17.5\,mV; trace STDP with
