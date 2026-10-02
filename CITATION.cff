@@ -9,7 +9,7 @@ authors:
 date-released: 2026-10-02
 version: "1.0"
 license: MIT
-repository-code: "https://github.com/TODO/subtractive-intelligence"
+repository-code: "https://github.com/debtor114/subtractive-intelligence"
 keywords:
   - network pruning
   - sparse training

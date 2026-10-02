@@ -3,7 +3,7 @@
 Code, per-run logs and paper source for
 
 > **What Survives the Translation from Brain to Von Neumann Machine: Learning Is Pruning, and Four Mechanisms That Did Not Transfer**
-> Dongin Kang, Independent Researcher, 2026 (draft; arXiv link to follow).
+> Dongin Kang, Independent Researcher, 2026 (draft; arXiv link to follow). Repository: https://github.com/debtor114/subtractive-intelligence
 
 Five brain mechanisms were ported to ordinary GPU training under one protocol and compared with matched baselines:
 gradual synaptic pruning during learning, hippocampus--cortex sleep consolidation, thalamic routing, predictive-coding
