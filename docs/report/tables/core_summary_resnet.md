@@ -6,17 +6,21 @@
 | 0.2 | prune-during: magnitude (global) | 2 | 2,232,870 | 0.9189 +- 0.0013 | 0.038 +- 0.000 | 3.45e+08 | 1.65e+15 | 377044 +- 750 |
 | 0.05 | dense small (additive) | 3 | 562,229 | 0.8866 +- 0.0018 | 0.030 +- 0.002 | 5.58e+07 | 1.67e+14 | 665417 +- 15510 |
 | 0.05 | prune-after: one-shot magnitude (global) + fine-tune | 3 | 558,218 | 0.9227 +- 0.0006 | 0.035 +- 0.001 | 2.71e+08 | 3.74e+15 | 434143 +- 30338 |
+| 0.05 | prune-after: one-shot magnitude (global) + fine-tune at lr 0.1 | 3 | 558,218 | 0.9256 +- 0.0001 | 0.032 +- 0.001 | 2.74e+08 | 3.74e+15 | 445454 +- 21753 |
 | 0.05 | prune-during: magnitude (uniform per layer) | 2 | 558,217 | 0.9108 +- 0.0002 | 0.037 +- 0.001 | 5.55e+07 | 9.79e+14 | 387334 +- 8668 |
 | 0.05 | prune-during: magnitude (global) | 3 | 558,218 | 0.9196 +- 0.0023 | 0.034 +- 0.001 | 1.85e+08 | 1.33e+15 | 384521 +- 15853 |
 | 0.05 | prune-during: magnitude (ERK per layer) | 3 | 558,213 | 0.9203 +- 0.0009 | 0.034 +- 0.001 | 1.39e+08 | 1.43e+15 | 399622 +- 18599 |
 | 0.05 | RigL (dynamic sparse training, gradient regrowth) | 3 | 558,213 | 0.9097 +- 0.0016 | 0.034 +- 0.001 | 1.39e+08 | 4.17e+14 | 524129 +- 20642 |
 | 0.02 | dense small (additive) | 3 | 225,892 | 0.8647 +- 0.0030 | 0.026 +- 0.000 | 2.25e+07 | 6.76e+13 | 801128 +- 18275 |
 | 0.02 | prune-after: one-shot magnitude (global) + fine-tune | 3 | 223,287 | 0.9094 +- 0.0018 | 0.027 +- 0.002 | 1.49e+08 | 3.56e+15 | 434143 +- 30338 |
+| 0.02 | prune-after: one-shot magnitude (global) + fine-tune at lr 0.1 | 3 | 223,287 | 0.9148 +- 0.0017 | 0.027 +- 0.001 | 1.50e+08 | 3.56e+15 | 443844 +- 17514 |
 | 0.02 | prune-during: magnitude (global) | 3 | 223,287 | 0.9146 +- 0.0015 | 0.034 +- 0.002 | 1.07e+08 | 1.20e+15 | 388422 +- 24257 |
 | 0.02 | prune-during: magnitude (ERK per layer) | 3 | 223,288 | 0.9125 +- 0.0012 | 0.032 +- 0.001 | 5.71e+07 | 1.26e+15 | 394149 +- 11727 |
 | 0.02 | RigL (dynamic sparse training, gradient regrowth) | 3 | 223,288 | 0.8950 +- 0.0018 | 0.030 +- 0.003 | 5.71e+07 | 1.71e+14 | 597590 +- 17418 |
 | 0.005 | dense small (additive) | 3 | 55,872 | 0.8131 +- 0.0026 | 0.021 +- 0.001 | 6.12e+06 | 1.84e+13 | - |
 | 0.005 | prune-after: one-shot magnitude (global) + fine-tune | 3 | 55,822 | 0.8364 +- 0.0015 | 0.016 +- 0.001 | 5.27e+07 | 3.41e+15 | 445811 +- 28637 |
+| 0.005 | prune-after: one-shot magnitude (global) + fine-tune at lr 0.05 | 3 | 55,822 | 0.8539 +- 0.0013 | 0.021 +- 0.001 | 5.28e+07 | 3.41e+15 | 449667 +- 21963 |
+| 0.005 | prune-after: one-shot magnitude (global) + fine-tune at lr 0.1 | 3 | 55,822 | 0.8563 +- 0.0029 | 0.022 +- 0.002 | 5.36e+07 | 3.41e+15 | 450406 +- 14435 |
 | 0.005 | prune-during: magnitude (uniform per layer) | 2 | 55,819 | 0.8311 +- 0.0006 | 0.022 +- 0.001 | 5.55e+06 | 8.67e+14 | 392455 +- 2533 |
 | 0.005 | prune-during: magnitude (global) | 3 | 55,822 | 0.8896 +- 0.0003 | 0.027 +- 0.001 | 3.40e+07 | 1.09e+15 | 401879 +- 17074 |
 | 0.005 | prune-during: magnitude (ERK per layer) | 3 | 55,820 | 0.8783 +- 0.0022 | 0.024 +- 0.001 | 1.38e+07 | 1.18e+15 | 391071 +- 8159 |

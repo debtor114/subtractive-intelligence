@@ -10,7 +10,8 @@ gradual synaptic pruning during learning, hippocampus--cortex sleep consolidatio
 token skipping, and STDP, plus one follow-up (per-input pruning at inference time). One principle transferred:
 at matched final connection budgets, removing connections gradually *while* training beats training small, pruning once
 after training and dynamic sparse training at tight budgets, with a margin that grows with sparsity (MNIST MLP, CIFAR-10
-CNN, CIFAR-10 ResNet-18, and an ImageNet-pre-trained ResNet-18 adapted to CIFAR-10; from the pre-trained start the
+CNN, CIFAR-10 ResNet-18, where against a prune-after baseline fine-tuned at the training rate it wins only at 0.5%, and an
+ImageNet-pre-trained ResNet-18 adapted to CIFAR-10; from the pre-trained start the
 standard schedule loses to one-shot pruning at 0.5%, which an earlier-ending schedule or RigL from the inherited mask
 repairs). Four structures did not transfer (sleep
 consolidation, thalamic routing, predictive coding, per-input pruning); the local pruning rules were mixed (about a
@@ -97,6 +98,8 @@ for s in 0 1 2; do python experiments/exp12_prefilter/run.py --ckpt "results/bas
 python experiments/exp12_prefilter/run.py --ckpt "results/baseline_vit_cifar10/seed0_*/model_final.pt" --dataset cifar10 --mode drop_late --smax 1.0 --epochs 6
 for s in 0 1; do for d in 0.05 0.02 0.005; do python experiments/core_prune_during_learning/run_pretrained.py --arm pt_rigl_mag --density $d --seed $s; done; done
 for s in 0 1 2; do for d in 0.01 0.03; do for a in ttp_gradual ttp; do python experiments/core_prune_during_learning/run_cifar.py --model cnn --arm $a --density $d --seed $s --set ft_lr=0.05 tag=ftlr05; done; done; done
+for s in 0 1 2; do for d in 0.05 0.02 0.005; do python experiments/core_prune_during_learning/run_cifar.py --model resnet18 --arm ttp --density $d --seed $s --set ft_lr=0.1 tag=ftlr10; done; done
+for s in 0 1 2; do python experiments/core_prune_during_learning/run_cifar.py --model resnet18 --arm ttp --density 0.005 --seed $s --set ft_lr=0.05 tag=ftlr05; done
 for s in 0 1; do python experiments/core_prune_during_learning/run_pretrained.py --arm pt_pd --density 0.005 --seed $s --set prune_end=0.5 tag=end50; done
 # tables and figures, then the paper
 python scripts/analyze.py && python scripts/analyze_exp12.py

@@ -264,3 +264,5 @@
 - 17:05 13 차 리뷰 1 부: Scope 를 one-shot (우위) / gradual-after (0.5–0.9 점, 비용 23–31%) 로 나눠 '학습 중' 의 근거를 비용으로, 초록·결론에 비용 근거 (a quarter to a third),
   기여 2 의 97% 를 MNIST 로 한정, CNN 1% 헤드라인 4.6 (표준 프로토콜 5.2), 그림 2 캡션 (주황 네 선·파란 점선), 부록 A 미세조정 학습률 (CNN 1/5, ResNet 1/10)·ResNet lr 0.1.
   초록 1,920 자 (sleep·thalamic 묘사 축약, 'best local rule'). 2 부: ResNet 0.5% one-shot 미세조정 lr 0.1 / 0.05, 3 시드 (scripts/review13_controls.cmd) 진행 중.
+- 18:55 13 차 리뷰 2 부: ResNet prune-after 를 학습률 0.1 로 미세조정 (3 시드 × 5/2/0.5%, 0.5% 는 0.05 도) → 92.6/91.5/85.6 (표준 92.3/90.9/83.6).
+  prune-during 은 ResNet 에서 0.5% 만 승 (+3.3), 2% 동률, 5% −0.6. 초록 (85.6, 'ties or trails'), 기여 1, 관련연구 RigL 문장, 4 절 정확도·비용·ResNet 문단, 표 3 (행 추가·굵게·캡션), Scope (모델별 임계 예산), Scale, 결론, 부록 A, README.
