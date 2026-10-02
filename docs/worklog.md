@@ -220,3 +220,5 @@
   "MLP 1 점 이내, CNN 붕괴 (mixed)" 로 통일, STDP 를 규칙으로 포함. 초록·기여 6 의 시상 라우팅에 "토큰 선택도 무작위와 같음" 추가.
   사소: 표 5 수면 행 "does not transfer:" 접두, 관련 연구 주어 RigL (SET 은 MNIST 만), 5.4 는 표 2 인용 + 그림 2 캡션에 3 시드 평균 명시,
   2.4~3.5 배, late-only 는 "slightly higher FLOPs (0.77 vs 0.72)", SET 비용 한정, 초록 공백. 초록 1,915 자. 29 쪽, 넘침 0.
+- 11:55 원격 연결·푸시 완료: https://github.com/debtor114/subtractive-intelligence (main 885f48f, 5 커밋). 저장소 링크를 논문 재현성 문단,
+  CITATION.cff, README, arXiv 코멘트 (29 pages, 4 figures, 22 tables) 에 넣고 묶음 재생성. 남은 것: 서지 대조, arXiv 제출 (사용자 승인 후).
