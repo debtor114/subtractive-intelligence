@@ -226,7 +226,11 @@
   "초록의 principle = schedule 수준 변화" 연결 문장, 수면 단계 크기 가지치기는 구조 안에서만 시험 (중립), 비용 목록에서 규칙 분리 ("규칙은 같은
   비용의 작은 판"), decay variants 로 개칭 (부록 캡션 포함), 결론 시상 라우팅에 사전 결정 스킵 추가, 서론 "negative or mixed", 초록 지역 기준 문구
   ("MLP 에서 약 1 점 뒤, CNN 붕괴"), "about a point behind per-layer magnitude pruning" 로 통일. 초록 1,907 자. 29 쪽, 넘침 0.
-- 12:50 서지 대조 (scripts/check_bib.py: CrossRef DOI/제목 + arXiv API): 28 건 모두 일치, 오류 0. 검증된 DOI·쪽수 12 건 보강 (huttenlocher, mocanu,
+- 11:30 서지 대조 (scripts/check_bib.py: CrossRef DOI/제목 + arXiv API): 28 건 모두 일치, 오류 0. 검증된 DOI·쪽수 12 건 보강 (huttenlocher, mocanu,
   gupta, roy, yin, friston, millidge, mcclelland, kumaran, tononi, mallya, diehl). 6 차 리뷰: rule 정의에 decay 변형 (활동 무관) 포함, "약 1 점 뒤" 는
   drive 기준에 한정 (Hebbian 8 점), schedule 수준 대비 "gradual > one-shot" 으로, 표 19~20 group 라벨 variants, README 요약을 초록 분류에 맞추고
   ResNet 대조군 재현 명령 추가. 초록 1,904 자.
+- 11:45 arXiv 제출 시도 (Chrome): 초안 submit/8167790 생성, Start 페이지 (연락처 확인·제출 동의·저자 본인·CC BY 4.0·cs → cs.LG) 까지 입력했으나
+  Continue 에서 'You are not endorsed for this archive' (cs.LG, cs.NE 모두). 첫 제출자 (gmail, 소속 없음) 는 해당 분야 등록 저자의 endorsement 가 필요.
+  need-endorsement.php (코드 발급) 는 구 인증 (tapir) 로그인을 따로 요구 → 사용자가 직접 로그인해 코드를 확인하고 추천인에게 보내야 함.
+  번들 paper/arxiv_submission.zip (480 KB, 24 파일, 시험 컴파일 OK) 과 paper/arxiv/arxiv_metadata.txt 는 그대로 사용.
