@@ -679,6 +679,16 @@ PT_LABEL = {
     "scratch_small": "from scratch, dense small (width-scaled)",
 }
 PT_ORDER = ["scratch_small", "scratch_pd", "pt_oneshot", "pt_rigl", "pt_rigl_mag", "pt_pd_erk", "pt_pd", "pt_pd_end50"]
+# 범례용 짧은 라벨과 고정 색 (실선 = 사전 학습 출발, 점선 = 처음부터)
+PT_SHORT = {
+    "pt_dense": "pre-trained, dense fine-tune", "pt_pd": "pre-trained, prune-during (global)",
+    "pt_pd_erk": "pre-trained, prune-during (ERK)", "pt_pd_end50": "pre-trained, prune-during, schedule ends at 50%",
+    "pt_oneshot": "pre-trained, one-shot prune + fine-tune", "pt_rigl": "pre-trained, random mask + RigL",
+    "pt_rigl_mag": "pre-trained, magnitude mask + RigL", "scratch_pd": "from scratch, prune-during",
+    "scratch_small": "from scratch, dense small",
+}
+PT_COLOR = {"scratch_small": "#2a78d6", "scratch_pd": "#eb6834", "pt_oneshot": "#1baf7a", "pt_rigl": "#eda100",
+            "pt_rigl_mag": "#e87ba4", "pt_pd_erk": "#008300", "pt_pd": "#4a3aa7", "pt_pd_end50": "#e34948", "pt_dense": "#303030"}
 
 
 def analyze_core_pretrained():
@@ -728,7 +738,7 @@ def analyze_core_pretrained():
                 ys.append(np.mean([r["final_acc"] for r in rs]))
                 es.append(np.std([r["final_acc"] for r in rs]))
         if xs:
-            ax.errorbar(xs, ys, yerr=es, label=PT_LABEL[arm], color=SERIES[i % 8], marker="o", capsize=2,
+            ax.errorbar(xs, ys, yerr=es, label=PT_SHORT.get(arm, arm), color=PT_COLOR.get(arm, "#303030"), marker="o", capsize=2,
                         linestyle="--" if arm.startswith("scratch") else "-")
     ax.set_xscale("log")
     if dense:
@@ -739,7 +749,7 @@ def analyze_core_pretrained():
     ax.set_xlabel("final active conv weights")
     ax.set_ylabel("CIFAR-10 test accuracy (128x128 input)")
     ax.set_title("실험 A: 사전 학습 ResNet-18 의 적응 중 가지치기 - 정확도 대 활성 연결 수 (시드 평균)")
-    ax.legend(fontsize=8, loc="lower right")
+    ax.legend(fontsize=7, loc="upper left", bbox_to_anchor=(0.0, 0.93))
     save(fig, "core_pretrained_acc_vs_active")
 
     # 그림 2: 적응 학습 FLOPs 대 정확도
@@ -753,7 +763,7 @@ def analyze_core_pretrained():
                 xs.append(np.mean([r["adapt_train_flops"] for r in rs]))
                 ys.append(np.mean([r["final_acc"] for r in rs]))
         if xs:
-            ax.plot(xs, ys, marker="o", color=SERIES[i % 8], label=PT_LABEL[arm],
+            ax.plot(xs, ys, marker="o", color=PT_COLOR.get(arm, "#303030"), label=PT_SHORT.get(arm, arm),
                     linestyle="--" if arm.startswith("scratch") else "-")
     if dense:
         ax.scatter([np.mean([r["adapt_train_flops"] for r in dense])], [np.mean([r["final_acc"] for r in dense])],

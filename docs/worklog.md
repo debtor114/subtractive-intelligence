@@ -252,3 +252,6 @@
   초록 gain 문장을 두 겹으로 (1,915 자). 궤적 그림에서 _x 팔 제외. CNN·사전학습 대조군은 아직 돌아가는 중.
 - 15:24 CNN 대조군 반영 (2 단계): gradual prune-after 90.5/88.0/81.9 (one-shot 90.7/88.4/80.5, prune-during 90.3/89.1/85.7) → CNN 은 타이밍 비중이 큼; RigL 3x 3% 87.0, 1% 80.0 (수렴 2 시드, 1 시드 또 발산) 로 prune-during 에 2.1/5.7 뒤, 비용 8–22%;
   얕고 넓은 dense small 86.9/83.9/78.4 (폭 축소판 87.3/82.8/77.1, 추론 FLOPs 2.6x) 로 가산 주장은 두 모양 모두에 성립. 표 2 에 세 행, 초록 gain 문장 'model-dependent shares', 범위·부록 sizing 갱신.
+- 15:49 전이 대조군 반영 (3 단계): pt_rigl_mag (사전학습 크기 마스크 RigL) 5/2/0.5% = 93.4/90.6/84.0 (pt_pd 93.7/91.0/80.9, 적응 비용 28–41%, 0.5% 는 1/7) → '상속 구조를 버려야 한다' 는 문장 철회, 상속 구조가 핵심이고 깎는 방식은 부차적;
+  pt_pd end50 0.5% = 83.7 (표준 70% 80.9, scratch 83.8, one-shot 81.7) → 0.5% 역전은 최종 밀도에서의 시간 부족. 초록 전면 재생성 (1,919 자, compute–memory 도입문 삭제, 'Which brain mechanisms survive translation to a von Neumann machine?'),
+  기여 4·전이 문단·표 4 (두 행)·그림 캡션·Discussion·결론·6 절·README (요약, MNIST --epochs 15, 대조군 재현 명령) 갱신. 전이 그림 짧은 라벨·고정 색·범례 좌상단.

@@ -11,7 +11,8 @@ token skipping, and STDP, plus one follow-up (per-input pruning at inference tim
 at matched final connection budgets, removing connections gradually *while* training beats training small, pruning once
 after training and dynamic sparse training at tight budgets, with a margin that grows with sparsity (MNIST MLP, CIFAR-10
 CNN, CIFAR-10 ResNet-18, and an ImageNet-pre-trained ResNet-18 adapted to CIFAR-10; from the pre-trained start the
-order against one-shot pruning reverses at the tightest budget, 0.5%). Four structures did not transfer (sleep
+standard schedule loses to one-shot pruning at 0.5%, which an earlier-ending schedule or RigL from the inherited mask
+repairs). Four structures did not transfer (sleep
 consolidation, thalamic routing, predictive coding, per-input pruning); the local pruning rules were mixed (about a
 point behind per-layer magnitude pruning on the MLP, collapse on the CNN) and STDP reproduced its known accuracy
 ceiling while sparsifying itself. Everything in the paper is produced from the stored run files in `results/`.
@@ -54,7 +55,7 @@ ImageNet weights for ResNet-18.
 
 ```bash
 # main comparison (MNIST MLP, 3 seeds, all arms and budgets)
-python experiments/core_prune_during_learning/run_all.py --skip_existing
+python experiments/core_prune_during_learning/run_all.py --densities 0.1 0.05 0.02 0.01 0.005 --epochs 15 --skip_existing
 # CIFAR-10 CNN and ResNet-18
 python experiments/core_prune_during_learning/run_all_cifar.py --model cnn --skip_existing
 python experiments/core_prune_during_learning/run_all_cifar.py --model resnet18 --densities 0.05 0.02 0.005 --seeds 0 1 2 --arms dense_small pd_mag_global pd_mag_erk rigl ttp --skip_existing
@@ -86,6 +87,17 @@ python experiments/exp12_prefilter/run.py --ckpt "$CK" --dataset cifar10 --mode 
 python experiments/exp12_prefilter/run.py --ckpt "$CK" --dataset cifar10 --mode thalamic --substitute identity --epochs 6
 python experiments/exp5_dynamic_pruning/run_all.py --skip_existing
 python experiments/exp4_stdp_temporal/run.py
+# controls added in revision: gradual prune-after, 3x RigL, shallow-and-wide dense small, late-block removal, magnitude-mask RigL,
+# early-ending schedule (scripts/review9_controls.cmd runs the same list on Windows)
+python experiments/core_prune_during_learning/run_all.py --arms ttp_gradual --densities 0.1 0.05 0.02 0.01 0.005 --epochs 15 --skip_dense_big --skip_existing
+python experiments/core_prune_during_learning/run_all.py --arms rigl_x3 --densities 0.01 0.005 --epochs 15 --skip_dense_big --skip_existing
+python experiments/core_prune_during_learning/run_all_cifar.py --model cnn --arms ttp_gradual dense_small_shallow --skip_dense_big --skip_existing
+python experiments/core_prune_during_learning/run_all_cifar.py --model cnn --arms rigl_x3 --densities 0.01 0.03 --skip_dense_big --skip_existing
+for s in 0 1 2; do python experiments/exp12_prefilter/run.py --ckpt "results/baseline_vit_mnist/seed${s}_*/model_final.pt" --dataset mnist --mode drop_late --smax 1.0 --seed $s; done
+python experiments/exp12_prefilter/run.py --ckpt "results/baseline_vit_cifar10/seed0_*/model_final.pt" --dataset cifar10 --mode drop_late --smax 1.0 --epochs 6
+for d in 0.05 0.02 0.005; do python experiments/core_prune_during_learning/run_pretrained.py --arm pt_rigl_mag --density $d; done
+python experiments/core_prune_during_learning/run_pretrained.py --arm pt_rigl_mag --density 0.005 --seed 1
+for s in 0 1; do python experiments/core_prune_during_learning/run_pretrained.py --arm pt_pd --density 0.005 --seed $s --set prune_end=0.5 tag=end50; done
 # tables and figures, then the paper
 python scripts/analyze.py && python scripts/analyze_exp12.py
 PAPER_FIGS=1 python scripts/analyze.py core core_cifar core_pretrained && PAPER_FIGS=1 python scripts/analyze_exp12.py

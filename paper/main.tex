@@ -32,7 +32,7 @@ Learning Is Pruning, and Four Mechanisms That Did Not Transfer}
 \maketitle
 
 \begin{abstract}
-A brain computes, stores and learns in the same synapses; a von~Neumann machine separates processor from memory. Which mechanisms survive the translation? We ported five mechanisms and a follow-up to GPU training under one protocol: gradual synaptic pruning during learning, a fast hippocampus consolidating into a slow cortex during sleep, thalamic routing that decides what to process, predictive coding that skips the predictable, and spike-timing-dependent plasticity. One principle transfers. At matched final connection budgets, removing connections gradually while training beats training small, pruning once after training and dynamic sparse training (RigL at equal training length) at tight budgets, ties with prune-after at loose ones, and its margin grows with sparsity: at 0.5\% of the connections it reaches 97.8\% on MNIST against 94.1\%, 94.5\% and 96.3\%, and 89.0\% on a CIFAR-10 ResNet-18 against 81.3\%, 83.6\% and 84.9\%. The gain comes from gradual removal and from doing it while learning, in model-dependent shares, not from sparsity; it survives at matched inference FLOPs and costs 3--59$\times$ the small network's training compute. A pre-trained start adds 3.5--5.3 points over pruning from scratch, saves no adaptation compute (93.7\% on CIFAR-10 at 5\% of an ImageNet-pre-trained ResNet-18's connections) and is a liability at 0.5\%. The best local criterion, synaptic drive, ends about a point behind per-layer magnitude pruning on the MLP and collapses on the CNN unless normalised per neuron. Four structures fail: hippocampus--cortex sleep matches class-balanced replay; thalamic routing picks tokens no better than random and, as pre-routed attention, saves only 3.6--4.7\% of compute; predictive coding neither picks tokens better than chance nor fills gaps better than leaving them; per-input subnetworks at inference are input-specific yet worse than a fixed mask. STDP alone sparsifies a spiking network.
+Which brain mechanisms survive translation to a von~Neumann machine? We ported five mechanisms and a follow-up to GPU training under one protocol: gradual synaptic pruning during learning, a fast hippocampus consolidating into a slow cortex during sleep, thalamic routing that decides what to process, predictive coding that skips the predictable, and spike-timing-dependent plasticity. One principle transfers. At matched final connection budgets, removing connections gradually while training beats training small, pruning once after training and dynamic sparse training (RigL at equal training length) at tight budgets, ties with prune-after at loose ones, and its margin grows with sparsity: at 0.5\% it reaches 97.8\% on MNIST against 94.1\%, 94.5\% and 96.3\%, and 89.0\% on a CIFAR-10 ResNet-18 against 81.3\%, 83.6\% and 84.9\%. The gain comes from gradual removal and from doing it while learning, in model-dependent shares, not from sparsity; it survives at matched inference FLOPs and costs 3--59$\times$ the small network's training compute. A pre-trained start adds 3.5--5.3 points over pruning from scratch and saves no adaptation compute (93.7\% on CIFAR-10 at 5\% of an ImageNet-pre-trained ResNet-18's connections); RigL from the inherited magnitude mask comes within 0.4 points at 28--41\% of the compute, and at 0.5\% the start pays off only if pruning ends early. The best local criterion, synaptic drive, ends about a point behind per-layer magnitude pruning on the MLP and collapses on the CNN unless normalised per neuron. Four structures fail: sleep consolidation matches class-balanced replay; thalamic routing picks tokens no better than random and, as pre-routed attention, saves only 3.6--4.7\% of compute; predictive coding neither picks tokens better than chance nor fills gaps better than leaving them; per-input subnetworks are input-specific yet worse than a fixed mask. STDP alone sparsifies a spiking network.
 \end{abstract}
 
 \section{Introduction}
@@ -89,9 +89,11 @@ unity, appears only as a hypothesis in Section~\ref{sec:discussion}.
   network, still leaves a 4.2-point advantage at 1\%.
   \item \textbf{Transfer from a pre-trained network} (Table~\ref{tab:pretrained}). Pruning an ImageNet-pre-trained
   ResNet-18 \emph{during} its adaptation to CIFAR-10 keeps 93.7\% at 5\% and 91.0\% at 2\% of its connections, against
-  88.4\% and 87.5\% from scratch and 86.9\% for RigL on the same weights; at 0.5\% the advantage reverses and both one-shot
-  pruning and training from scratch win: the inherited start adds accuracy, not adaptation compute, and pays off only down to
-  about 2\%.
+  88.4\% and 87.5\% from scratch and 86.9\% for RigL from a random mask on the same weights; RigL from the inherited
+  magnitude mask comes within 0.4 points at 28--41\% of the adaptation compute. Under the standard schedule the advantage
+  reverses at 0.5\% (80.9\% against 83.8\% from scratch), but ending the schedule earlier or rewiring from the inherited
+  mask restores it (83.7\% and 84.0\%): the inherited start adds accuracy, not adaptation compute, and at 0.5\% needs time
+  at the final density.
   \item \textbf{Local pruning rules.} A Hebbian correlation rule beats random removal at 5\% and below (not at 10\%) but
   falls below the dense small network at every budget under 10\%. A synapse-level rule
   (``synaptic drive'': the input flowing through a synapse when its post-synaptic unit fires) is competitive on the MLP but
@@ -383,38 +385,49 @@ We therefore took an ImageNet-pre-trained ResNet-18 (torchvision weights, 11.17M
 classifier kept dense) and adapted it to CIFAR-10 for 10 epochs at $128\times128$ input while pruning its convolutions to 5\%,
 2\% and 0.5\% with the same cubic schedule (SGD, lr 0.01, the from-scratch arms use lr 0.1 and the same architecture, schedule
 and resolution). Table~\ref{tab:pretrained} compares gradual pruning during adaptation with one-shot magnitude pruning of the
-same weights followed by fine-tuning, RigL started from a random ERK mask over the pre-trained weights, and the two from-scratch
-routes. At 5\% and 2\% the pre-trained start is worth 5.3 and 3.5 points over pruning from scratch, gradual removal during
-adaptation beats one-shot pruning of the same weights by 0.6--0.7 points, and RigL, which must discard the inherited
-structure to start sparse, lands below pruning from scratch. The pre-trained prune-during arms reach 90\% after about 52k
+same weights followed by fine-tuning, RigL started either from a random ERK mask over the pre-trained weights or from the
+pre-trained magnitude mask at the target density (the fair form, which keeps the inherited structure and rewires it), and the
+two from-scratch routes. At 5\% and 2\% the pre-trained start is worth 5.3 and 3.5 points over pruning from scratch, gradual
+removal during adaptation beats one-shot pruning of the same weights by 0.6--0.7 points, and RigL from a random mask, which
+discards the inherited structure, lands below pruning from scratch; RigL from the magnitude mask, however, comes within
+0.2--0.4 points of gradual pruning (93.4\% and 90.6\%, one seed) at 28--41\% of its adaptation compute, so once the
+inherited structure is kept, how the sparse network is then reached matters little at these budgets. The pre-trained prune-during arms reach 90\% after about 52k
 samples (just over one epoch, when pruning has just begun and about 99\% of the weights remain, as does the dense
 fine-tune), a level one-shot pruning needs
 166k--402k samples for at 5\% and 2\% and does not reach at 0.5\%, and RigL never reaches in ten epochs; they are also
 better calibrated (ECE 0.015--0.020 against 0.028--0.031 for prune-during from scratch). The inherited start does not save
 adaptation compute: at 5\% gradual pruning costs 7.3e14 FLOPs from the pre-trained weights against 7.7e14 from scratch,
 40\% of a dense fine-tune and 7$\times$ the dense small network. What it buys is accuracy; the early data efficiency is
-that of the dense start, which gradual pruning keeps and one-shot pruning destroys. At 0.5\% the ordering reverses: pruning from scratch (83.8\%) beats one-shot pruning (81.7\%), which
-beats gradual pruning of the pre-trained network (80.9\%). The pre-trained prune-during run peaks at 93.1\% in mid-schedule
-and loses twelve points as the last 4.5\% of its connections go, with only three epochs left at the final density, whereas
-one-shot pruning spends all ten there. An inherited structure pays off down to about 2\% of its connections; below that, a
-magnitude profile tuned for another task is a liability, and the short adaptation window favours removing it at once.
+that of the dense start, which gradual pruning keeps and one-shot pruning destroys. At 0.5\% the standard schedule reverses the ordering: pruning from scratch (83.8\%) beats one-shot pruning (81.7\%),
+which beats gradual pruning of the pre-trained network (80.9\%). The pre-trained prune-during run peaks at 93.1\% in
+mid-schedule and loses twelve points as the last 4.5\% of its connections go, with only three epochs left at the final
+density, whereas one-shot pruning spends all ten there. Two controls show that this is a matter of time at the final density
+rather than of the inherited structure: ending the schedule at 50\% of adaptation instead of 70\%, which leaves five epochs
+at 0.5\%, lifts gradual pruning to 83.7\% (two seeds), level with pruning from scratch and above one-shot pruning at 82\%
+of the compute, and RigL from the magnitude mask, which spends all ten epochs at the final density, reaches 84.0\% at a
+seventh of the compute. An inherited structure therefore pays off at every budget we tried, but at 0.5\% only if the network
+is given enough adaptation time at the final density; the practical choice there is between a schedule that ends early and
+dynamic sparse training from the inherited mask.
 
 \begin{table}[t]
 \centering\small
 \caption{ImageNet-pre-trained ResNet-18 adapted to CIFAR-10 ($128\times128$, 10 epochs) while being pruned: test accuracy
 (\%) at matched convolutional budgets, two seeds, standard deviations $\le 0.4$. Adaptation FLOPs count the 10 epochs only;
 the ImageNet pre-training is a sunk cost common to the pre-trained arms. The unpruned dense fine-tune reaches 95.9\% at
-$1.8\times10^{15}$ FLOPs.}
+$1.8\times10^{15}$ FLOPs. The magnitude-mask RigL row has one seed at 5\% and 2\%; the schedule that ends at 50\% of
+adaptation was run at 0.5\% only (Table~\ref{tab:app-pretrained}).}
 \label{tab:pretrained}
 \begin{tabular}{llcccc}
 \toprule
 Start & Route & 5\% & 2\% & 0.5\% & Adapt.\ FLOPs (5\%) \\
 \midrule
 pre-trained & prune-during, magnitude (global) & \textbf{93.7} & \textbf{91.0} & 80.9 & 7.3e14 \\
+pre-trained & prune-during, global, schedule ends at 50\% & -- & -- & 83.7 & -- \\
 pre-trained & prune-during, magnitude (ERK)    & 93.4 & 89.7 & 78.8 & 8.1e14 \\
 pre-trained & one-shot prune + fine-tune        & 93.1 & 90.3 & 81.7 & 3.0e14 \\
 pre-trained & random ERK mask + RigL            & 86.9 & 83.6 & 76.8 & 2.7e14 \\
-scratch     & prune-during, magnitude (global) & 88.4 & 87.5 & \textbf{83.8} & 7.7e14 \\
+pre-trained & magnitude mask + RigL             & 93.4 & 90.6 & \textbf{84.0} & 3.0e14 \\
+scratch     & prune-during, magnitude (global) & 88.4 & 87.5 & 83.8 & 7.7e14 \\
 scratch     & dense small (additive)            & 84.8 & 82.4 & 76.5 & 1.1e14 \\
 \bottomrule
 \end{tabular}
@@ -424,8 +437,9 @@ scratch     & dense small (additive)            & 84.8 & 82.4 & 76.5 & 1.1e14 \\
 \centering
 \includegraphics[width=0.75\linewidth]{core_pretrained_acc_vs_active}
 \caption{Pre-trained ResNet-18 adapted to CIFAR-10 while pruned: accuracy against final active convolutional weights (two
-seeds). Solid lines start from the ImageNet weights, dashed lines from scratch. The pre-trained advantage is largest at 5\% and
-reverses at 0.5\%.}
+seeds; one for the magnitude-mask RigL at 5\% and 2\%). Solid lines start from the ImageNet weights, dashed lines from
+scratch. The pre-trained advantage is largest at 5\%; at 0.5\% it survives only in the routes that leave time at the final
+density, the magnitude-mask RigL and the early-ending schedule.}
 \label{fig:pretrained}
 \end{figure}
 
@@ -611,13 +625,16 @@ depends on how often the model is used. Second, the over-parameterised starting 
 networks are published with their training cost already paid. That does not make the adaptation cheap, since the schedule
 still runs its dense phase (at 5\%, 7.3e14 FLOPs against 7.7e14 from scratch), but it changes what the compute buys. Pruning
 pre-trained models is the classical setting of \citet{han2015} and
-\citet{zhu2017}; what our comparison adds is that gradual removal \emph{during} adaptation should then dominate one-shot
-pruning and, because RigL must discard the pre-trained structure to start sparse, dynamic sparse training as well. The
-transfer experiment (Table~\ref{tab:pretrained}) confirms this at 5\% and 2\%: gradual removal during adaptation beats
-one-shot pruning of the same weights, beats RigL on the pre-trained weights by seven points and keeps 5.3 and 3.5 points over
-pruning from scratch, at 40\% of the FLOPs of a dense fine-tune. It refutes it at 0.5\%, where the inherited structure
-becomes a liability and both one-shot pruning and training from scratch win: an inherited start pays off only while enough
-of it survives. The developmental reading is the same: an organism inherits an over-connected
+\citet{zhu2017}; what our comparison adds is that gradual removal \emph{during} adaptation then dominates one-shot pruning,
+and that dynamic sparse training competes only when it starts from the inherited structure. The transfer experiment
+(Table~\ref{tab:pretrained}) confirms the first at 5\% and 2\%: gradual removal during adaptation beats one-shot pruning of
+the same weights, beats RigL from a random mask by seven points and keeps 5.3 and 3.5 points over pruning from scratch, at
+40\% of the FLOPs of a dense fine-tune; RigL from the inherited magnitude mask, which keeps the structure and rewires it,
+comes within 0.4 points at 28--41\% of the compute, so what the inherited start buys is the structure, not the particular
+way it is thinned. At 0.5\% the standard schedule loses to one-shot pruning and to training from scratch, but two controls
+trace this to time at the final density rather than to the inherited structure: ending the schedule earlier restores parity
+with training from scratch, and RigL from the inherited mask reaches 84.0\% at a seventh of the compute. An inherited start
+pays off while enough of it survives and enough adaptation remains after the last cut. The developmental reading is the same: an organism inherits an over-connected
 cortex it did not pay for and only pays for the pruning.
 
 \paragraph{Scale.} Two small datasets; models from one to eleven million parameters. The ResNet-18 replication
@@ -643,7 +660,7 @@ these terms. Every structure failed. The rules were mixed: the drive criterion e
 pruning on the MLP and collapses on the CNN, the decay variants were neutral or harmful, and STDP stays at its known
 accuracy ceiling while sparsifying itself. Within the schedule level, the brain-derived gradual schedule beat the
 conventional one-shot schedule (prune-after) at every tight budget when training from scratch, which is the paper's main
-result (from a pre-trained start the order reverses at 0.5\%, Section~\ref{sec:core}); the sleep-phase
+result (from a pre-trained start it reverses at 0.5\% under the standard schedule, Section~\ref{sec:core}); the sleep-phase
 magnitude pruning of Section~\ref{sec:negative} was tested only inside the sleep structure, where it was neutral. One reading, offered as a hypothesis because it rests on a single positive case, is that a substantial
 part of the brain's advantage rests on compute--memory unity, the hardware property by which every synapse computes, stores
 and learns in place, and that a processor--memory architecture can imitate the structures only at a cost: a hippocampus
@@ -666,7 +683,9 @@ continual learning \citep{mallya2018,golkar2019} but tests the developmental cla
 Pruning during learning, with a plain global magnitude criterion and a gradual schedule, is the best route to a sparse network
 at tight budgets on the three models we tried, ties with pruning afterwards at loose budgets, and its advantage comes from the
 gradualness rather than from sparsity. Starting from a pre-trained network adds 3.5--5.3 points over pruning from scratch
-down to about 2\% of the connections, without saving adaptation compute, and becomes a liability below that. The same programme's attempts at sleep consolidation, predictive skipping, thalamic routing (pre-decided skips and
+down to about 2\% of the connections without saving adaptation compute, and at 0.5\% keeps its advantage only when the
+network is given time at the final density; dynamic sparse training from the inherited mask matches it at a fraction of
+the compute. The same programme's attempts at sleep consolidation, predictive skipping, thalamic routing (pre-decided skips and
 pre-routed attention) and
 input-dependent pruning did not add to known baselines (the best of them, on Permuted MNIST, is within 0.3--0.8 points of
 class-balanced replay at 2.5--5$\times$ its compute),
