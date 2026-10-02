@@ -266,3 +266,5 @@
   초록 1,920 자 (sleep·thalamic 묘사 축약, 'best local rule'). 2 부: ResNet 0.5% one-shot 미세조정 lr 0.1 / 0.05, 3 시드 (scripts/review13_controls.cmd) 진행 중.
 - 18:55 13 차 리뷰 2 부: ResNet prune-after 를 학습률 0.1 로 미세조정 (3 시드 × 5/2/0.5%, 0.5% 는 0.05 도) → 92.6/91.5/85.6 (표준 92.3/90.9/83.6).
   prune-during 은 ResNet 에서 0.5% 만 승 (+3.3), 2% 동률, 5% −0.6. 초록 (85.6, 'ties or trails'), 기여 1, 관련연구 RigL 문장, 4 절 정확도·비용·ResNet 문단, 표 3 (행 추가·굵게·캡션), Scope (모델별 임계 예산), Scale, 결론, 부록 A, README.
+- 19:00 14 차 리뷰 1 부: '88–22%' 는 PDF 텍스트 추출에서 쪽 번호 8 이 다음 쪽 첫 줄 '8–22%' 앞에 붙은 것 (원문 이상 없음). RigL 순위를 '네 가지 주요 경로 중' 으로,
+  관련연구 'the strongest of the routes that start sparse', 초록 'and saves' 복원 (한도: 'of the cost', 'of FLOPs', 1,918 자). 2 부: ResNet 0.5% gradual prune-after lr 0.1 × 3 시드 진행 중.
