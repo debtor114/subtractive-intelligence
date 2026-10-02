@@ -76,7 +76,7 @@ def main() -> None:
         f.write("MSC/ACM class: 없음\nJournal-ref / DOI: 없음 (초고)\n")
     # 검증 컴파일
     if os.path.exists(LATEXMK):
-        r = subprocess.run([LATEXMK, "-pdf", "-interaction=nonstopmode", "-halt-on-error", "main.tex"], cwd=OUT,
+        r = subprocess.run([LATEXMK, "-pdf", "-bibtex-", "-interaction=nonstopmode", "-halt-on-error", "main.tex"], cwd=OUT,
                            capture_output=True, text=True, encoding="utf-8", errors="replace")
         log = open(os.path.join(OUT, "main.log"), encoding="utf-8", errors="replace").read()
         pages = re.search(r"Output written on main.pdf \((\d+) pages", log)

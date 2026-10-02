@@ -270,3 +270,5 @@
   관련연구 'the strongest of the routes that start sparse', 초록 'and saves' 복원 (한도: 'of the cost', 'of FLOPs', 1,918 자). 2 부: ResNet 0.5% gradual prune-after lr 0.1 × 3 시드 진행 중.
 - 19:28 14 차 리뷰 2 부: ResNet 0.5% gradual prune-after lr 0.1 = 88.3 (one-shot 85.6, during 89.0) → 분해가 세 모델에서 같음 (점진 73–81%, 타이밍 0.7–0.9, 비용 23–31%, ResNet 27.6%).
   기여 2·4 절 분해 단락·Scope 를 세 모델로, 다섯 곳 수치를 '가장 빡빡한 예산에서 0.7–0.9' 로 통일 (초록·결론은 'up to a point', 'a quarter to a third' 로 이미 포함). 표 3 행·캡션, 부록 표 9 자동, README 명령.
+- 19:31 arXiv 업로드 전 점검: 제목 블록 'Draft, October 2026' → 'October 2026', README 'draft' → 'preprint'. 번들 검증 컴파일을 latexmk -bibtex- 로 바꿔 arXiv 처럼 동봉 main.bbl (30 항목) 만 쓰게 함 — 33 쪽, 미해결 0.
+  메타데이터 초록 1,918 자·ASCII 전용·TeX 마크업 없음, 제목 ASCII. 교수님 메일의 ResNet 비교 범위는 81~86% 로 (prune-after 85.6).
