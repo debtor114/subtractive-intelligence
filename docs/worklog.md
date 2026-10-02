@@ -235,5 +235,5 @@
   need-endorsement.php (코드 발급) 는 구 인증 (tapir) 로그인을 따로 요구 → 사용자가 직접 로그인해 코드를 확인하고 추천인에게 보내야 함.
   번들 paper/arxiv_submission.zip (480 KB, 24 파일, 시험 컴파일 OK) 과 paper/arxiv/arxiv_metadata.txt 는 그대로 사용.
 - 13:19 7 차 리뷰: schedule 비교에 'when training from scratch' 한정 (pre-trained 는 0.5% 에서 one-shot 81.7 > gradual 80.9), Scope 'all fail' → CNN 에서 돌린 drive 규칙만,
-  Table 5 행 주어 명시, 초록 'ResNet-18's connections' 복원 (1,914 자), README 요약 (about a point behind, transfer 예외) + ViT 재현 명령 전체 (baseline 학습·exp2 finetune.py·exp12 5 종).
+  Table 5 행 주어 명시, 초록 'ResNet-18's connections' 복원 (1,915 자), README 요약 (about a point behind, transfer 예외) + ViT 재현 명령 전체 (baseline 학습·exp2 finetune.py·exp12 5 종).
   refs.bib: DOI 없는 학회·저널 9 건에 공식 페이지 url 추가 (NeurIPS hash 는 연도 색인에서 제목 대조, PMLR·JMLR 페이지 제목 대조, OpenReview 는 Chrome 으로 포럼 제목 확인).
