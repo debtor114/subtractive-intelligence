@@ -66,9 +66,11 @@ def main() -> None:
     abstract = " ".join(abstract.replace("\\emph{", "").replace("}", "").replace("\\%", "%").replace("$\\times$", "x")
                         .replace("--", "-").replace("~", " ").replace("``", '"').replace("''", '"').split())
     n_fig = len((re.findall(r"\\includegraphics", main_tex)))
+    main_log = open(os.path.join(PAPER, "main.log"), encoding="utf-8", errors="replace").read()
+    n_pages = re.search(r"Output written on main.pdf \((\d+) pages", main_log).group(1)
     with open(os.path.join(OUT, "arxiv_metadata.txt"), "w", encoding="utf-8") as f:
         f.write("Title:\n" + title + "\n\nAuthors:\nDongin Kang\n\nAbstract:\n" + abstract + "\n\n")
-        f.write(f"Comments:\n29 pages, {n_fig} figures, 22 tables. Code and per-run logs: https://github.com/debtor114/subtractive-intelligence\n\n")
+        f.write(f"Comments:\n{n_pages} pages, {n_fig} figures, 22 tables. Code and per-run logs: https://github.com/debtor114/subtractive-intelligence\n\n")
         f.write("Primary category: cs.LG (Machine Learning)\nCross-list: cs.NE (Neural and Evolutionary Computing)\n")
         f.write("License: CC BY 4.0 (권장) 또는 arXiv perpetual non-exclusive\n")
         f.write("MSC/ACM class: 없음\nJournal-ref / DOI: 없음 (초고)\n")
