@@ -250,3 +250,5 @@
   exp4 표에 배경 픽셀 대조 행 (Table 22 출처), exp5 표 옛 이름 교체, 표 1 에 'prune-after, gradual' 과 'RigL 3x' 행, 본문에 점진 prune-after 대조군 (0.5% 96.9 vs 94.5 vs 97.8),
   RigL 3x (1% 97.7, 0.5% 97.5), late block 제거 대조군 (MNIST −1.7, CIFAR −9.0 @50% FLOPs vs 스킵 90% −0.4/−2 @64–65%), ResNet 0.2–0.5, local rules 'at 5% and below',
   초록 gain 문장을 두 겹으로 (1,915 자). 궤적 그림에서 _x 팔 제외. CNN·사전학습 대조군은 아직 돌아가는 중.
+- 15:24 CNN 대조군 반영 (2 단계): gradual prune-after 90.5/88.0/81.9 (one-shot 90.7/88.4/80.5, prune-during 90.3/89.1/85.7) → CNN 은 타이밍 비중이 큼; RigL 3x 3% 87.0, 1% 80.0 (수렴 2 시드, 1 시드 또 발산) 로 prune-during 에 2.1/5.7 뒤, 비용 8–22%;
+  얕고 넓은 dense small 86.9/83.9/78.4 (폭 축소판 87.3/82.8/77.1, 추론 FLOPs 2.6x) 로 가산 주장은 두 모양 모두에 성립. 표 2 에 세 행, 초록 gain 문장 'model-dependent shares', 범위·부록 sizing 갱신.
