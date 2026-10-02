@@ -208,3 +208,10 @@
   A3 어텐션: 비중 5% -> 약 10%, post-hoc 는 최대 2.7% 절감, 부록 캡션에 총 비율 계산법. A4 수면 Permuted: no-distill +1.2 (같은 연산), CLS2 +0.8 (5 배).
   B/C 전부 반영 (ordering, RigL 관련 연구 문장, 그림 1 캡션 색 구분, accuracy gap -> +3.5~5.3, 다섯 + 변형, 공유 출력층 문구, 표 1 표준편차,
   ECE MNIST 한정 + static random, 표 참조 순서 (exp2 를 exp12 앞으로), 0.01/5.3/1.0 수치, one-shot 0.5% 미도달, 시드 목록, 로그 근거 5 건).
+- 11:00 3 차 리뷰 반영. A1 어텐션 FLOPs 이중 계산 발견·수정: exp1 run.py 의 flops_total_exploited 가 pre 모드에서 라우팅된 모델의 측정값을
+  기준으로 삼아 절감이 두 번 들어감 -> analyze_exp1 에서 full 모델 측정값 기준으로 재계산. 어텐션 비중 6.1%/5.3% (MNIST/CIFAR), pre 총 절감
+  4.7%/3.6% (이전 8.5%/6.5%). 본문·초록 (4~5%)·6 절 수정. 기여 6 옛 문장, 구조/원리 기준을 결과 앞에 명시 + "pattern" -> "observation"
+  + 예측기 항목 추가, ResNet 데이터 효율 비교 대상 (dense big 437k, RigL 1/3 시드), 전이 "약 99% 남은 시점", 0.7 점은 비영 비율만,
+  5 절 제목 "Negative results", 수면 문구 3 곳 통일 (matches balanced replay; +1.2 over plain replay at equal compute), 인용 15~16,
+  ECE 0.008~, late-only 는 같은 FLOPs 비교 (30% 전 블록 대비), 기여 3 fewer, exp12 캡션 (identity 행·warm-up 정의), 결론 명칭, 부록 로그 목록.
+  29 쪽, 넘침 0. git 저장소 초기화 (main), 영문 README·MIT LICENSE·CITATION.cff·.gitignore, 팟 IP 를 <pod-ip> 로 치환, 첫 커밋. 원격은 사용자가 제공 예정.
