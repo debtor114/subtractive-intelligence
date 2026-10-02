@@ -36,8 +36,9 @@ def main():
             if key[0] == "drop_late":
                 dl = [row for r in g for row in r["rows"] if row["eval_mode"] == "drop_late"]
                 rows.append(["late blocks removed, same fine-tuning (control)", len(g), ms([r["baseline_full"]["acc"] for r in g]),
-                             ms([r["after_warmup_at_smax"]["acc"] for r in g]) + " (removed, no fine-tune)"] + ["-"] * len(fracs)
-                            + [f"{np.mean([x['flops_ratio'] for x in dl]):.2f}", ms([x["acc"] for x in dl])])
+                             "-"] + ["-"] * len(fracs)
+                            + [f"{np.mean([x['flops_ratio'] for x in dl]):.2f}",
+                               ms([r["after_warmup_at_smax"]["acc"] for r in g]) + " / " + ms([x["acc"] for x in dl])])
                 continue
             cells = []
             for s in fracs:
@@ -58,10 +59,10 @@ def main():
                     cells.append(ms(vals) if vals else "-")
                 rows.append([f"  (eval {ev})", len(g), "", ""] + ["" ] + cells + ["", ""])
         write_table(f"exp12_{ds}", ["train mode / late attn", "seeds", "원본 (스킵 없음)", "워밍업만, 스킵 smax"]
-                    + [f"스킵 {s:g}" for s in fracs] + ["FLOPs 비율 (스킵 순서대로)", "late blocks removed: acc"], rows,
+                    + [f"스킵 {s:g}" for s in fracs] + ["FLOPs 비율 (스킵 순서대로)", "late blocks removed: acc, no fine-tune / fine-tuned"], rows,
                     "뒤쪽 절반 블록에만 적용. 건너뛴 토큰은 예측 잔차를 더해 통과. 미세조정은 스킵 비율을 0 에서 0.7 로 올리며 진행. "
                     "late attn pre = 뒤쪽 블록 어텐션을 사전 라우팅(키 25%) 으로 교체. "
-                    "late blocks removed = 뒤쪽 블록을 통째로 떼고 같은 에폭을 미세조정한 대조군 (워밍업만 열은 떼기만 하고 미세조정 전); "
+                    "late blocks removed = 뒤쪽 블록을 통째로 떼고 같은 에폭을 미세조정한 대조군 (마지막 열: 떼기만 한 값 / 미세조정 후); "
                     "FLOPs 비율은 앞쪽 블록만의 비용.")
         fig, ax = plt.subplots(figsize=(8, 4.8))
         for i, key in enumerate(sorted(groups)):
@@ -85,8 +86,8 @@ def main():
                     ys.append(np.mean([x["acc"] for x in v]))
             if xs:
                 ax.plot(xs, ys, marker="s", color=MUTED, linestyle=":", label="post-hoc identity skipping, late blocks only, no fine-tuning")
-        base = np.mean([r["baseline_full"]["acc"] for r in rs])
-        ax.axhline(base, color=MUTED, linewidth=1, linestyle=":")
+        base = np.mean([r["baseline_full"]["acc"] for r in rs if r["late_attn"] == "full"])   # 사전 라우팅 변형은 다른 모델이라 제외
+        ax.axhline(base, color=MUTED, linewidth=1, linestyle=":", label="full model, no skipping")
         ax.set_xlabel("FLOPs ratio vs full model")
         ax.set_ylabel("test accuracy")
         ax.set_title(f"{ds}: 사전 필터링 (시상 라우터 + 예측 잔차 + 점진 스킵 미세조정), 스킵 0 ~ 0.9")

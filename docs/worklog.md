@@ -255,3 +255,7 @@
 - 15:49 전이 대조군 반영 (3 단계): pt_rigl_mag (사전학습 크기 마스크 RigL) 5/2/0.5% = 93.4/90.6/84.0 (pt_pd 93.7/91.0/80.9, 적응 비용 28–41%, 0.5% 는 1/7) → '상속 구조를 버려야 한다' 는 문장 철회, 상속 구조가 핵심이고 깎는 방식은 부차적;
   pt_pd end50 0.5% = 83.7 (표준 70% 80.9, scratch 83.8, one-shot 81.7) → 0.5% 역전은 최종 밀도에서의 시간 부족. 초록 전면 재생성 (1,919 자, compute–memory 도입문 삭제, 'Which brain mechanisms survive translation to a von Neumann machine?'),
   기여 4·전이 문단·표 4 (두 행)·그림 캡션·Discussion·결론·6 절·README (요약, MNIST --epochs 15, 대조군 재현 명령) 갱신. 전이 그림 짧은 라벨·고정 색·범례 좌상단.
+- 16:06 11 차 리뷰 1 부: RigL 3x 를 같은 할당 (MNIST uniform, CNN ERK) 의 prune-during 과도 비교 → 4 예산 중 2 에서 동률/우위, 우위의 일부는 전역 할당 자유도 (본문 명시, 그림 2 캡션 '같은 학습 길이');
+  MNIST 분해 0.5% 73% / 1% 절반, 'much' 삭제, 비용 6–11% / 28–42%, 전이 0.5% 는 parity 로 통일 (초록·기여 4·4 절), 재배선 효과 (+0.3/0.3/2.3), 기여 2·4 절 소제목·결론 'model-dependent shares',
+  얕고 넓은 망은 FLOPs 까지 일치 (10–30% 이내) 문장, 그림 1 캡션 gradual prune-after, 그림 4 기준선 범례·pre 제외, 표 15/16 대조 행 열 분리, 부록 shallow 설명·라벨.
+  2 부 실험 (scripts/review11_controls.cmd): CNN prune-after 미세조정 lr 0.05 (점진·one-shot, 1%·3%, 3 시드), pt_rigl_mag 5%·2% 시드 1.

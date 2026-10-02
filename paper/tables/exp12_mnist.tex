@@ -6,9 +6,9 @@
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llrrrrrrrrrr}
 \toprule
-train mode / late attn & seeds & no skip & warm-up only, skip $s_{\max}$ & skip 0 & skip 0.3 & skip 0.5 & skip 0.7 & skip 0.8 & skip 0.9 & FLOPs ratio (by skip level) & late blocks removed: acc \\
+train mode / late attn & seeds & no skip & warm-up only, skip $s_{\max}$ & skip 0 & skip 0.3 & skip 0.5 & skip 0.7 & skip 0.8 & skip 0.9 & FLOPs ratio (by skip level) & late blocks removed: acc, no fine-tune / fine-tuned \\
 \midrule
-late blocks removed, same fine-tuning (control) & 3 & 0.9827 $\pm$ 0.0003 & 0.8911 $\pm$ 0.0126 (removed, no fine-tune) & - & - & - & - & - & - & 0.50 & 0.9657 $\pm$ 0.0028 \\
+late blocks removed, same fine-tuning (control) & 3 & 0.9827 $\pm$ 0.0003 & - & - & - & - & - & - & - & 0.50 & 0.8911 $\pm$ 0.0126 / 0.9657 $\pm$ 0.0028 \\
 layerwise / late attn full & 3 & 0.9827 $\pm$ 0.0003 & 0.9806 $\pm$ 0.0004 & 0.9785 $\pm$ 0.0012 & 0.9787 $\pm$ 0.0016 & 0.9788 $\pm$ 0.0015 & 0.9788 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0016 & 0.9787 $\pm$ 0.0015 & 1.01 / 0.89 / 0.81 / 0.73 / 0.69 / 0.65 & - \\
 (eval thalamic) & 3 & -- & -- & -- & 0.9788 $\pm$ 0.0015 & 0.9789 $\pm$ 0.0016 & 0.9786 $\pm$ 0.0015 & 0.9786 $\pm$ 0.0013 & 0.9784 $\pm$ 0.0013 & -- & -- \\
 (eval random) & 3 & -- & -- & -- & 0.9783 $\pm$ 0.0015 & 0.9787 $\pm$ 0.0009 & 0.9786 $\pm$ 0.0014 & 0.9784 $\pm$ 0.0014 & 0.9784 $\pm$ 0.0014 & -- & -- \\
