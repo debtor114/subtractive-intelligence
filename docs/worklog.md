@@ -215,3 +215,8 @@
   5 절 제목 "Negative results", 수면 문구 3 곳 통일 (matches balanced replay; +1.2 over plain replay at equal compute), 인용 15~16,
   ECE 0.008~, late-only 는 같은 FLOPs 비교 (30% 전 블록 대비), 기여 3 fewer, exp12 캡션 (identity 행·warm-up 정의), 결론 명칭, 부록 로그 목록.
   29 쪽, 넘침 0. git 저장소 초기화 (main), 영문 README·MIT LICENSE·CITATION.cff·.gitignore, 팟 IP 를 <pod-ip> 로 치환, 첫 커밋. 원격은 사용자가 제공 예정.
+- 11:40 4 차 리뷰 반영: 6 절 분류를 구조(모듈·결정 추가)/규칙(국소 학습·선택 규칙 변경: Hebbian·drive, 수면 감쇠, STDP)/스케줄(무엇을 언제 지우나)
+  3 분류로 바꾸고 "실험 뒤에 세운 정리용 관찰" 임을 명시. 구조 전부 실패, 규칙은 혼재, 스케줄 하나 성공. 지역 규칙 판정을 표 5·Scope·6 절에서
+  "MLP 1 점 이내, CNN 붕괴 (mixed)" 로 통일, STDP 를 규칙으로 포함. 초록·기여 6 의 시상 라우팅에 "토큰 선택도 무작위와 같음" 추가.
+  사소: 표 5 수면 행 "does not transfer:" 접두, 관련 연구 주어 RigL (SET 은 MNIST 만), 5.4 는 표 2 인용 + 그림 2 캡션에 3 시드 평균 명시,
+  2.4~3.5 배, late-only 는 "slightly higher FLOPs (0.77 vs 0.72)", SET 비용 한정, 초록 공백. 초록 1,915 자. 29 쪽, 넘침 0.
