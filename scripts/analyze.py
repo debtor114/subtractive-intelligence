@@ -734,7 +734,7 @@ def analyze_core_pretrained():
 # 논문 2 토대: 수면 감쇠 스케줄 + 분산(국소) 증류 (실험 3 변형들만 따로 비교)
 # ---------------------------------------------------------------------------
 PAPER2_GROUPS = [
-    ("sleep decay schedule", "cls2_kwta10",
+    ("sleep decay variants", "cls2_kwta10",
      ["cls2_decay_boundary", "cls2_decay_periodic", "cls2_decay_periodic_small", "cls2_decay_continuous"]),
     ("distillation locality (fast width 256)", "cls2_kd_none_h256",
      ["cls2_kd_global", "cls2_kd_local", "cls2_kd_local_logits"]),

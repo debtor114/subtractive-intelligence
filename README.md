@@ -9,9 +9,11 @@ Five brain mechanisms were ported to ordinary GPU training under one protocol an
 gradual synaptic pruning during learning, hippocampus--cortex sleep consolidation, thalamic routing, predictive-coding
 token skipping, and STDP, plus one follow-up (per-input pruning at inference time). One principle transferred:
 at matched final connection budgets, removing connections gradually *while* training beats training small, pruning once
-after training and dynamic sparse training, with a margin that grows with sparsity (MNIST MLP, CIFAR-10 CNN, CIFAR-10
-ResNet-18, and an ImageNet-pre-trained ResNet-18 adapted to CIFAR-10). The other four mechanisms did not transfer, and the
-paper reports them as negative results. Everything in the paper is produced from the stored run files in `results/`.
+after training and dynamic sparse training at tight budgets, with a margin that grows with sparsity (MNIST MLP, CIFAR-10
+CNN, CIFAR-10 ResNet-18, and an ImageNet-pre-trained ResNet-18 adapted to CIFAR-10). Four structures did not transfer
+(sleep consolidation, thalamic routing, predictive coding, per-input pruning); the local pruning rules were mixed (near
+parity on the MLP, collapse on the CNN) and STDP reproduced its known accuracy ceiling while sparsifying itself. Everything
+in the paper is produced from the stored run files in `results/`.
 
 The paper PDF is `paper/main.pdf`; the Korean working report with every table and figure is `docs/report/REPORT.md`.
 
@@ -54,7 +56,10 @@ ImageNet weights for ResNet-18.
 python experiments/core_prune_during_learning/run_all.py --skip_existing
 # CIFAR-10 CNN and ResNet-18
 python experiments/core_prune_during_learning/run_all_cifar.py --model cnn --skip_existing
-python experiments/core_prune_during_learning/run_all_cifar.py --model resnet18 --densities 0.05 0.02 0.005 --seeds 0 1 2 --skip_existing
+python experiments/core_prune_during_learning/run_all_cifar.py --model resnet18 --densities 0.05 0.02 0.005 --seeds 0 1 2 --arms dense_small pd_mag_global pd_mag_erk rigl ttp --skip_existing
+# ResNet-18 controls used in Tables 6 and 9: the 20% budget and the uniform-per-layer criterion (two seeds)
+python experiments/core_prune_during_learning/run_all_cifar.py --model resnet18 --densities 0.2 --seeds 0 1 --arms dense_small pd_mag_global pd_mag_layer --skip_existing
+python experiments/core_prune_during_learning/run_all_cifar.py --model resnet18 --densities 0.05 0.005 --seeds 0 1 --arms pd_mag_layer --skip_existing
 # transfer from an ImageNet-pre-trained ResNet-18
 python experiments/core_prune_during_learning/run_all_pretrained.py --skip_existing
 # negative results

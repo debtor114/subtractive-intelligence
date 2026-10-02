@@ -226,3 +226,7 @@
   "초록의 principle = schedule 수준 변화" 연결 문장, 수면 단계 크기 가지치기는 구조 안에서만 시험 (중립), 비용 목록에서 규칙 분리 ("규칙은 같은
   비용의 작은 판"), decay variants 로 개칭 (부록 캡션 포함), 결론 시상 라우팅에 사전 결정 스킵 추가, 서론 "negative or mixed", 초록 지역 기준 문구
   ("MLP 에서 약 1 점 뒤, CNN 붕괴"), "about a point behind per-layer magnitude pruning" 로 통일. 초록 1,907 자. 29 쪽, 넘침 0.
+- 12:50 서지 대조 (scripts/check_bib.py: CrossRef DOI/제목 + arXiv API): 28 건 모두 일치, 오류 0. 검증된 DOI·쪽수 12 건 보강 (huttenlocher, mocanu,
+  gupta, roy, yin, friston, millidge, mcclelland, kumaran, tononi, mallya, diehl). 6 차 리뷰: rule 정의에 decay 변형 (활동 무관) 포함, "약 1 점 뒤" 는
+  drive 기준에 한정 (Hebbian 8 점), schedule 수준 대비 "gradual > one-shot" 으로, 표 19~20 group 라벨 variants, README 요약을 초록 분류에 맞추고
+  ResNet 대조군 재현 명령 추가. 초록 1,904 자.
