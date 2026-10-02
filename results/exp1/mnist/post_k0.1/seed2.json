@@ -1,0 +1,133 @@
+{
+ "cfg": {
+  "dataset": "mnist",
+  "mode": "post",
+  "keep": 0.1,
+  "seed": 2,
+  "epochs": 8
+ },
+ "dataset": "mnist",
+ "mode": "post",
+ "keep": 0.1,
+ "router_dim": 8,
+ "seed": 2,
+ "n_tokens": 50,
+ "k": 5,
+ "params": 803338,
+ "flops_total_measured": 83966464.0,
+ "attn_flops_per_block_dense": 1280000,
+ "attn_flops_per_block_exploited": 704000,
+ "attn_flops_full_per_block": 1280000,
+ "depth": 4,
+ "final_acc": 0.9813,
+ "best_acc": 0.9813,
+ "calibration": {
+  "acc": 0.9813,
+  "loss": 0.06527584046125412,
+  "ece": 0.003993765279650663,
+  "mce": 0.19281771779060364,
+  "nll": 0.06527583921065427,
+  "brier": 0.030049027893150476,
+  "auroc": 0.9634022531499468,
+  "aurc": 0.000907899765854897,
+  "sel_acc@0.9": 0.9975555555555555,
+  "sel_acc@0.8": 0.9995,
+  "sel_acc@0.5": 1.0
+ },
+ "data_efficiency": {
+  "aulc": 0.95415,
+  "samples_to_target": null
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "samples_seen": 60000,
+   "train_loss": 1.284169413280487,
+   "train_acc": 0.5494333333333333,
+   "aux": 0.0,
+   "test_acc": 0.8216,
+   "test_loss": 0.5666388869285583,
+   "ece": 0.01655350406616925,
+   "time_s": 13.43035888671875
+  },
+  {
+   "epoch": 2,
+   "samples_seen": 120000,
+   "train_loss": 0.37856306777000426,
+   "train_acc": 0.88135,
+   "aux": 0.0,
+   "test_acc": 0.9324,
+   "test_loss": 0.2223294973373413,
+   "ece": 0.009188344182074086,
+   "time_s": 26.878886461257935
+  },
+  {
+   "epoch": 3,
+   "samples_seen": 180000,
+   "train_loss": 0.22405868048667907,
+   "train_acc": 0.9302833333333334,
+   "aux": 0.0,
+   "test_acc": 0.9511,
+   "test_loss": 0.16189292073249817,
+   "ece": 0.005053750301897468,
+   "time_s": 39.9541015625
+  },
+  {
+   "epoch": 4,
+   "samples_seen": 240000,
+   "train_loss": 0.15817507582505544,
+   "train_acc": 0.9496833333333333,
+   "aux": 0.0,
+   "test_acc": 0.9637,
+   "test_loss": 0.11539726704359055,
+   "ece": 0.005307297441363311,
+   "time_s": 53.73841881752014
+  },
+  {
+   "epoch": 5,
+   "samples_seen": 300000,
+   "train_loss": 0.11309629817406336,
+   "train_acc": 0.96465,
+   "aux": 0.0,
+   "test_acc": 0.9739,
+   "test_loss": 0.08807533234357834,
+   "ece": 0.003987418970465668,
+   "time_s": 66.49269580841064
+  },
+  {
+   "epoch": 6,
+   "samples_seen": 360000,
+   "train_loss": 0.08201155198017757,
+   "train_acc": 0.9744,
+   "aux": 0.0,
+   "test_acc": 0.9776,
+   "test_loss": 0.07392337918281555,
+   "ece": 0.0035873218953609842,
+   "time_s": 80.34974503517151
+  },
+  {
+   "epoch": 7,
+   "samples_seen": 420000,
+   "train_loss": 0.059429752538601555,
+   "train_acc": 0.98115,
+   "aux": 0.0,
+   "test_acc": 0.9789,
+   "test_loss": 0.06895289570093155,
+   "ece": 0.005438024207949621,
+   "time_s": 93.64914774894714
+  },
+  {
+   "epoch": 8,
+   "samples_seen": 480000,
+   "train_loss": 0.04861506220300992,
+   "train_acc": 0.9851,
+   "aux": 0.0,
+   "test_acc": 0.9813,
+   "test_loss": 0.06527584046125412,
+   "ece": 0.003993765279650663,
+   "time_s": 107.26205921173096
+  }
+ ],
+ "time_s": 107.79597687721252,
+ "flops_total_exploited": 81662464.0
+}

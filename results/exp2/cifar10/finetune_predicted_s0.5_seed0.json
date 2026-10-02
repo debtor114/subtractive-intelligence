@@ -1,0 +1,182 @@
+{
+ "cfg": {
+  "ckpt": "results/baseline_vit_cifar10\\seed0_20261001-042831\\model_final.pt",
+  "dataset": "cifar10",
+  "score": "predicted",
+  "skip": 0.5,
+  "epochs": 3,
+  "seed": 0
+ },
+ "dataset": "cifar10",
+ "seed": 0,
+ "train_score": "predicted",
+ "train_skip": 0.5,
+ "epochs": 3,
+ "baseline_full": {
+  "acc": 0.8184,
+  "ece": 0.04705968863219021,
+  "nll": 0.6075730932448627,
+  "auroc": 0.8463100276783754,
+  "computed_frac": 1.0
+ },
+ "before_finetune_skipped": {
+  "acc": 0.5216,
+  "ece": 0.1879857560709119,
+  "nll": 1.544783743540603,
+  "auroc": 0.6997029536402015,
+  "computed_frac": 0.5076923076923077
+ },
+ "rows": [
+  {
+   "eval_score": "predicted",
+   "skip_frac": 0.0,
+   "acc": 0.7986,
+   "ece": 0.04061360777765512,
+   "nll": 0.6117316348540138,
+   "auroc": 0.8473038778637193,
+   "computed_frac": 1.0,
+   "flops_ratio": 1.0
+  },
+  {
+   "eval_score": "predicted",
+   "skip_frac": 0.2,
+   "acc": 0.7694,
+   "ece": 0.04500321352332827,
+   "nll": 0.6825262906497656,
+   "auroc": 0.8323799184821143,
+   "computed_frac": 0.8,
+   "flops_ratio": 0.8452026687891535
+  },
+  {
+   "eval_score": "random",
+   "skip_frac": 0.2,
+   "acc": 0.7726,
+   "ece": 0.04200344242751598,
+   "nll": 0.6758573037507458,
+   "auroc": 0.8395985718874986,
+   "computed_frac": 0.8,
+   "flops_ratio": 0.8452026687891535
+  },
+  {
+   "eval_score": "predicted",
+   "skip_frac": 0.3,
+   "acc": 0.7531,
+   "ece": 0.044439063335955147,
+   "nll": 0.728459538904007,
+   "auroc": 0.820704662392071,
+   "computed_frac": 0.7076923076923077,
+   "flops_ratio": 0.7677094993185222
+  },
+  {
+   "eval_score": "random",
+   "skip_frac": 0.3,
+   "acc": 0.7575,
+   "ece": 0.039971755079925064,
+   "nll": 0.7249499208077372,
+   "auroc": 0.82380837671396,
+   "computed_frac": 0.7076923076923077,
+   "flops_ratio": 0.7677094993185222
+  },
+  {
+   "eval_score": "predicted",
+   "skip_frac": 0.4,
+   "acc": 0.7308,
+   "ece": 0.04854988999813791,
+   "nll": 0.7845304173299095,
+   "auroc": 0.8117569562880061,
+   "computed_frac": 0.6,
+   "flops_ratio": 0.6773008016027856
+  },
+  {
+   "eval_score": "random",
+   "skip_frac": 0.4,
+   "acc": 0.7335,
+   "ece": 0.04319561265259982,
+   "nll": 0.7765689021657539,
+   "auroc": 0.8126675542357122,
+   "computed_frac": 0.6,
+   "flops_ratio": 0.6773008016027856
+  },
+  {
+   "eval_score": "predicted",
+   "skip_frac": 0.5,
+   "acc": 0.7077,
+   "ece": 0.050278443381190314,
+   "nll": 0.8448884749970353,
+   "auroc": 0.8034783163994748,
+   "computed_frac": 0.5076923076923077,
+   "flops_ratio": 0.5998076321321542
+  },
+  {
+   "eval_score": "random",
+   "skip_frac": 0.5,
+   "acc": 0.7069,
+   "ece": 0.04662650653421877,
+   "nll": 0.8644525667509053,
+   "auroc": 0.7980052018319784,
+   "computed_frac": 0.5076923076923077,
+   "flops_ratio": 0.5998076321321542
+  },
+  {
+   "eval_score": "predicted",
+   "skip_frac": 0.6,
+   "acc": 0.6805,
+   "ece": 0.05421466204524039,
+   "nll": 0.9148981452844203,
+   "auroc": 0.7906094317558547,
+   "computed_frac": 0.4153846153846154,
+   "flops_ratio": 0.5223144626615228
+  },
+  {
+   "eval_score": "random",
+   "skip_frac": 0.6,
+   "acc": 0.6742,
+   "ece": 0.05064534394294023,
+   "nll": 0.9421243990103721,
+   "auroc": 0.7863998237958946,
+   "computed_frac": 0.4153846153846154,
+   "flops_ratio": 0.5223144626615228
+  },
+  {
+   "eval_score": "predicted",
+   "skip_frac": 0.7,
+   "acc": 0.6414,
+   "ece": 0.059104544143378734,
+   "nll": 1.0208126782379372,
+   "auroc": 0.7749148457144864,
+   "computed_frac": 0.3076923076923077,
+   "flops_ratio": 0.4319057649457863
+  },
+  {
+   "eval_score": "random",
+   "skip_frac": 0.7,
+   "acc": 0.6176,
+   "ece": 0.0678428951576352,
+   "nll": 1.105011792107185,
+   "auroc": 0.7660183814861686,
+   "computed_frac": 0.3076923076923077,
+   "flops_ratio": 0.4319057649457863
+  },
+  {
+   "eval_score": "predicted",
+   "skip_frac": 0.8,
+   "acc": 0.5924,
+   "ece": 0.0659821628972888,
+   "nll": 1.1723192158422735,
+   "auroc": 0.7439642322542854,
+   "computed_frac": 0.21538461538461542,
+   "flops_ratio": 0.3544125954751549
+  },
+  {
+   "eval_score": "random",
+   "skip_frac": 0.8,
+   "acc": 0.5536,
+   "ece": 0.0918067926928401,
+   "nll": 1.2826928335816863,
+   "auroc": 0.7495257702273292,
+   "computed_frac": 0.21538461538461542,
+   "flops_ratio": 0.3544125954751549
+  }
+ ],
+ "time_s": 181.78850650787354
+}

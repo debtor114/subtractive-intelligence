@@ -1,0 +1,626 @@
+\documentclass[11pt]{article}
+
+% 초안: 워크숍 분량. 투고 시 해당 학회 스타일 파일(neurips_2026.sty 등)로 \documentclass 와 여백만 바꾸면 된다.
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{xcolor}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage{microtype}
+
+\graphicspath{{figures/}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+\title{What Survives the Translation from Brain to Von Neumann Machine:\\
+Learning Is Pruning, and Four Mechanisms That Did Not Transfer}
+
+\author{%
+  Dongin Kang\\
+  Independent Researcher\\
+  \texttt{shalooooooooom@gmail.com}\\
+}
+\date{Draft, October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A brain computes, stores and learns in the same synapses; a von~Neumann machine separates processor from memory. Which brain mechanisms survive the translation? We ported five mechanisms and one follow-up to GPU training under one protocol:gradual synaptic pruning during learning, a fast hippocampus consolidating into a slow cortex during sleep, thalamic routing that decides what to process, predictive coding that skips the predictable, and spike-timing-dependent plasticity. One principle transfers. At matched final connection budgets, removing connections gradually while training beats training small, pruning once after training and dynamic sparse training (RigL) at tight budgets, ties with prune-after at loose ones, and its margin grows with sparsity: at 0.5\% of the connections it reaches 97.8\% on MNIST against 94.1\%, 94.5\% and 96.3\%, and 89.0\% on a CIFAR-10 ResNet-18 against 81.3\%, 83.6\% and 84.9\%. The gain comes from the gradual removal, not from sparsity; it survives at matched inference FLOPs and costs 3--59$\times$ the training compute of the small network. A pre-trained start adds 3.5--5.3 points over pruning from scratch without saving adaptation compute (93.7\% at 5\% of an ImageNet ResNet-18's connections) and becomes a liability at 0.5\%. Local, activity-dependent pruning criteria trail magnitude pruning and collapse on CNNs. Four structures do not transfer: hippocampus--cortex sleep matches class-balanced replay; thalamic routing saves only 4--5\% of total compute at 50--65 tokens; predictive coding neither picks which tokens to skip better than chance nor fills the gap better than leaving it; per-input subnetworks at inference are input-specific yet worse than a fixed mask. We offer compute--memory unity as the hypothesis behind this pattern, not a conclusion. Finally, an STDP-trained spiking network sparsifies itself without explicit pruning.
+\end{abstract}
+
+\section{Introduction}
+
+A brain computes, stores and learns in the same synapses; a von~Neumann machine keeps its processor and its memory apart and
+moves every weight between them. Most brain-inspired proposals for deep learning copy one brain mechanism into this second
+kind of machine and report whether it helps. We ask the question the other way round: when the same protocol and a common set
+of metrics are applied to each of several brain mechanisms, which of them survive the translation, and which do not?
+
+Synaptic density in human cortex peaks in early childhood and falls by roughly half by adulthood \citep{huttenlocher1979};
+the pruning is activity dependent and interleaved with learning. Deep learning takes the opposite route: parameters are
+accumulated from random initialisation, and sparsity, when wanted, is imposed afterwards \citep{han2015,hoefler2021}. The
+lottery-ticket literature showed that large networks contain small trainable subnetworks \citep{frankle2019}, and gradual
+magnitude pruning \citep{zhu2017} and dynamic sparse training \citep{mocanu2018,evci2020} showed that sparsity can be
+reached during training. What has not been laid out side by side, at identical final budgets and with the full cost
+accounting, is the simple developmental question: does it matter whether a network is pruned \emph{while} it learns, after it
+learns, or never grown large in the first place?
+
+This paper is the first empirical instalment of a broader programme that set out to test four brain principles (pruning,
+compute--memory unity, retrieval structure and information concentration) in small models, by porting five concrete
+mechanisms to ordinary GPU training: gradual synaptic pruning during learning, a fast hippocampus consolidating into a slow
+cortex during sleep, thalamic routing that decides what to process, predictive coding that skips the predictable, and
+spike-timing-dependent plasticity, plus one follow-up suggested by the first result, per-input pruning at inference time.
+Of the four principles only pruning is tested directly: compute--memory unity cannot be tested on a GPU and appears only as a
+hypothesis in Section~\ref{sec:discussion}, and retrieval structure and information concentration motivated the routing and
+attention experiments. Table~\ref{tab:map} maps each mechanism to its reduction and outcome. We report the one principle that
+survived contact with the data, and the rest honestly as negative results, because they constrain what a brain-inspired
+architecture should and should not borrow.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+  \item \textbf{A matched-budget comparison of four routes to sparsity} (Section~\ref{sec:core}). On MNIST (MLP, five
+  budgets from 10\% to 0.5\% of a 1.86M-connection network) and CIFAR-10 (VGG-style CNN, three budgets from 10\% to 1\% of
+  2.2M connections), prune-during with a global magnitude criterion is the most accurate route at every budget of 2\% and
+  below, ties with prune-after (within 0.4 points) at the loosest budgets, and its margin over the additive baseline grows from
+  0.3 to 3.7 points (MNIST) and from 3.0 to 8.6 points (CIFAR-10) as the budget shrinks. A ResNet-18 replication (11.2M weights, three budgets from 5\% to 0.5\%) reproduces the winner and the
+  growth of the margin, with
+  prune-during at 0.5\% reaching 89.0\% against 81.3\% (dense small), 83.6\% (prune-after) and 84.9\% (RigL).
+  \item \textbf{The benefit is in the gradual removal, not in sparsity.} Pruning the same network once after training
+  collapses accuracy at the pruning step (to below 60\% at 0.5\% density on MNIST) and recovers only partially; gradual
+  removal with the global criterion never falls below 97\% (Figure~\ref{fig:traj}).
+  \item \textbf{Honest cost accounting.} Prune-during costs 3--59$\times$ the cumulative training FLOPs of the dense small
+  network because it starts large; RigL costs about the same as the dense small network on the MLP and CNN and 2.3--2.5$\times$
+  on ResNet-18. On CNNs, equal connection counts are not equal
+  FLOPs; constraining the layer-wise allocation to the ERK pattern, which uses fewer inference FLOPs than the dense small
+  network, still leaves a 4.2-point advantage at 1\%.
+  \item \textbf{Transfer from a pre-trained network} (Table~\ref{tab:pretrained}). Pruning an ImageNet-pre-trained
+  ResNet-18 \emph{during} its adaptation to CIFAR-10 keeps 93.7\% at 5\% and 91.0\% at 2\% of its connections, against
+  88.4\% and 87.5\% from scratch and 86.9\% for RigL on the same weights; at 0.5\% the advantage reverses and both one-shot
+  pruning and training from scratch win: the inherited start adds accuracy, not adaptation compute, and pays off only down to
+  about 2\%.
+  \item \textbf{Local pruning rules.} A Hebbian correlation rule beats random removal but falls below the dense small network
+  at every budget under 10\%. A synapse-level rule
+  (``synaptic drive'': the input flowing through a synapse when its post-synaptic unit fires) is competitive on the MLP but
+  collapses on the CNN through channel death unless normalised per neuron, and trails magnitude pruning in both settings.
+  \item \textbf{Negative results} (Section~\ref{sec:negative}) for a simple sleep-consolidation scheme with a fast hippocampal
+  learner, for predictive token skipping (neither its choice of tokens nor its predicted-change substitution beats a random
+  or identity control), for thalamic routing (pre-routed sparse attention), and for input-dependent pruning at inference
+  time (which forms input-specific subnetworks yet loses to a fixed mask at the same budget), together with the observation
+  that STDP alone sparsifies a spiking network during learning.
+\end{enumerate}
+
+\section{Related work}
+
+\paragraph{Pruning.} Magnitude pruning after training \citep{han2015}, gradual pruning during training with a cubic sparsity
+schedule \citep{zhu2017}, the lottery-ticket hypothesis \citep{frankle2019} and data-free saliency criteria such as SynFlow
+\citep{tanaka2020} are the closest antecedents; \citet{hoefler2021} survey the field. Our prune-during arm is gradual magnitude
+pruning; our contribution is the controlled comparison, the extreme-sparsity regime, and the local-rule variants.
+
+\paragraph{Dynamic sparse training.} SET \citep{mocanu2018} and RigL \citep{evci2020} start sparse and periodically drop and
+regrow connections (randomly or by gradient magnitude), with the Erd\H{o}s--R\'enyi-kernel (ERK) layer allocation (we use
+ERK on the convolutional networks and a uniform allocation on the MLP). They are the cheapest of the large-network routes on
+the MLP and CNN and, at the tightest MNIST and ResNet-18 budgets, the strongest alternative to prune-during.
+
+\paragraph{Sparse attention and token skipping.} Sparse Transformers \citep{child2019}, top-$k$ attention \citep{gupta2021}
+and routing attention \citep{roy2021} sparsify attention; DynamicViT \citep{rao2021} and A-ViT \citep{yin2022} drop tokens
+during a forward pass. Predictive coding \citep{friston2010,millidge2022} motivates processing only prediction errors.
+
+\paragraph{Complementary learning systems.} The hippocampus--cortex account \citep{mcclelland1995,kumaran2016} underlies
+replay-based continual learning: generative replay \citep{shin2017}, CLS-ER \citep{arani2022}, and class-balanced reservoir
+sampling \citep{chrysakis2020}. Two implementations of the hippocampus--cortex structure do succeed at class-incremental
+learning without storing data: brain-inspired replay \citep{vandeven2020}, in which the network's own context-modulated
+feedback connections generate internal representations for replay, and CH-HNN \citep{shi2025}, a hybrid of artificial and
+spiking networks that emulates the dual (specific and generalised) representations of corticohippocampal circuits and uses
+episode inference from prior knowledge. Our implementation in Section~\ref{sec:negative} is deliberately simpler---two plain
+MLPs, replay from a buffer, distillation---and its failure should be read against these successes. Synaptic homeostasis during sleep \citep{tononi2014} motivated our downscaling variant.
+Pruning-based continual learning \citep{mallya2018,golkar2019} is related to the follow-up we propose in
+Section~\ref{sec:discussion}.
+
+\paragraph{STDP.} Our spiking network follows \citet{diehl2015}. The accuracy ceiling of unsupervised STDP on shallow
+networks and its difficulty in scaling to deeper architectures are known \citep{eshraghian2023}; the strongest STDP-only
+results add adaptive thresholds, adaptive synaptic filters and adaptive lateral inhibition \citep{dong2023}. We keep the
+plain rule because our interest is in what it does to the weight distribution, not in its accuracy.
+
+\section{Setup}
+\label{sec:setup}
+
+\paragraph{Routes to a sparse network.} Let $B$ be a final budget of non-zero weights. We compare:
+\emph{dense small}: a network of the same architecture whose width is scaled so that it has $B$ weights, trained normally
+(additive);
+\emph{prune-after}: the full-width network trained to completion, pruned once to $B$ by global magnitude, then fine-tuned
+for half the original schedule;
+\emph{prune-during}: the full-width network trained while a cubic schedule \citep{zhu2017} lowers the density from 1 to
+$B/|W|$ between 10\% and 70\% of training, pruning every 100 steps with no regrowth;
+\emph{SET} and \emph{RigL}: a random mask at density $B/|W|$ (uniform per layer on the MLP, ERK on the CNN) with
+drop-and-regrow every 100 steps up to 75\% of training, with random or gradient-based regrowth;
+\emph{static sparse}: the random mask kept fixed.
+A full-width \emph{dense big} network trained without pruning gives the accuracy ceiling.
+
+\paragraph{Pruning criteria.} Within prune-during we vary what is removed: weight magnitude $|w_{ij}|$ (global or per-layer
+threshold); a Hebbian correlation trace $|\mathbb{E}[y_i x_j]|$ with post-activation $y_i$ and input $x_j$; its product with
+magnitude; a \emph{synaptic drive} trace $|w_{ij}|\,\mathbb{E}[\mathbb{1}(y_i>0)\,|x_j|]$, i.e.\ the mean input carried by the
+synapse while its post-synaptic unit is active, which transports the ``pre fires and post fires'' condition of STDP to a
+synapse-level score without gradients; a per-neuron-normalised drive (dividing by the neuron's mean drive, a homeostatic
+correction); and random removal as a control. All traces are exponential moving averages (momentum 0.99) maintained by
+forward hooks; convolutional drives are computed exactly per weight via unfolded receptive fields.
+
+\paragraph{Models and data.} MNIST: MLP 784--1024--1024--10 (1{,}861{,}632 weights), Adam, cosine schedule, 15 epochs,
+budgets 10\%, 5\%, 2\%, 1\% and 0.5\%. CIFAR-10: VGG-style CNN with BatchNorm (conv 64-64/128-128/256-256, fc 256;
+2{,}195{,}648 weights), SGD with Nesterov momentum, cosine schedule, 20 epochs, random crop and flip, budgets 10\%, 3\% and 1\%.
+On the CNN a uniform per-layer density starves the first convolution (1{,}728 weights), so per-layer criteria use the ERK
+allocation as their layer targets. Three seeds for the MNIST, CIFAR-10 CNN and ResNet-18 comparisons; two for the transfer
+experiment, the inference-time pruning arms, the 20\% ResNet-18 rows and the uniform-allocation ResNet-18 control; one for
+the CIFAR-10 ViT runs and for the 100- and 1{,}600-neuron spiking runs, which we mark as such. We report mean $\pm$
+standard deviation.
+
+\paragraph{Metrics.} Test accuracy; inference FLOPs counted analytically as $2\sum_\ell n_\ell d_\ell$ over linear and
+convolutional layers with $n_\ell$ active weights and $d_\ell$ output positions; cumulative training FLOPs as three times the
+forward FLOPs of the \emph{actual} active network at every step; expected calibration error; data efficiency as the number
+of training samples needed to reach a target accuracy; and, for the sequential-task experiment, average final accuracy and
+forgetting. We do not measure energy: all experiments run on von~Neumann GPUs
+(a consumer RTX~3060~Ti with 8\,GB; the ResNet-18, transfer and inference-time pruning sweeps on one rented A40), where the
+brain's energy argument cannot be tested.
+
+\section{Prune-during versus the alternatives}
+\label{sec:core}
+
+\begin{table}[t]
+\centering\small
+\caption{MNIST test accuracy (\%) at matched final connection budgets, 3 seeds. Standard deviations are below 0.1 for the
+magnitude routes at every budget and below 0.3 for every route at 2\% and above; at 1\% random removal and the static mask
+reach 0.6 and 0.3, and at 0.5\% they reach 2.3 and 2.7, with prune-after 0.6, activity 1.1, RigL 0.3 and drive 0.2; full
+values in Table~\ref{tab:app-mnist}. Density is relative to the 1.86M-weight
+network. The dense big network reaches 98.7\%.}
+\label{tab:mnist}
+\begin{tabular}{lccccc}
+\toprule
+Route (criterion) & 10\% & 5\% & 2\% & 1\% & 0.5\% \\
+\midrule
+Dense small (additive)           & 98.36 & 98.01 & 97.30 & 96.30 & 94.07 \\
+Prune-after + fine-tune          & 98.69 & 98.73 & 98.38 & 97.52 & 94.51 \\
+Prune-during, magnitude (global) & \textbf{98.67} & \textbf{98.72} & \textbf{98.65} & \textbf{98.44} & \textbf{97.81} \\
+Prune-during, magnitude (layer)  & 98.67 & 98.68 & 98.55 & 98.23 & 97.04 \\
+Prune-during, synaptic drive     & 98.53 & 98.50 & 98.22 & 97.56 & 96.03 \\
+Prune-during, $|w|\times$activity (Hebbian) & 98.57 & 98.42 & 98.05 & 97.25 & 95.22 \\
+Prune-during, activity (Hebbian)  & 98.19 & 97.87 & 96.55 & 93.66 & 88.85 \\
+Prune-during, random             & 98.23 & 97.13 & 93.39 & 89.13 & 71.84 \\
+RigL                             & 98.53 & 98.22 & 97.85 & 97.41 & 96.31 \\
+SET                              & 98.38 & 98.19 & 97.43 & 96.03 & 93.65 \\
+Static random sparse             & 98.18 & 97.54 & 95.90 & 92.59 & 72.71 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering\small
+\caption{CIFAR-10 test accuracy (\%) and inference FLOPs per image at matched budgets (3 seeds). Density is relative to the
+2.2M-weight CNN, which reaches 91.3\% dense. Per-layer criteria use the ERK allocation. RigL at 1\%: one of three seeds
+diverged to chance despite the non-finite-gradient guard (Appendix); the table shows the mean of the two seeds that converged,
+and the three-seed mean is 53.9$\pm$31.1 (Table~\ref{tab:app-cifar}, Figure~\ref{fig:flops}).}
+\label{tab:cifar}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{Accuracy} & \multicolumn{3}{c}{Inference FLOPs} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Route (criterion) & 10\% & 3\% & 1\% & 10\% & 3\% & 1\% \\
+\midrule
+Dense small (additive)             & 87.3 & 82.8 & 77.1 & 3.1e7 & 9.7e6 & 3.3e6 \\
+Prune-after + fine-tune            & \textbf{90.7} & 88.4 & 80.5 & 8.2e7 & 3.6e7 & 1.6e7 \\
+Prune-during, magnitude (global)   & 90.3 & \textbf{89.1} & \textbf{85.7} & 7.4e7 & 3.0e7 & 1.2e7 \\
+Prune-during, magnitude (ERK)      & 89.3 & 86.9 & 81.3 & 2.7e7 & 8.4e6 & 2.8e6 \\
+Prune-during, drive, per-neuron normalised (ERK) & 87.6 & 79.3 & 60.0 & 2.7e7 & 8.4e6 & 2.8e6 \\
+RigL (ERK)                         & 87.6 & 83.5 & 75.9$^\dagger$ & 2.7e7 & 8.4e6 & 2.8e6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Accuracy at matched budgets.} Tables~\ref{tab:mnist} and \ref{tab:cifar} give the main result. Prune-during with
+a global magnitude criterion is the most accurate route at every budget of 2\% and below. At the loosest budgets prune-after
+is level with it or slightly ahead: by 0.02 points at 10\% and 0.01 at 5\% on MNIST, 0.4 at 10\% on CIFAR-10 and 0.3 at 5\% on
+ResNet-18 (Table~\ref{tab:resnet}). Its margin over the additive baseline grows as the budget shrinks: on MNIST from 0.3
+points at 10\% to 3.7 points at 0.5\%, on CIFAR-10 from 3.0 points at 10\% to 8.6 points at 1\%. It also beats RigL by 1.5
+(MNIST, 0.5\%) and 9.8 points (CIFAR-10, 1\%, against the two RigL seeds that converged), and prune-after by 3.3 and 5.2
+points.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{core_trajectory}
+\caption{Connection count (left, log scale) and test accuracy (right) during training at 0.5\% density on MNIST (seed 0).
+Prune-after (orange) trains dense, is pruned once at step 7035, collapses below 60\% and recovers to 94\% during fine-tuning;
+the prune-during routes reach the same final count gradually; the global route (yellow) never falls below 97\% (lowest point
+in any seed 97.3\%, run logs) and the per-layer route (green) ends at 97.0\%.}
+\label{fig:traj}
+\end{figure}
+
+\paragraph{The benefit is in the gradual removal.} Figure~\ref{fig:traj} shows why prune-after loses at high sparsity: the
+one-shot removal destroys the function and fine-tuning recovers only part of it. Gradual removal interleaved with learning
+never leaves the high-accuracy region. The same picture holds on CIFAR-10 at 1\% (91.4\% before the pruning step, 10\%
+after it, 80.5\% after fine-tuning; run logs). Sparsity itself is not the point: on MNIST the two routes that impose a random
+pattern, a static random mask and random removal during training, are the worst at every budget below 10\% (72.7\% and
+71.8\% at 0.5\%).
+
+\paragraph{Connection counts versus FLOPs.} On the CNN, global magnitude pruning keeps convolutional weights, which are each
+used at many positions, and removes fully connected ones, so the pruned network uses 2.4--3.5$\times$ the inference FLOPs of
+the dense small network at the same connection count (Table~\ref{tab:cifar}). Constraining the per-layer allocation to ERK,
+which on this CNN gives \emph{fewer} inference FLOPs than the dense small network, still leaves prune-during 4.2 points ahead
+at 1\%, and 1.7--3.4 points ahead of RigL at the same FLOPs at 10\% and 3\% (5.4 at 1\% against the converged RigL seeds;
+Figure~\ref{fig:flops}). On ResNet-18 the ERK variant costs 2.3--2.5$\times$ the inference FLOPs of the dense small network,
+so there the equal-FLOPs comparison holds only against RigL (Table~\ref{tab:resnet}). The gain is therefore real in both
+currencies, but a paper that reports only connection counts would overstate it by a factor of two to three in compute.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{core_inferflops_vs_acc_cifar}
+\caption{CIFAR-10 accuracy against inference FLOPs; each point is one budget. At equal FLOPs, prune-during with the ERK
+allocation (orange) dominates RigL (green) and the dense small network (blue).}
+\label{fig:flops}
+\end{figure}
+
+\paragraph{Training cost, data efficiency, calibration.} Prune-during starts with the full network, so its cumulative training
+FLOPs are 3$\times$ (10\%) to 50$\times$ (0.5\%) those of the dense small network on MNIST, 4.5--31$\times$ on CIFAR-10 and
+8--59$\times$ on ResNet-18; prune-after costs a further 2.5--4$\times$. RigL and SET cost the same as the dense small network
+on the MLP and CNN, and RigL 2.3--2.5$\times$ on ResNet-18. On the training-cost axis RigL is the most efficient of the
+large-network routes; in accuracy it is second to prune-during only at the tightest budgets (0.5\% on MNIST and ResNet-18),
+otherwise third behind prune-after, and at 1\% on CIFAR-10 it falls below the dense small network. Measured in samples rather
+than FLOPs, the over-parameterised network learns fastest, but on MNIST it reaches 97\% after 87k samples, before pruning
+begins, so this is a property of the dense start that every large-network route shares (against 133k--436k samples for the
+dense small networks and 124k--445k for RigL). The comparison is informative where the target falls inside the pruning
+phase: on ResNet-18 at 5\% prune-during reaches 85\% after 385k samples, when about a fifth of the weights remain, earlier
+than the unpruned dense network (437k; prune-after is still dense at that point), RigL (524k) and the dense small network
+(665k); at 0.5\% it needs 402k, against 437k, 908k (one RigL seed of three, the others never) and never. On MNIST the expected calibration error stays between 0.003 and 0.017 for the magnitude, additive, prune-after and
+RigL routes at every budget and degrades for the local rules at the tightest budgets (drive 0.025, $|w|\times$activity
+0.038, activity 0.100), for the static random mask (0.053) and for random removal (0.157); on the CNN and ResNet-18 all
+routes lie between 0.008 and 0.038.
+
+\paragraph{ResNet-18.} Table~\ref{tab:resnet} repeats the comparison with a CIFAR-style ResNet-18 (11.2M prunable
+weights, 92.5\% dense; SGD, 20 epochs, three seeds) at 5\%, 2\% and 0.5\% of the weights. The winner is unchanged: at 0.5\%
+(56k weights) prune-during reaches 89.0\% against 81.3\% for the dense small network, 83.6\% for prune-after and 84.9\% for
+RigL, its largest lead over prune-after in any setting (5.3 points) and a lead over the additive baseline (7.7) close to the
+CNN's (8.6); constrained to the ERK allocation it keeps 87.8\% at 40\% of the inference FLOPs of the global variant. The
+order of the other routes does change with the model: on the CNN at 1\% prune-after beats dense small beats RigL, on
+ResNet-18 at 0.5\% RigL beats prune-after beats dense small. At 5\% the three large-network routes lie within 0.3 points of
+each other and within 0.5 points of the dense ceiling, so the budget, not the method, decides whether the route matters.
+
+\begin{table}[t]
+\centering\small
+\caption{CIFAR-10 ResNet-18 (11.2M weights, 92.5\% dense): test accuracy (\%) and inference FLOPs per image at matched
+budgets, three seeds. Per-layer criteria use the ERK allocation.}
+\label{tab:resnet}
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{Accuracy} & \multicolumn{3}{c}{Inference FLOPs} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Route (criterion) & 5\% & 2\% & 0.5\% & 5\% & 2\% & 0.5\% \\
+\midrule
+Dense small (additive)           & 88.7 & 86.5 & 81.3 & 5.6e7 & 2.3e7 & 6.1e6 \\
+Prune-after + fine-tune          & \textbf{92.3} & 90.9 & 83.6 & 2.7e8 & 1.5e8 & 5.3e7 \\
+Prune-during, magnitude (global) & 92.0 & \textbf{91.5} & \textbf{89.0} & 1.9e8 & 1.1e8 & 3.4e7 \\
+Prune-during, magnitude (ERK)    & 92.0 & 91.3 & 87.8 & 1.4e8 & 5.7e7 & 1.4e7 \\
+RigL (ERK)                       & 91.0 & 89.5 & 84.9 & 1.4e8 & 5.7e7 & 1.4e7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{What to remove: local rules.} Removing connections by a Hebbian correlation trace beats random removal but falls
+below the dense small network at every budget under 10\% (88.9\% against 94.1\% at 0.5\%), because $\mathbb{E}[y_i x_j]$
+measures correlation through every path, not the contribution of synapse $ij$. Scoring synapses by their own drive repairs
+most of the gap on the MLP: at 0.5\% the drive rule (96.0\%) beats the additive baseline, prune-after and SET and is 0.3
+points behind RigL, with a criterion that uses no gradient information (training itself remains back-propagation). On the
+CNN the unnormalised drive rule collapses within two epochs (run logs): channels that fire rarely lose all their inputs, die,
+and the failure propagates downstream, a known hazard of activity-dependent pruning without homeostasis. Normalising each
+neuron's drive by its mean removes the collapse but the rule still falls from parity with the dense baseline at 10\% to 17
+points behind it at 1\%. A local criterion can stand in for the magnitude criterion on the MLP at a cost of 1.0 point at
+0.5\% against the per-layer magnitude criterion (1.8 against the global one); on the convolutional network, in this form,
+it cannot.
+
+\paragraph{Transfer: pruning a pre-trained network during adaptation.} The over-parameterised starting point that
+prune-during needs is, in practice, often inherited: pre-trained networks are published with their training cost already
+paid, so the practical question is what gradual pruning does during adaptation.
+We therefore took an ImageNet-pre-trained ResNet-18 (torchvision weights, 11.17M convolutional weights, fresh 10-way
+classifier kept dense) and adapted it to CIFAR-10 for 10 epochs at $128\times128$ input while pruning its convolutions to 5\%,
+2\% and 0.5\% with the same cubic schedule (SGD, lr 0.01, the from-scratch arms use lr 0.1 and the same architecture, schedule
+and resolution). Table~\ref{tab:pretrained} compares gradual pruning during adaptation with one-shot magnitude pruning of the
+same weights followed by fine-tuning, RigL started from a random ERK mask over the pre-trained weights, and the two from-scratch
+routes. At 5\% and 2\% the pre-trained start is worth 5.3 and 3.5 points over pruning from scratch, gradual removal during
+adaptation beats one-shot pruning of the same weights by 0.6--0.7 points, and RigL, which must discard the inherited
+structure to start sparse, lands below pruning from scratch. The pre-trained prune-during arms reach 90\% after about 52k
+samples (just over one epoch, when pruning has just begun and about 99\% of the weights remain, as does the dense
+fine-tune), a level one-shot pruning needs
+166k--402k samples for at 5\% and 2\% and does not reach at 0.5\%, and RigL never reaches in ten epochs; they are also
+better calibrated (ECE 0.015--0.020 against 0.028--0.031 for prune-during from scratch). The inherited start does not save
+adaptation compute: at 5\% gradual pruning costs 7.3e14 FLOPs from the pre-trained weights against 7.7e14 from scratch,
+40\% of a dense fine-tune and 7$\times$ the dense small network. What it buys is accuracy; the early data efficiency is
+that of the dense start, which gradual pruning keeps and one-shot pruning destroys. At 0.5\% the ordering reverses: pruning from scratch (83.8\%) beats one-shot pruning (81.7\%), which
+beats gradual pruning of the pre-trained network (80.9\%). The pre-trained prune-during run peaks at 93.1\% in mid-schedule
+and loses twelve points as the last 4.5\% of its connections go, with only three epochs left at the final density, whereas
+one-shot pruning spends all ten there. An inherited structure pays off down to about 2\% of its connections; below that, a
+magnitude profile tuned for another task is a liability, and the short adaptation window favours removing it at once.
+
+\begin{table}[t]
+\centering\small
+\caption{ImageNet-pre-trained ResNet-18 adapted to CIFAR-10 ($128\times128$, 10 epochs) while being pruned: test accuracy
+(\%) at matched convolutional budgets, two seeds, standard deviations $\le 0.4$. Adaptation FLOPs count the 10 epochs only;
+the ImageNet pre-training is a sunk cost common to the pre-trained arms. The unpruned dense fine-tune reaches 95.9\% at
+$1.8\times10^{15}$ FLOPs.}
+\label{tab:pretrained}
+\begin{tabular}{llcccc}
+\toprule
+Start & Route & 5\% & 2\% & 0.5\% & Adapt.\ FLOPs (5\%) \\
+\midrule
+pre-trained & prune-during, magnitude (global) & \textbf{93.7} & \textbf{91.0} & 80.9 & 7.3e14 \\
+pre-trained & prune-during, magnitude (ERK)    & 93.4 & 89.7 & 78.8 & 8.1e14 \\
+pre-trained & one-shot prune + fine-tune        & 93.1 & 90.3 & 81.7 & 3.0e14 \\
+pre-trained & random ERK mask + RigL            & 86.9 & 83.6 & 76.8 & 2.7e14 \\
+scratch     & prune-during, magnitude (global) & 88.4 & 87.5 & \textbf{83.8} & 7.7e14 \\
+scratch     & dense small (additive)            & 84.8 & 82.4 & 76.5 & 1.1e14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.75\linewidth]{core_pretrained_acc_vs_active}
+\caption{Pre-trained ResNet-18 adapted to CIFAR-10 while pruned: accuracy against final active convolutional weights (two
+seeds). Solid lines start from the ImageNet weights, dashed lines from scratch. The pre-trained advantage is largest at 5\% and
+reverses at 0.5\%.}
+\label{fig:pretrained}
+\end{figure}
+
+\section{Negative results from the same programme}
+\label{sec:negative}
+
+The programme that produced Section~\ref{sec:core} also implemented the other mechanisms of Table~\ref{tab:map}. Four
+of them did not work as designed, and we report them because the failures are informative: sleep consolidation, thalamic
+routing, predictive coding and per-input subnetworks. The local pruning criteria of Section~\ref{sec:core} are a variant of
+the first mechanism and are not counted separately; the spiking network closes the section as a replication, not a
+failure.
+
+\begin{table}[t]
+\centering\small
+\caption{The mechanisms ported in this paper, their reductions, and what transferred.}
+\label{tab:map}
+\footnotesize
+\begin{tabular}{@{}p{3.2cm}p{4.4cm}p{5.0cm}p{2.0cm}@{}}
+\toprule
+Brain mechanism & Our reduction & Outcome & Where \\
+\midrule
+gradual synaptic pruning during learning & prune-during at matched budgets & transfers (principle) & Section~\ref{sec:core} \\
+activity-dependent local pruning rules & Hebbian, drive and normalised-drive criteria & does not transfer: trails magnitude pruning, collapses on the CNN without homeostasis, near parity on the MLP & Section~\ref{sec:core} \\
+hippocampus--cortex sleep consolidation & fast/slow MLPs, replay, distillation, decay & matches class-balanced replay; beats plain replay by 1.2 points on Permuted MNIST at equal compute & this section \\
+thalamic routing & pre-decided skips; pre-routed attention & does not transfer (choice uninformative; little compute saved) & this section \\
+predictive coding & skip by predicted change; predicted-residual substitution & does not transfer: selection no better than random, substitution no better than identity & this section \\
+per-input subnetworks at inference (follow-up) & per-sample masks by a local rule & does not transfer & this section \\
+spike-timing-dependent plasticity & Diehl--Cook network & known accuracy limit reproduced; self-sparsification observed & this section \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Sleep consolidation.} We trained a fast ``hippocampal'' MLP on the task stream and a slow ``cortical'' MLP only
+during sleep phases at task boundaries, using the current task's data plus a 500-sample reservoir buffer, with distillation
+from the fast network, global synaptic downscaling and magnitude or activity pruning as optional sleep ingredients
+(Split MNIST class-incremental, Permuted MNIST, MLP 784--256--256--10, three seeds; Tables~\ref{tab:app-split} and
+\ref{tab:app-permuted}). Distillation from the fast network lowered final average accuracy on Split MNIST from 85.0\% to
+78.7\% and raised forgetting from 0.18 to 0.25, because the fast network, trained on the current task's classes alone under
+the same single 10-way head, is biased to them; downscaling hurt in both settings (77.4\% and 82.7\%); magnitude pruning was neutral and
+activity pruning cost 6.3 points on Permuted MNIST; and the scheme without distillation only matched plain experience replay
+(85.0\% against 85.2\%) at three times the compute. A redesign with a $k$-winners-take-all sparse hippocampus, no distillation and
+class-balanced replay improved to 87.0\%, but balanced sampling alone added to experience replay reaches 87.8\%, and the
+hippocampal sparsity has no path to influence the cortex once distillation is removed. On Split MNIST the only effective
+ingredient was the known one \citep{chrysakis2020}; on Permuted MNIST the scheme without distillation beats experience
+replay by 1.2 points at the same compute (88.6\% against 87.4\%), and the sparse redesign beats balanced replay by 0.8
+points at five times the compute (89.0\% against 88.3\%). This is a negative result for our simple implementation, not for the hippocampus--cortex
+account: brain-inspired generative replay \citep{vandeven2020} and the hybrid CH-HNN \citep{shi2025} both succeed at
+class-incremental learning, and what they have that we lacked is a hippocampus with generative capacity (internal
+representations replayed through feedback connections) or a dual specific--generalised representation with episode inference, rather
+than a second feed-forward network that can only speak to the cortex through distillation. Confidence-based agreement between the two networks, proposed as a metacognitive ``I do not
+know'' signal, failed to detect unseen classes (AUROC 0.51), whereas plain softmax confidence reached 0.85. Varying how the
+sleep phase decays weights, on the sparse redesign (Tables~\ref{tab:app-sleep-split} and \ref{tab:app-sleep-perm}), did not
+change the picture: a one-shot 10\% downscaling at the task boundary, a gradual 10\% or 3\% decay spread over the sleep
+phase and a continuous weight decay were within noise on Split MNIST (+0.1 to +0.5 points) and cost 0.3--4.0 points on
+Permuted MNIST. Replacing global logit distillation by layer-local feature distillation, the form a processor--memory split
+would favour, did not help: with a 256-unit fast network, local distillation costs 4.2 points against no distillation on
+both benchmarks, less than global distillation on Split MNIST (6.2) and more on Permuted MNIST (1.6).
+
+\paragraph{Predictive token skipping and pre-filtering.} With a low-rank predictor per block estimating how much each token
+will change, skipping the tokens predicted to change least, uniformly over all blocks of a small ViT, was \emph{worse} than
+skipping random tokens (MNIST, 30\% skip: 94.9\% against 96.7\%; even the oracle residual norm was worse than random), because
+background tokens freeze consistently in every layer. Restricting skipping to the later half of the blocks recovers most of
+the loss by itself: with the skipped tokens left unchanged and no fine-tuning, skipping 70\% of them in the late blocks costs
+0.3 points on MNIST and 5.0 on CIFAR-10, against 1.5--3.3 and 8.9--15.4 points for skipping 30\% of them in every block at
+the same FLOPs (Tables~\ref{tab:app-skip-mnist} and \ref{tab:app-skip-cifar}), and a short
+fine-tuning phase that ramps the skip ratio from 0 to 0.7 brings the CIFAR-10 cost to 1.0 point at 72\% of the FLOPs (ViT,
+81.8\% baseline, one seed; Figure~\ref{fig:prefilter}). Replacing the skipped tokens by their predicted residual, the
+predictive-coding ingredient, adds nothing over leaving them unchanged under the same fine-tuning: 97.9\% against 97.9\% on
+MNIST (three seeds) and 80.8\% against 80.8\% on CIFAR-10 at 70\% skipping (one seed; within 0.7 points at every
+non-zero ratio, with a 1.0-point gap at zero skipping that sets the single-seed noise floor;
+Tables~\ref{tab:app-exp12-mnist} and \ref{tab:app-exp12-cifar}). A ``thalamic'' router that pre-decides all late-block skips from the representation at the block boundary performs identically
+to per-block prediction and to random selection, also under cross-evaluation (three seeds on MNIST, one on CIFAR-10;
+Tables~\ref{tab:app-exp12-mnist} and \ref{tab:app-exp12-cifar}). The choice of \emph{which} tokens to skip carries no
+information at this scale, and neither does what replaces them; what matters is how many and in which layers.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{exp12_cifar10}
+\caption{CIFAR-10 ViT: accuracy against FLOPs when skipping tokens in the late blocks with predicted-residual substitution,
+after fine-tuning with a ramped skip ratio (one seed). Thalamic pre-decision, per-block prediction, random selection and
+identity substitution (no predicted residual) coincide; all lie far above post-hoc identity skipping without fine-tuning
+(grey).}
+\label{fig:prefilter}
+\end{figure}
+
+\paragraph{Pre-routed sparse attention.} Selecting the top-$k$ keys per query with an 8-dimensional router \emph{before} the
+full attention computation keeps accuracy at $k=5$ of 50 keys on MNIST (98.1\% against 97.9\%, three seeds) and $k=17$ of 65
+on CIFAR-10 (80.0\% against 79.4\%, one seed; Tables~\ref{tab:app-attn-mnist} and \ref{tab:app-attn-cifar}) and cuts
+attention FLOPs by 68--77\%, but attention is only 5--6\% of the total cost at 50--65 tokens, so total FLOPs fall by only
+3.6--4.7\%; post-hoc top-$k$ masking still computes the full score matrix and saves at most 2.7\%. Stacked on token skipping it saves a further
+1\% of FLOPs for a 0.1--0.6 point loss. The mechanism is sound but irrelevant below several hundred tokens.
+
+\paragraph{Input-dependent pruning at inference time.} If learning is pruning, should inference prune as well? We let
+the ResNet-18 of Table~\ref{tab:resnet} select a different subnetwork for every input. For each output neuron, the connections
+with the largest $|w_{ij}|\,\overline{|x_j|}$ (the weight times the mean magnitude of its input channel for that sample, a
+per-sample form of the synaptic-drive rule without its post-synaptic term) are kept and the rest are masked for that sample
+only, with the kept fraction following the same cubic schedule as prune-during so that every sample uses the budget (within
+1\% at 20\% and 5\%; 14\% more at 0.5\%, where per-neuron rounding and the dense first layer dominate). Controls: the same per-sample
+budget chosen at random, a channel-level $k$-WTA gate on each convolution's input (the only variant whose sparsity is structured
+enough to save time on a GPU), and the static networks of Table~\ref{tab:resnet} plus a static mask with the same uniform
+per-layer allocation that the dynamic rule is confined to. Table~\ref{tab:dynamic} gives the result. At 20\% the input-dependent
+rule matches the fixed masks (91.8\% against 91.8--91.9\%). The penalty appears as the budget shrinks: at 5\% it reaches
+89.8\% against 92.0\% for a fixed global mask and 91.1\% for a fixed mask with the same per-layer allocation, and at 0.5\%
+77.7\% against 89.0\% and 83.1\%, so re-deciding the mask for every input costs 1.3 points at 5\% and 5.4 points at 0.5\%
+even after allocation is controlled for; it beats the width-matched dense network at 20\% and 5\% (90.9\%, 88.7\%) and loses
+to it at 0.5\% (81.3\%). In FLOPs the dynamic arm sits between the two fixed masks (at 0.5\%, 9.3e6 against 5.6e6 for the
+uniform and 3.4e7 for the global mask). Random per-input selection collapses to 52.3\% at 5\% and 18.2\% at 0.5\%, and the channel-level
+gate to 44.9\% and 34.0\% (73.4\% even at 20\%). The rule does form input-specific subnetworks: in the last stage, the masks
+of two samples of the same class share 44\% of their connections at 5\% and those of different classes 27\% (random masks:
+2.6\%; at 20\%, 61\% against 46\%), and across 200 test images the network touches 21\% of that stage's connections while
+each image uses 5\%. The extra capacity is real and buys nothing. This is the mirror image of the token result: among tokens, which to drop did not matter; among
+connections, which to keep is everything, and re-deciding it for every input is worse than deciding it once.
+
+\begin{table}[t]
+\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Input-dependent (per-sample) pruning of a CIFAR-10 ResNet-18 against fixed masks at the same per-sample budget.
+Static rows from Table~\ref{tab:resnet} (three seeds; the 20\% column and the uniform-allocation control from
+Table~\ref{tab:app-resnet}, two seeds); dynamic rows two seeds, with per-sample budgets within 1\% of the fixed masks at
+20\% and 5\% and 14\% above them at 0.5\%. Jaccard: overlap of the last-stage masks of two test images of the same class / of different classes (200 images, 5\%
+budget); a random mask gives 0.026.}
+\label{tab:dynamic}
+\begin{tabular}{lcccc}
+\toprule
+Mask & 20\% & 5\% & 0.5\% & Jaccard same / diff.\ class (5\%) \\
+\midrule
+fixed, prune-during, magnitude (global)               & \textbf{91.9} & \textbf{92.0} & \textbf{89.0} & -- \\
+fixed, prune-during, magnitude (uniform per layer)    & 91.8 & 91.1 & 83.1 & -- \\
+fixed, dense small (additive)                         & 90.9 & 88.7 & 81.3 & -- \\
+per sample, connection-level, local rule              & 91.8 & 89.8 & 77.7 & 0.44 / 0.27 \\
+per sample, connection-level, random                  & 76.1 & 52.3 & 18.2 & 0.03 / 0.03 \\
+per sample, channel-level $k$-WTA gate                & 73.4 & 44.9 & 34.0 & 0.08 / 0.05 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{STDP sparsifies itself.} A 400-neuron spiking network in the style of \citet{diehl2015}, trained with
+trace-based STDP, lateral inhibition and weight normalisation on one pass of MNIST, reaches 81.1$\pm$0.3\% (a
+back-propagated MLP of the same width reaches 96.5\% on the same samples). The gap is the known limitation of unsupervised
+STDP \citep{eshraghian2023,dong2023}; what we add is an observation about the weights. Without any explicit pruning, the
+fraction of its input weights below 1\% of the maximum rises from 5.0\% to 57.7\% and the Gini coefficient of the weight
+distribution from 0.33 to 0.77 during learning (run logs; the 100- and 1{,}600-neuron runs end at 54.9\% and 28.7\%,
+Table~\ref{tab:app-stdp}). Learning under a local plasticity rule with normalisation is itself subtractive, which is the
+biological reading of Section~\ref{sec:core}.
+
+\section{Discussion and limitations}
+\label{sec:discussion}
+
+\paragraph{Scope of the claim.} The claim that survives is narrow and, we think, useful: at a tight final connection budget,
+removing connections gradually while learning is better than learning small, better than removing them afterwards and better
+than rewiring from a sparse start; the advantage grows with sparsity, and at loose budgets it shrinks to a tie with removing
+them afterwards. The claim is about accuracy per connection. It is not a claim about training cost, where RigL wins, and on
+convolutional networks it must be stated per FLOP as well as per connection. It is also not a claim that local rules suffice:
+they nearly do on the MLP and do not, in our forms, on the CNN.
+
+\paragraph{Training cost, and what an inherited start buys.} The 3--59$\times$ training-cost multiplier is the honest
+weakness of prune-during trained from scratch: it buys accuracy with compute, and RigL buys most of the
+accuracy for the price of the dense small network (2.3--2.5$\times$ on ResNet-18), trailing prune-during by 1.5--10 points
+at the tightest budgets. Two observations qualify the weakness. First, training happens once and inference many times; at
+equal inference FLOPs (the ERK-constrained variant) the extra training compute is amortised over deployment, so the trade-off
+depends on how often the model is used. Second, the over-parameterised starting point is often inherited: pre-trained
+networks are published with their training cost already paid. That does not make the adaptation cheap, since the schedule
+still runs its dense phase (at 5\%, 7.3e14 FLOPs against 7.7e14 from scratch), but it changes what the compute buys. Pruning
+pre-trained models is the classical setting of \citet{han2015} and
+\citet{zhu2017}; what our comparison adds is that gradual removal \emph{during} adaptation should then dominate one-shot
+pruning and, because RigL must discard the pre-trained structure to start sparse, dynamic sparse training as well. The
+transfer experiment (Table~\ref{tab:pretrained}) confirms this at 5\% and 2\%: gradual removal during adaptation beats
+one-shot pruning of the same weights, beats RigL on the pre-trained weights by seven points and keeps 5.3 and 3.5 points over
+pruning from scratch, at 40\% of the FLOPs of a dense fine-tune. It refutes it at 0.5\%, where the inherited structure
+becomes a liability and both one-shot pruning and training from scratch win: an inherited start pays off only while enough
+of it survives. The developmental reading is the same: an organism inherits an over-connected
+cortex it did not pay for and only pays for the pruning.
+
+\paragraph{Scale.} Two small datasets; models from one to eleven million parameters. The ResNet-18 replication
+(Table~\ref{tab:resnet}) shows that the winner and the growth of the margin with sparsity survive a five-fold increase in
+model size, but ImageNet-scale data and models remain future work. The hazards we
+found on the CNN (layer starvation under uniform allocation, channel death under activity pruning, divergence of RigL at
+sub-1\% mid-layer densities) suggest that the extreme-sparsity regime will need care at scale.
+
+\paragraph{What the negative results constrain.} A hippocampus that cannot communicate with the cortex except by distillation
+will transfer its bias; a token-selection rule that freezes the same background tokens in every layer will lose to random
+selection; an
+attention-sparsity mechanism is only worth its router at long sequences; a network that re-selects its connections for every
+input pays for the flexibility with accuracy. These are not arguments against the brain principles
+but against the particular reductions we tried, and they are the kind of result that is rarely published and often re-discovered.
+
+\paragraph{An observation about the failures.} We state the distinction before the results. We call a reduction a
+\emph{structure} when it adds a module or a decision to the network (a second network, a router, a predictor that fills gaps,
+a per-sample mask) and a \emph{principle} when it changes only how the existing network is trained (what is removed, and
+when). By this criterion the four mechanisms that did not transfer are all structures, and the one that did is the only
+principle we tested; the local pruning rules sit in between (a different criterion for the same schedule, with activity
+buffers added) and transferred only in part. One reading, which we offer as a hypothesis rather than a conclusion because it
+was named after the results and rests on a single positive case, is that a substantial part of the brain's advantage rests on
+compute--memory unity, the hardware property by which every synapse computes, stores and learns in place, and that a
+processor--memory architecture can only imitate the structures at a cost: a hippocampus that can communicate only by
+distillation transfers its bias, a router must spend compute to save compute, a predictor must be trained and evaluated for
+every token it stands in for, an activity-dependent rule must track activity in buffers separate from the weights it governs,
+and a per-input subnetwork must be materialised as a per-sample copy of the weights. Each failure also has a mundane
+explanation (bias transfer, a single shared head in class-incremental learning, attention being 5--6\% of the cost, token
+selection carrying no information at this scale, a predicted residual carrying no more than the token it replaces once only
+late layers are skipped, a mask that changes faster than the weights can adapt to it), and the hippocampus--cortex structure
+has been made to work in software by giving the hippocampus generative capacity or a hybrid dual representation
+\citep{vandeven2020,shi2025}. We did not test the hardware reading: the principle transferred; the structures did not, in our
+hands.
+
+\paragraph{Follow-up.} The natural next question links the main result to forgetting: whether networks sparsified by
+prune-during interfere less across sequential tasks than dense networks of equal budget. This connects to PackNet-style
+continual learning \citep{mallya2018,golkar2019} but tests the developmental claim directly.
+
+\section{Conclusion}
+
+Pruning during learning, with a plain global magnitude criterion and a gradual schedule, is the best route to a sparse network
+at tight budgets on the three models we tried, ties with pruning afterwards at loose budgets, and its advantage comes from the
+gradualness rather than from sparsity. Starting from a pre-trained network adds 3.5--5.3 points over pruning from scratch
+down to about 2\% of the connections, without saving adaptation compute, and becomes a liability below that. The same programme's attempts at sleep consolidation, predictive skipping, thalamic routing (pre-routed attention) and
+input-dependent pruning did not add to known baselines, apart from a 1.2-point gain over plain replay on Permuted MNIST
+at equal compute,
+and we report them so that the next attempt can start from the right place.
+
+\paragraph{Reproducibility.} Code, configurations, per-run logs and the full result tables will be released in a public repository;
+every number in this paper is produced by \texttt{scripts/analyze.py} from the stored run files.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\appendix
+
+\section{Hyper-parameters and implementation notes}
+
+\paragraph{Masks.} Linear and convolutional layers carry a binary mask buffer; the forward pass uses $w \odot m$, masked
+weights are re-zeroed after every optimiser step, and pruning selects an exact top-$k$ of the live weights by index so that
+tied scores (common with activity traces) cannot inflate the count.
+
+\paragraph{Schedules.} Prune-during: density $d(t)=d_f+(1-d_f)(1-t)^3$ for $t\in[0,1]$ spanning 10--70\% of training, pruning
+every 100 steps, with a final pruning step at 70\% so that the target is met exactly. RigL/SET: drop fraction
+$0.3\cdot\frac{1}{2}(1+\cos(\pi s/S))$ every 100 steps up to $S$ = 75\% of training. Prune-after: fine-tuning for half the
+original epochs at lr 0.01 (CNN) or the original lr (MLP). RigL regrowth is skipped on steps whose mixed-precision gradients
+are non-finite; without this guard one CIFAR-10 seed lost 93\% of its connections in the first 1{,}000 steps. With the guard
+in place one CIFAR-10 seed at 1\% still diverged to chance (Table~\ref{tab:cifar}).
+
+\paragraph{Dense small sizing.} MLP: hidden width $h$ solving $784h+h^2+10h=B$. CNN and ResNet: all widths scaled by a common
+factor found by bisection on the prunable weight count.
+
+\paragraph{Training.} MLP: Adam, lr $10^{-3}$, batch 128, one warm-up epoch then cosine, 15 epochs, no augmentation, full
+training and test sets resident on the GPU. CNN: SGD with Nesterov momentum 0.9, lr 0.05, weight decay $5\times10^{-4}$ on
+weights only, batch 128, mixed precision, 20 epochs, random crop (padding 4) and horizontal flip performed on the GPU.
+
+\paragraph{Spiking network.} 784 Poisson inputs at 32\,Hz per unit intensity, 250\,ms per image, 1\,ms steps; 400 LIF
+neurons with adaptive thresholds ($\theta^+=0.05$), 5\,ms refractory period, recurrent inhibition of 17.5\,mV; trace STDP with
+$\eta_\mathrm{pre}=10^{-4}$, $\eta_\mathrm{post}=10^{-2}$; input weights normalised to a column sum of 78.4; batches of 32
+images with summed updates. Labels are assigned to neurons by their class-wise mean response on 10k training images.
+
+\section{Full result tables}
+\input{tables/all}
+
+\end{document}

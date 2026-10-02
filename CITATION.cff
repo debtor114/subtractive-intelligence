@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this code or these results, please cite the paper below."
+title: "What Survives the Translation from Brain to Von Neumann Machine: Learning Is Pruning, and Four Mechanisms That Did Not Transfer"
+authors:
+  - family-names: Kang
+    given-names: Dongin
+    affiliation: Independent Researcher
+    email: shalooooooooom@gmail.com
+date-released: 2026-10-02
+version: "1.0"
+license: MIT
+repository-code: "https://github.com/TODO/subtractive-intelligence"
+keywords:
+  - network pruning
+  - sparse training
+  - brain-inspired computing
+  - continual learning
+  - spiking neural networks

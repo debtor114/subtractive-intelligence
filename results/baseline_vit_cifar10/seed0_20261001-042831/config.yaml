@@ -1,0 +1,34 @@
+run_name: baseline_vit_cifar10
+seed: 0
+deterministic: false
+dataset:
+  name: cifar10
+  batch_size: 128
+  num_workers: 0
+  augment: true
+model:
+  name: vit
+  patch_size: 4
+  dim: 192
+  depth: 6
+  num_heads: 3
+  mlp_ratio: 4.0
+  dropout: 0.1
+  attn_dropout: 0.0
+  emb_dropout: 0.1
+optim:
+  name: adamw
+  lr: 0.001
+  weight_decay: 0.05
+sched:
+  name: cosine
+  warmup_epochs: 5
+  min_lr_ratio: 0.01
+train:
+  epochs: 50
+  amp: true
+  grad_clip: 1.0
+  label_smoothing: 0.1
+  eval_every: 1
+  eval_every_steps: null
+  progress: false

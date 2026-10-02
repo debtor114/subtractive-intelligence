@@ -1,0 +1,32 @@
+run_name: baseline_vit_mnist
+seed: 2
+deterministic: false
+dataset:
+  name: mnist
+  batch_size: 128
+  num_workers: 0
+model:
+  name: vit
+  patch_size: 4
+  dim: 128
+  depth: 4
+  num_heads: 4
+  mlp_ratio: 4.0
+  dropout: 0.1
+  attn_dropout: 0.0
+  emb_dropout: 0.1
+optim:
+  name: adamw
+  lr: 0.001
+  weight_decay: 0.05
+sched:
+  name: cosine
+  warmup_epochs: 1
+train:
+  epochs: 10
+  amp: true
+  grad_clip: 1.0
+  label_smoothing: 0.0
+  eval_every: 1
+  eval_every_steps: 100
+  progress: false

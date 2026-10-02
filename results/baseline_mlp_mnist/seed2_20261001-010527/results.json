@@ -1,0 +1,684 @@
+{
+  "run_name": "baseline_mlp_mnist",
+  "seed": 2,
+  "dataset": "mnist",
+  "model": {
+    "name": "mlp",
+    "hidden": [
+      256,
+      256
+    ],
+    "dropout": 0.0
+  },
+  "device": "NVIDIA GeForce RTX 3060 Ti",
+  "torch": "2.11.0+cu128",
+  "amp": true,
+  "params_total": 269322,
+  "params_active": 269322,
+  "flops_dense_per_sample": 537600.0,
+  "flops_effective_per_sample": 537600.0,
+  "flops_leaf_total_per_sample": 537600.0,
+  "epochs": 10,
+  "history": [
+    {
+      "epoch": 1,
+      "samples_seen": 60000,
+      "train_loss": 0.5887748400767644,
+      "train_acc": 0.8324333333333334,
+      "lr": 0.001,
+      "epoch_time_s": 30.579344511032104,
+      "test_loss": 0.1564747542142868,
+      "test_acc": 0.9546,
+      "ece": 0.007881469157338183,
+      "nll": 0.1564747609790967
+    },
+    {
+      "epoch": 2,
+      "samples_seen": 120000,
+      "train_loss": 0.12355428076982498,
+      "train_acc": 0.96215,
+      "lr": 0.0009698463103929542,
+      "epoch_time_s": 28.848406553268433,
+      "test_loss": 0.1011122614145279,
+      "test_acc": 0.9674,
+      "ece": 0.00312717639803893,
+      "nll": 0.10111225975377368
+    },
+    {
+      "epoch": 3,
+      "samples_seen": 180000,
+      "train_loss": 0.07202653886079788,
+      "train_acc": 0.9769833333333333,
+      "lr": 0.000883022221559489,
+      "epoch_time_s": 32.86669659614563,
+      "test_loss": 0.08142749965190887,
+      "test_acc": 0.9738,
+      "ece": 0.004786573885381217,
+      "nll": 0.08142750125172481
+    },
+    {
+      "epoch": 4,
+      "samples_seen": 240000,
+      "train_loss": 0.047552759459614756,
+      "train_acc": 0.9841666666666666,
+      "lr": 0.00075,
+      "epoch_time_s": 30.62985324859619,
+      "test_loss": 0.08393345028162003,
+      "test_acc": 0.9735,
+      "ece": 0.006699293419718726,
+      "nll": 0.08393345261033439
+    },
+    {
+      "epoch": 5,
+      "samples_seen": 300000,
+      "train_loss": 0.031612403539816536,
+      "train_acc": 0.9898166666666667,
+      "lr": 0.0005868240888334653,
+      "epoch_time_s": 31.62022089958191,
+      "test_loss": 0.059842243790626526,
+      "test_acc": 0.9809,
+      "ece": 0.004453679537773153,
+      "nll": 0.05984224048114792
+    },
+    {
+      "epoch": 6,
+      "samples_seen": 360000,
+      "train_loss": 0.016830685782432558,
+      "train_acc": 0.9950833333333333,
+      "lr": 0.00041317591116653486,
+      "epoch_time_s": 34.041231870651245,
+      "test_loss": 0.060243360698223114,
+      "test_acc": 0.9828,
+      "ece": 0.006218630623817415,
+      "nll": 0.060243354840001234
+    },
+    {
+      "epoch": 7,
+      "samples_seen": 420000,
+      "train_loss": 0.008921722976428768,
+      "train_acc": 0.9978166666666667,
+      "lr": 0.0002500000000000001,
+      "epoch_time_s": 31.700940370559692,
+      "test_loss": 0.06067361310124397,
+      "test_acc": 0.9826,
+      "ece": 0.007944627276062974,
+      "nll": 0.060673612304756264
+    },
+    {
+      "epoch": 8,
+      "samples_seen": 480000,
+      "train_loss": 0.004873247261842092,
+      "train_acc": 0.99915,
+      "lr": 0.00011697777844051105,
+      "epoch_time_s": 42.86281776428223,
+      "test_loss": 0.060358766466379166,
+      "test_acc": 0.9832,
+      "ece": 0.007992280375957497,
+      "nll": 0.06035876546075236
+    },
+    {
+      "epoch": 9,
+      "samples_seen": 540000,
+      "train_loss": 0.0031941294710462293,
+      "train_acc": 0.99965,
+      "lr": 3.0153689607045842e-05,
+      "epoch_time_s": 40.23919320106506,
+      "test_loss": 0.06050575524568558,
+      "test_acc": 0.9833,
+      "ece": 0.008240194952487852,
+      "nll": 0.06050575716046533
+    },
+    {
+      "epoch": 10,
+      "samples_seen": 600000,
+      "train_loss": 0.0026129566232285773,
+      "train_acc": 0.9997833333333334,
+      "lr": 0.0,
+      "epoch_time_s": 34.01259469985962,
+      "test_loss": 0.06055549904704094,
+      "test_acc": 0.983,
+      "ece": 0.008534380665421433,
+      "nll": 0.0605554909918519
+    }
+  ],
+  "learning_curve": [
+    {
+      "samples_seen": 6400,
+      "step": 50,
+      "test_acc": 0.6449
+    },
+    {
+      "samples_seen": 12800,
+      "step": 100,
+      "test_acc": 0.8355
+    },
+    {
+      "samples_seen": 19200,
+      "step": 150,
+      "test_acc": 0.8923
+    },
+    {
+      "samples_seen": 25600,
+      "step": 200,
+      "test_acc": 0.9068
+    },
+    {
+      "samples_seen": 32000,
+      "step": 250,
+      "test_acc": 0.9191
+    },
+    {
+      "samples_seen": 38400,
+      "step": 300,
+      "test_acc": 0.9253
+    },
+    {
+      "samples_seen": 44800,
+      "step": 350,
+      "test_acc": 0.9426
+    },
+    {
+      "samples_seen": 51200,
+      "step": 400,
+      "test_acc": 0.9453
+    },
+    {
+      "samples_seen": 57600,
+      "step": 450,
+      "test_acc": 0.9478
+    },
+    {
+      "samples_seen": 60000,
+      "step": 469,
+      "test_acc": 0.9546
+    },
+    {
+      "samples_seen": 63968,
+      "step": 500,
+      "test_acc": 0.944
+    },
+    {
+      "samples_seen": 70368,
+      "step": 550,
+      "test_acc": 0.9596
+    },
+    {
+      "samples_seen": 76768,
+      "step": 600,
+      "test_acc": 0.9566
+    },
+    {
+      "samples_seen": 83168,
+      "step": 650,
+      "test_acc": 0.9626
+    },
+    {
+      "samples_seen": 89568,
+      "step": 700,
+      "test_acc": 0.9591
+    },
+    {
+      "samples_seen": 95968,
+      "step": 750,
+      "test_acc": 0.9645
+    },
+    {
+      "samples_seen": 102368,
+      "step": 800,
+      "test_acc": 0.9592
+    },
+    {
+      "samples_seen": 108768,
+      "step": 850,
+      "test_acc": 0.9663
+    },
+    {
+      "samples_seen": 115168,
+      "step": 900,
+      "test_acc": 0.9648
+    },
+    {
+      "samples_seen": 120000,
+      "step": 938,
+      "test_acc": 0.9674
+    },
+    {
+      "samples_seen": 121536,
+      "step": 950,
+      "test_acc": 0.9714
+    },
+    {
+      "samples_seen": 127936,
+      "step": 1000,
+      "test_acc": 0.9686
+    },
+    {
+      "samples_seen": 134336,
+      "step": 1050,
+      "test_acc": 0.9715
+    },
+    {
+      "samples_seen": 140736,
+      "step": 1100,
+      "test_acc": 0.9679
+    },
+    {
+      "samples_seen": 147136,
+      "step": 1150,
+      "test_acc": 0.9712
+    },
+    {
+      "samples_seen": 153536,
+      "step": 1200,
+      "test_acc": 0.9701
+    },
+    {
+      "samples_seen": 159936,
+      "step": 1250,
+      "test_acc": 0.9709
+    },
+    {
+      "samples_seen": 166336,
+      "step": 1300,
+      "test_acc": 0.9756
+    },
+    {
+      "samples_seen": 172736,
+      "step": 1350,
+      "test_acc": 0.973
+    },
+    {
+      "samples_seen": 179136,
+      "step": 1400,
+      "test_acc": 0.9739
+    },
+    {
+      "samples_seen": 180000,
+      "step": 1407,
+      "test_acc": 0.9738
+    },
+    {
+      "samples_seen": 185504,
+      "step": 1450,
+      "test_acc": 0.9771
+    },
+    {
+      "samples_seen": 191904,
+      "step": 1500,
+      "test_acc": 0.9746
+    },
+    {
+      "samples_seen": 198304,
+      "step": 1550,
+      "test_acc": 0.9761
+    },
+    {
+      "samples_seen": 204704,
+      "step": 1600,
+      "test_acc": 0.9737
+    },
+    {
+      "samples_seen": 211104,
+      "step": 1650,
+      "test_acc": 0.9721
+    },
+    {
+      "samples_seen": 217504,
+      "step": 1700,
+      "test_acc": 0.9772
+    },
+    {
+      "samples_seen": 223904,
+      "step": 1750,
+      "test_acc": 0.9741
+    },
+    {
+      "samples_seen": 230304,
+      "step": 1800,
+      "test_acc": 0.9771
+    },
+    {
+      "samples_seen": 236704,
+      "step": 1850,
+      "test_acc": 0.977
+    },
+    {
+      "samples_seen": 240000,
+      "step": 1876,
+      "test_acc": 0.9735
+    },
+    {
+      "samples_seen": 243072,
+      "step": 1900,
+      "test_acc": 0.9781
+    },
+    {
+      "samples_seen": 249472,
+      "step": 1950,
+      "test_acc": 0.9782
+    },
+    {
+      "samples_seen": 255872,
+      "step": 2000,
+      "test_acc": 0.978
+    },
+    {
+      "samples_seen": 262272,
+      "step": 2050,
+      "test_acc": 0.9803
+    },
+    {
+      "samples_seen": 268672,
+      "step": 2100,
+      "test_acc": 0.9761
+    },
+    {
+      "samples_seen": 275072,
+      "step": 2150,
+      "test_acc": 0.9793
+    },
+    {
+      "samples_seen": 281472,
+      "step": 2200,
+      "test_acc": 0.9794
+    },
+    {
+      "samples_seen": 287872,
+      "step": 2250,
+      "test_acc": 0.9789
+    },
+    {
+      "samples_seen": 294272,
+      "step": 2300,
+      "test_acc": 0.9755
+    },
+    {
+      "samples_seen": 300000,
+      "step": 2345,
+      "test_acc": 0.9809
+    },
+    {
+      "samples_seen": 300640,
+      "step": 2350,
+      "test_acc": 0.9801
+    },
+    {
+      "samples_seen": 307040,
+      "step": 2400,
+      "test_acc": 0.9812
+    },
+    {
+      "samples_seen": 313440,
+      "step": 2450,
+      "test_acc": 0.9795
+    },
+    {
+      "samples_seen": 319840,
+      "step": 2500,
+      "test_acc": 0.9804
+    },
+    {
+      "samples_seen": 326240,
+      "step": 2550,
+      "test_acc": 0.9802
+    },
+    {
+      "samples_seen": 332640,
+      "step": 2600,
+      "test_acc": 0.9809
+    },
+    {
+      "samples_seen": 339040,
+      "step": 2650,
+      "test_acc": 0.9804
+    },
+    {
+      "samples_seen": 345440,
+      "step": 2700,
+      "test_acc": 0.9813
+    },
+    {
+      "samples_seen": 351840,
+      "step": 2750,
+      "test_acc": 0.9819
+    },
+    {
+      "samples_seen": 358240,
+      "step": 2800,
+      "test_acc": 0.9823
+    },
+    {
+      "samples_seen": 360000,
+      "step": 2814,
+      "test_acc": 0.9828
+    },
+    {
+      "samples_seen": 364608,
+      "step": 2850,
+      "test_acc": 0.9815
+    },
+    {
+      "samples_seen": 371008,
+      "step": 2900,
+      "test_acc": 0.9816
+    },
+    {
+      "samples_seen": 377408,
+      "step": 2950,
+      "test_acc": 0.9828
+    },
+    {
+      "samples_seen": 383808,
+      "step": 3000,
+      "test_acc": 0.9826
+    },
+    {
+      "samples_seen": 390208,
+      "step": 3050,
+      "test_acc": 0.9822
+    },
+    {
+      "samples_seen": 396608,
+      "step": 3100,
+      "test_acc": 0.9829
+    },
+    {
+      "samples_seen": 403008,
+      "step": 3150,
+      "test_acc": 0.9824
+    },
+    {
+      "samples_seen": 409408,
+      "step": 3200,
+      "test_acc": 0.9817
+    },
+    {
+      "samples_seen": 415808,
+      "step": 3250,
+      "test_acc": 0.9821
+    },
+    {
+      "samples_seen": 420000,
+      "step": 3283,
+      "test_acc": 0.9826
+    },
+    {
+      "samples_seen": 422176,
+      "step": 3300,
+      "test_acc": 0.983
+    },
+    {
+      "samples_seen": 428576,
+      "step": 3350,
+      "test_acc": 0.9833
+    },
+    {
+      "samples_seen": 434976,
+      "step": 3400,
+      "test_acc": 0.9835
+    },
+    {
+      "samples_seen": 441376,
+      "step": 3450,
+      "test_acc": 0.9826
+    },
+    {
+      "samples_seen": 447776,
+      "step": 3500,
+      "test_acc": 0.9825
+    },
+    {
+      "samples_seen": 454176,
+      "step": 3550,
+      "test_acc": 0.9838
+    },
+    {
+      "samples_seen": 460576,
+      "step": 3600,
+      "test_acc": 0.9831
+    },
+    {
+      "samples_seen": 466976,
+      "step": 3650,
+      "test_acc": 0.9826
+    },
+    {
+      "samples_seen": 473376,
+      "step": 3700,
+      "test_acc": 0.9831
+    },
+    {
+      "samples_seen": 479776,
+      "step": 3750,
+      "test_acc": 0.9831
+    },
+    {
+      "samples_seen": 480000,
+      "step": 3752,
+      "test_acc": 0.9832
+    },
+    {
+      "samples_seen": 486144,
+      "step": 3800,
+      "test_acc": 0.983
+    },
+    {
+      "samples_seen": 492544,
+      "step": 3850,
+      "test_acc": 0.9833
+    },
+    {
+      "samples_seen": 498944,
+      "step": 3900,
+      "test_acc": 0.9831
+    },
+    {
+      "samples_seen": 505344,
+      "step": 3950,
+      "test_acc": 0.9834
+    },
+    {
+      "samples_seen": 511744,
+      "step": 4000,
+      "test_acc": 0.9831
+    },
+    {
+      "samples_seen": 518144,
+      "step": 4050,
+      "test_acc": 0.9835
+    },
+    {
+      "samples_seen": 524544,
+      "step": 4100,
+      "test_acc": 0.9832
+    },
+    {
+      "samples_seen": 530944,
+      "step": 4150,
+      "test_acc": 0.9831
+    },
+    {
+      "samples_seen": 537344,
+      "step": 4200,
+      "test_acc": 0.9832
+    },
+    {
+      "samples_seen": 540000,
+      "step": 4221,
+      "test_acc": 0.9833
+    },
+    {
+      "samples_seen": 543712,
+      "step": 4250,
+      "test_acc": 0.9831
+    },
+    {
+      "samples_seen": 550112,
+      "step": 4300,
+      "test_acc": 0.9834
+    },
+    {
+      "samples_seen": 556512,
+      "step": 4350,
+      "test_acc": 0.9832
+    },
+    {
+      "samples_seen": 562912,
+      "step": 4400,
+      "test_acc": 0.9832
+    },
+    {
+      "samples_seen": 569312,
+      "step": 4450,
+      "test_acc": 0.9833
+    },
+    {
+      "samples_seen": 575712,
+      "step": 4500,
+      "test_acc": 0.9832
+    },
+    {
+      "samples_seen": 582112,
+      "step": 4550,
+      "test_acc": 0.9833
+    },
+    {
+      "samples_seen": 588512,
+      "step": 4600,
+      "test_acc": 0.983
+    },
+    {
+      "samples_seen": 594912,
+      "step": 4650,
+      "test_acc": 0.983
+    },
+    {
+      "samples_seen": 600000,
+      "step": 4690,
+      "test_acc": 0.983
+    }
+  ],
+  "run_dir": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\baseline_mlp_mnist\\seed2_20261001-010527",
+  "total_train_time_s": 358.1949393749237,
+  "best_test_acc": 0.9833,
+  "final_test_acc": 0.983,
+  "peak_gpu_mem_mb": 23.41259765625,
+  "train_flops_total": 967680000000.0,
+  "calibration": {
+    "acc": 0.983,
+    "loss": 0.06055549904704094,
+    "ece": 0.008534380665421433,
+    "mce": 0.3886541277170181,
+    "nll": 0.0605554909918519,
+    "brier": 0.0262636182053351,
+    "auroc": 0.9797426844593382,
+    "aurc": 0.0005041564461337304,
+    "sel_acc@0.9": 0.9995555555555555,
+    "sel_acc@0.8": 0.999875,
+    "sel_acc@0.5": 1.0
+  },
+  "data_efficiency": {
+    "aulc": 0.9702935579514825,
+    "samples_to_target": null
+  }
+}

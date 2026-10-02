@@ -1,0 +1,5 @@
+| density | dense small (additive) | train-then-prune + finetune | prune-during: magnitude (layer) | prune-during: magnitude (global) | prune-during: magnitude (ERK layer budget) | prune-during: activity (layer) | prune-during: abs(w) x activity (layer) | prune-during: synaptic drive (layer) | prune-during: synaptic drive (ERK layer budget) | prune-during: synaptic drive, per-neuron normalized (ERK) | prune-during: random (layer) | SET (dynamic, random regrow) | RigL (dynamic, grad regrow) | static random sparse |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.01 | 0.7709 +- 0.0036 | 0.8051 +- 0.0010 | - | 0.8570 +- 0.0020 | 0.8134 +- 0.0007 | - | - | - | - | 0.6004 +- 0.0141 | - | - | 0.5392 +- 0.3110 | - |
+| 0.03 | 0.8284 +- 0.0010 | 0.8838 +- 0.0022 | - | 0.8908 +- 0.0017 | 0.8692 +- 0.0026 | - | - | - | - | 0.7928 +- 0.0048 | - | - | 0.8353 +- 0.0019 | - |
+| 0.1 | 0.8729 +- 0.0007 | 0.9072 +- 0.0014 | - | 0.9028 +- 0.0029 | 0.8930 +- 0.0004 | - | - | - | - | 0.8759 +- 0.0033 | - | - | 0.8759 +- 0.0005 | - |

@@ -1,0 +1,221 @@
+{
+ "cfg": {
+  "ckpt": "results/baseline_vit_mnist\\seed1_20261001-011836\\model_final.pt",
+  "dataset": "mnist",
+  "mode": "layerwise",
+  "late_attn": "full",
+  "smax": 0.7,
+  "epochs": 4,
+  "seed": 1
+ },
+ "dataset": "mnist",
+ "seed": 1,
+ "mode": "layerwise",
+ "late_attn": "full",
+ "smax": 0.7,
+ "epochs": 4,
+ "n_front": 2,
+ "n_tokens": 50,
+ "baseline_full": {
+  "acc": 0.9827,
+  "ece": 0.0059181930303573195,
+  "nll": 0.0527150385703275,
+  "computed_frac": 1.0
+ },
+ "after_warmup_at_smax": {
+  "acc": 0.9802,
+  "ece": 0.0062521629720926255,
+  "nll": 0.06075113855011742,
+  "computed_frac": 0.31999999999999995
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "train_acc": 0.9817833333333333,
+   "test_acc_at_smax": 0.9777,
+   "s_end": 0.29119999999999996
+  },
+  {
+   "epoch": 2,
+   "train_acc": 0.98115,
+   "test_acc_at_smax": 0.9795,
+   "s_end": 0.5830222222222222
+  },
+  {
+   "epoch": 3,
+   "train_acc": 0.9821166666666666,
+   "test_acc_at_smax": 0.9802,
+   "s_end": 0.7
+  },
+  {
+   "epoch": 4,
+   "train_acc": 0.98305,
+   "test_acc_at_smax": 0.9807,
+   "s_end": 0.7
+  }
+ ],
+ "rows": [
+  {
+   "skip_frac": 0.0,
+   "eval_mode": "layerwise",
+   "acc": 0.9798,
+   "ece": 0.005611031171679425,
+   "nll": 0.06287343677837533,
+   "computed_frac": 1.0,
+   "flops_ratio": 1.0099087178423996,
+   "flops": 84798464.0
+  },
+  {
+   "skip_frac": 0.3,
+   "eval_mode": "thalamic",
+   "acc": 0.9806,
+   "ece": 0.005674876904487586,
+   "nll": 0.06215972344135265,
+   "computed_frac": 0.7,
+   "flops_ratio": 0.886613779520357,
+   "flops": 74445824.0
+  },
+  {
+   "skip_frac": 0.3,
+   "eval_mode": "layerwise",
+   "acc": 0.9807,
+   "ece": 0.005043992304801927,
+   "nll": 0.06252920299080551,
+   "computed_frac": 0.7,
+   "flops_ratio": 0.886613779520357,
+   "flops": 74445824.0
+  },
+  {
+   "skip_frac": 0.3,
+   "eval_mode": "random",
+   "acc": 0.9801,
+   "ece": 0.006008429741859444,
+   "nll": 0.06303258677787645,
+   "computed_frac": 0.7,
+   "flops_ratio": 0.886613779520357,
+   "flops": 74445824.0
+  },
+  {
+   "skip_frac": 0.5,
+   "eval_mode": "thalamic",
+   "acc": 0.9809,
+   "ece": 0.005560415452718754,
+   "nll": 0.0621630241708836,
+   "computed_frac": 0.5199999999999999,
+   "flops_ratio": 0.8126368165271316,
+   "flops": 68234240.0
+  },
+  {
+   "skip_frac": 0.5,
+   "eval_mode": "layerwise",
+   "acc": 0.9807,
+   "ece": 0.0059866121709345865,
+   "nll": 0.06279066010770065,
+   "computed_frac": 0.5199999999999999,
+   "flops_ratio": 0.8126368165271316,
+   "flops": 68234240.0
+  },
+  {
+   "skip_frac": 0.5,
+   "eval_mode": "random",
+   "acc": 0.9798,
+   "ece": 0.0060081062436104365,
+   "nll": 0.0632961860715309,
+   "computed_frac": 0.5199999999999999,
+   "flops_ratio": 0.8126368165271316,
+   "flops": 68234240.0
+  },
+  {
+   "skip_frac": 0.7,
+   "eval_mode": "thalamic",
+   "acc": 0.9805,
+   "ece": 0.005667966467142067,
+   "nll": 0.06314496462945483,
+   "computed_frac": 0.31999999999999995,
+   "flops_ratio": 0.7304401909791033,
+   "flops": 61332480.0
+  },
+  {
+   "skip_frac": 0.7,
+   "eval_mode": "layerwise",
+   "acc": 0.9807,
+   "ece": 0.005582619333267144,
+   "nll": 0.06351321103935313,
+   "computed_frac": 0.31999999999999995,
+   "flops_ratio": 0.7304401909791033,
+   "flops": 61332480.0
+  },
+  {
+   "skip_frac": 0.7,
+   "eval_mode": "random",
+   "acc": 0.9804,
+   "ece": 0.005727072685957032,
+   "nll": 0.06308367730056572,
+   "computed_frac": 0.31999999999999995,
+   "flops_ratio": 0.7304401909791033,
+   "flops": 61332480.0
+  },
+  {
+   "skip_frac": 0.8,
+   "eval_mode": "thalamic",
+   "acc": 0.9803,
+   "ece": 0.00618334499001505,
+   "nll": 0.06372942260868796,
+   "computed_frac": 0.22000000000000003,
+   "flops_ratio": 0.6893418782050891,
+   "flops": 57881600.0
+  },
+  {
+   "skip_frac": 0.8,
+   "eval_mode": "layerwise",
+   "acc": 0.9807,
+   "ece": 0.005408556565642354,
+   "nll": 0.06385980522349056,
+   "computed_frac": 0.22000000000000003,
+   "flops_ratio": 0.6893418782050891,
+   "flops": 57881600.0
+  },
+  {
+   "skip_frac": 0.8,
+   "eval_mode": "random",
+   "acc": 0.9798,
+   "ece": 0.005746886718273222,
+   "nll": 0.06452115157626312,
+   "computed_frac": 0.22000000000000003,
+   "flops_ratio": 0.6893418782050891,
+   "flops": 57881600.0
+  },
+  {
+   "skip_frac": 0.9,
+   "eval_mode": "thalamic",
+   "acc": 0.9801,
+   "ece": 0.00580432772934442,
+   "nll": 0.06460931781830066,
+   "computed_frac": 0.12000000000000002,
+   "flops_ratio": 0.648243565431075,
+   "flops": 54430720.0
+  },
+  {
+   "skip_frac": 0.9,
+   "eval_mode": "layerwise",
+   "acc": 0.9806,
+   "ece": 0.005874781462550124,
+   "nll": 0.06446317031034587,
+   "computed_frac": 0.12000000000000002,
+   "flops_ratio": 0.648243565431075,
+   "flops": 54430720.0
+  },
+  {
+   "skip_frac": 0.9,
+   "eval_mode": "random",
+   "acc": 0.9803,
+   "ece": 0.005887582004070313,
+   "nll": 0.06477733777715415,
+   "computed_frac": 0.12000000000000002,
+   "flops_ratio": 0.648243565431075,
+   "flops": 54430720.0
+  }
+ ],
+ "flops_full": 83966464.0,
+ "time_s": 43.47425580024719
+}

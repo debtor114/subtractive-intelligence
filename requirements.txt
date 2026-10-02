@@ -1,0 +1,15 @@
+# torch / torchvision 은 CUDA 빌드를 별도 인덱스에서 먼저 설치한다 (setup_env.ps1 참고):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+# 아래는 그 다음 설치. 실제 설치된 정확한 버전은 requirements.lock.txt (pip freeze).
+torch-geometric>=2.4.0
+snntorch>=0.9.0
+brian2>=2.5.0
+networkx>=3.0
+matplotlib>=3.7.0
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+tqdm>=4.65.0
+tensorboard>=2.13.0
+pyyaml>=6.0
+# norse 는 선택 (Python 3.10 에서 설치 실패 시 snntorch 로 대체). 실험 4 는 순수 PyTorch 로 구현.

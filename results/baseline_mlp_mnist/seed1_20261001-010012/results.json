@@ -1,0 +1,684 @@
+{
+  "run_name": "baseline_mlp_mnist",
+  "seed": 1,
+  "dataset": "mnist",
+  "model": {
+    "name": "mlp",
+    "hidden": [
+      256,
+      256
+    ],
+    "dropout": 0.0
+  },
+  "device": "NVIDIA GeForce RTX 3060 Ti",
+  "torch": "2.11.0+cu128",
+  "amp": true,
+  "params_total": 269322,
+  "params_active": 269322,
+  "flops_dense_per_sample": 537600.0,
+  "flops_effective_per_sample": 537600.0,
+  "flops_leaf_total_per_sample": 537600.0,
+  "epochs": 10,
+  "history": [
+    {
+      "epoch": 1,
+      "samples_seen": 60000,
+      "train_loss": 0.5899381031592686,
+      "train_acc": 0.8325666666666667,
+      "lr": 0.001,
+      "epoch_time_s": 29.248583555221558,
+      "test_loss": 0.1685086488723755,
+      "test_acc": 0.9497,
+      "ece": 0.01267143639475107,
+      "nll": 0.16850864198760718
+    },
+    {
+      "epoch": 2,
+      "samples_seen": 120000,
+      "train_loss": 0.12483862800598144,
+      "train_acc": 0.9620666666666666,
+      "lr": 0.0009698463103929542,
+      "epoch_time_s": 28.22329568862915,
+      "test_loss": 0.09942533820867538,
+      "test_acc": 0.9702,
+      "ece": 0.004781978848576595,
+      "nll": 0.09942534325260638
+    },
+    {
+      "epoch": 3,
+      "samples_seen": 180000,
+      "train_loss": 0.07397747902870178,
+      "train_acc": 0.97745,
+      "lr": 0.000883022221559489,
+      "epoch_time_s": 28.442752599716187,
+      "test_loss": 0.07592751830816269,
+      "test_acc": 0.9762,
+      "ece": 0.003023944947123498,
+      "nll": 0.07592750777006657
+    },
+    {
+      "epoch": 4,
+      "samples_seen": 240000,
+      "train_loss": 0.04901504483620326,
+      "train_acc": 0.9844333333333334,
+      "lr": 0.00075,
+      "epoch_time_s": 25.720677614212036,
+      "test_loss": 0.079337939620018,
+      "test_acc": 0.9761,
+      "ece": 0.008055290123820292,
+      "nll": 0.07933793738424613
+    },
+    {
+      "epoch": 5,
+      "samples_seen": 300000,
+      "train_loss": 0.031417515194416046,
+      "train_acc": 0.9899166666666667,
+      "lr": 0.0005868240888334653,
+      "epoch_time_s": 29.331389904022217,
+      "test_loss": 0.07071048021316528,
+      "test_acc": 0.9781,
+      "ece": 0.007279211866855611,
+      "nll": 0.07071047908246697
+    },
+    {
+      "epoch": 6,
+      "samples_seen": 360000,
+      "train_loss": 0.017461197546621163,
+      "train_acc": 0.9945333333333334,
+      "lr": 0.00041317591116653486,
+      "epoch_time_s": 31.139930248260498,
+      "test_loss": 0.06373275071382523,
+      "test_acc": 0.9805,
+      "ece": 0.007015843413770289,
+      "nll": 0.06373275255257307
+    },
+    {
+      "epoch": 7,
+      "samples_seen": 420000,
+      "train_loss": 0.00935686807607611,
+      "train_acc": 0.9976833333333334,
+      "lr": 0.0002500000000000001,
+      "epoch_time_s": 28.229876279830933,
+      "test_loss": 0.061446595937013626,
+      "test_acc": 0.9825,
+      "ece": 0.007684697002172445,
+      "nll": 0.061446588652580646
+    },
+    {
+      "epoch": 8,
+      "samples_seen": 480000,
+      "train_loss": 0.005015975282589595,
+      "train_acc": 0.99925,
+      "lr": 0.00011697777844051105,
+      "epoch_time_s": 31.206355571746826,
+      "test_loss": 0.0589962899684906,
+      "test_acc": 0.9843,
+      "ece": 0.006971200042962965,
+      "nll": 0.058996284144061543
+    },
+    {
+      "epoch": 9,
+      "samples_seen": 540000,
+      "train_loss": 0.003269317509668569,
+      "train_acc": 0.9996,
+      "lr": 3.0153689607045842e-05,
+      "epoch_time_s": 29.31691575050354,
+      "test_loss": 0.06035145744681358,
+      "test_acc": 0.984,
+      "ece": 0.007654408320784616,
+      "nll": 0.060351455809899326
+    },
+    {
+      "epoch": 10,
+      "samples_seen": 600000,
+      "train_loss": 0.002692796579996745,
+      "train_acc": 0.9997333333333334,
+      "lr": 0.0,
+      "epoch_time_s": 28.83157730102539,
+      "test_loss": 0.06023392826318741,
+      "test_acc": 0.9843,
+      "ece": 0.007328050339221906,
+      "nll": 0.060233931411441836
+    }
+  ],
+  "learning_curve": [
+    {
+      "samples_seen": 6400,
+      "step": 50,
+      "test_acc": 0.6637
+    },
+    {
+      "samples_seen": 12800,
+      "step": 100,
+      "test_acc": 0.8498
+    },
+    {
+      "samples_seen": 19200,
+      "step": 150,
+      "test_acc": 0.8921
+    },
+    {
+      "samples_seen": 25600,
+      "step": 200,
+      "test_acc": 0.9061
+    },
+    {
+      "samples_seen": 32000,
+      "step": 250,
+      "test_acc": 0.9221
+    },
+    {
+      "samples_seen": 38400,
+      "step": 300,
+      "test_acc": 0.9249
+    },
+    {
+      "samples_seen": 44800,
+      "step": 350,
+      "test_acc": 0.9342
+    },
+    {
+      "samples_seen": 51200,
+      "step": 400,
+      "test_acc": 0.9441
+    },
+    {
+      "samples_seen": 57600,
+      "step": 450,
+      "test_acc": 0.938
+    },
+    {
+      "samples_seen": 60000,
+      "step": 469,
+      "test_acc": 0.9497
+    },
+    {
+      "samples_seen": 63968,
+      "step": 500,
+      "test_acc": 0.9512
+    },
+    {
+      "samples_seen": 70368,
+      "step": 550,
+      "test_acc": 0.9487
+    },
+    {
+      "samples_seen": 76768,
+      "step": 600,
+      "test_acc": 0.9583
+    },
+    {
+      "samples_seen": 83168,
+      "step": 650,
+      "test_acc": 0.9583
+    },
+    {
+      "samples_seen": 89568,
+      "step": 700,
+      "test_acc": 0.966
+    },
+    {
+      "samples_seen": 95968,
+      "step": 750,
+      "test_acc": 0.9675
+    },
+    {
+      "samples_seen": 102368,
+      "step": 800,
+      "test_acc": 0.9638
+    },
+    {
+      "samples_seen": 108768,
+      "step": 850,
+      "test_acc": 0.9678
+    },
+    {
+      "samples_seen": 115168,
+      "step": 900,
+      "test_acc": 0.9709
+    },
+    {
+      "samples_seen": 120000,
+      "step": 938,
+      "test_acc": 0.9702
+    },
+    {
+      "samples_seen": 121536,
+      "step": 950,
+      "test_acc": 0.9665
+    },
+    {
+      "samples_seen": 127936,
+      "step": 1000,
+      "test_acc": 0.9701
+    },
+    {
+      "samples_seen": 134336,
+      "step": 1050,
+      "test_acc": 0.9687
+    },
+    {
+      "samples_seen": 140736,
+      "step": 1100,
+      "test_acc": 0.9719
+    },
+    {
+      "samples_seen": 147136,
+      "step": 1150,
+      "test_acc": 0.9726
+    },
+    {
+      "samples_seen": 153536,
+      "step": 1200,
+      "test_acc": 0.9713
+    },
+    {
+      "samples_seen": 159936,
+      "step": 1250,
+      "test_acc": 0.9742
+    },
+    {
+      "samples_seen": 166336,
+      "step": 1300,
+      "test_acc": 0.9736
+    },
+    {
+      "samples_seen": 172736,
+      "step": 1350,
+      "test_acc": 0.9726
+    },
+    {
+      "samples_seen": 179136,
+      "step": 1400,
+      "test_acc": 0.9739
+    },
+    {
+      "samples_seen": 180000,
+      "step": 1407,
+      "test_acc": 0.9762
+    },
+    {
+      "samples_seen": 185504,
+      "step": 1450,
+      "test_acc": 0.9737
+    },
+    {
+      "samples_seen": 191904,
+      "step": 1500,
+      "test_acc": 0.9744
+    },
+    {
+      "samples_seen": 198304,
+      "step": 1550,
+      "test_acc": 0.9778
+    },
+    {
+      "samples_seen": 204704,
+      "step": 1600,
+      "test_acc": 0.9758
+    },
+    {
+      "samples_seen": 211104,
+      "step": 1650,
+      "test_acc": 0.9773
+    },
+    {
+      "samples_seen": 217504,
+      "step": 1700,
+      "test_acc": 0.9744
+    },
+    {
+      "samples_seen": 223904,
+      "step": 1750,
+      "test_acc": 0.9785
+    },
+    {
+      "samples_seen": 230304,
+      "step": 1800,
+      "test_acc": 0.9773
+    },
+    {
+      "samples_seen": 236704,
+      "step": 1850,
+      "test_acc": 0.9762
+    },
+    {
+      "samples_seen": 240000,
+      "step": 1876,
+      "test_acc": 0.9761
+    },
+    {
+      "samples_seen": 243072,
+      "step": 1900,
+      "test_acc": 0.976
+    },
+    {
+      "samples_seen": 249472,
+      "step": 1950,
+      "test_acc": 0.9794
+    },
+    {
+      "samples_seen": 255872,
+      "step": 2000,
+      "test_acc": 0.9801
+    },
+    {
+      "samples_seen": 262272,
+      "step": 2050,
+      "test_acc": 0.9792
+    },
+    {
+      "samples_seen": 268672,
+      "step": 2100,
+      "test_acc": 0.9792
+    },
+    {
+      "samples_seen": 275072,
+      "step": 2150,
+      "test_acc": 0.9794
+    },
+    {
+      "samples_seen": 281472,
+      "step": 2200,
+      "test_acc": 0.9815
+    },
+    {
+      "samples_seen": 287872,
+      "step": 2250,
+      "test_acc": 0.9803
+    },
+    {
+      "samples_seen": 294272,
+      "step": 2300,
+      "test_acc": 0.9803
+    },
+    {
+      "samples_seen": 300000,
+      "step": 2345,
+      "test_acc": 0.9781
+    },
+    {
+      "samples_seen": 300640,
+      "step": 2350,
+      "test_acc": 0.9796
+    },
+    {
+      "samples_seen": 307040,
+      "step": 2400,
+      "test_acc": 0.9823
+    },
+    {
+      "samples_seen": 313440,
+      "step": 2450,
+      "test_acc": 0.9806
+    },
+    {
+      "samples_seen": 319840,
+      "step": 2500,
+      "test_acc": 0.9797
+    },
+    {
+      "samples_seen": 326240,
+      "step": 2550,
+      "test_acc": 0.9815
+    },
+    {
+      "samples_seen": 332640,
+      "step": 2600,
+      "test_acc": 0.9806
+    },
+    {
+      "samples_seen": 339040,
+      "step": 2650,
+      "test_acc": 0.9801
+    },
+    {
+      "samples_seen": 345440,
+      "step": 2700,
+      "test_acc": 0.98
+    },
+    {
+      "samples_seen": 351840,
+      "step": 2750,
+      "test_acc": 0.9826
+    },
+    {
+      "samples_seen": 358240,
+      "step": 2800,
+      "test_acc": 0.9819
+    },
+    {
+      "samples_seen": 360000,
+      "step": 2814,
+      "test_acc": 0.9805
+    },
+    {
+      "samples_seen": 364608,
+      "step": 2850,
+      "test_acc": 0.9806
+    },
+    {
+      "samples_seen": 371008,
+      "step": 2900,
+      "test_acc": 0.9824
+    },
+    {
+      "samples_seen": 377408,
+      "step": 2950,
+      "test_acc": 0.9828
+    },
+    {
+      "samples_seen": 383808,
+      "step": 3000,
+      "test_acc": 0.9811
+    },
+    {
+      "samples_seen": 390208,
+      "step": 3050,
+      "test_acc": 0.9828
+    },
+    {
+      "samples_seen": 396608,
+      "step": 3100,
+      "test_acc": 0.983
+    },
+    {
+      "samples_seen": 403008,
+      "step": 3150,
+      "test_acc": 0.9814
+    },
+    {
+      "samples_seen": 409408,
+      "step": 3200,
+      "test_acc": 0.9815
+    },
+    {
+      "samples_seen": 415808,
+      "step": 3250,
+      "test_acc": 0.981
+    },
+    {
+      "samples_seen": 420000,
+      "step": 3283,
+      "test_acc": 0.9825
+    },
+    {
+      "samples_seen": 422176,
+      "step": 3300,
+      "test_acc": 0.983
+    },
+    {
+      "samples_seen": 428576,
+      "step": 3350,
+      "test_acc": 0.9825
+    },
+    {
+      "samples_seen": 434976,
+      "step": 3400,
+      "test_acc": 0.9828
+    },
+    {
+      "samples_seen": 441376,
+      "step": 3450,
+      "test_acc": 0.983
+    },
+    {
+      "samples_seen": 447776,
+      "step": 3500,
+      "test_acc": 0.9819
+    },
+    {
+      "samples_seen": 454176,
+      "step": 3550,
+      "test_acc": 0.9838
+    },
+    {
+      "samples_seen": 460576,
+      "step": 3600,
+      "test_acc": 0.9833
+    },
+    {
+      "samples_seen": 466976,
+      "step": 3650,
+      "test_acc": 0.9831
+    },
+    {
+      "samples_seen": 473376,
+      "step": 3700,
+      "test_acc": 0.9832
+    },
+    {
+      "samples_seen": 479776,
+      "step": 3750,
+      "test_acc": 0.9845
+    },
+    {
+      "samples_seen": 480000,
+      "step": 3752,
+      "test_acc": 0.9843
+    },
+    {
+      "samples_seen": 486144,
+      "step": 3800,
+      "test_acc": 0.9833
+    },
+    {
+      "samples_seen": 492544,
+      "step": 3850,
+      "test_acc": 0.9844
+    },
+    {
+      "samples_seen": 498944,
+      "step": 3900,
+      "test_acc": 0.9838
+    },
+    {
+      "samples_seen": 505344,
+      "step": 3950,
+      "test_acc": 0.9836
+    },
+    {
+      "samples_seen": 511744,
+      "step": 4000,
+      "test_acc": 0.9836
+    },
+    {
+      "samples_seen": 518144,
+      "step": 4050,
+      "test_acc": 0.984
+    },
+    {
+      "samples_seen": 524544,
+      "step": 4100,
+      "test_acc": 0.984
+    },
+    {
+      "samples_seen": 530944,
+      "step": 4150,
+      "test_acc": 0.9837
+    },
+    {
+      "samples_seen": 537344,
+      "step": 4200,
+      "test_acc": 0.9845
+    },
+    {
+      "samples_seen": 540000,
+      "step": 4221,
+      "test_acc": 0.984
+    },
+    {
+      "samples_seen": 543712,
+      "step": 4250,
+      "test_acc": 0.9841
+    },
+    {
+      "samples_seen": 550112,
+      "step": 4300,
+      "test_acc": 0.984
+    },
+    {
+      "samples_seen": 556512,
+      "step": 4350,
+      "test_acc": 0.9839
+    },
+    {
+      "samples_seen": 562912,
+      "step": 4400,
+      "test_acc": 0.984
+    },
+    {
+      "samples_seen": 569312,
+      "step": 4450,
+      "test_acc": 0.984
+    },
+    {
+      "samples_seen": 575712,
+      "step": 4500,
+      "test_acc": 0.9843
+    },
+    {
+      "samples_seen": 582112,
+      "step": 4550,
+      "test_acc": 0.9843
+    },
+    {
+      "samples_seen": 588512,
+      "step": 4600,
+      "test_acc": 0.9843
+    },
+    {
+      "samples_seen": 594912,
+      "step": 4650,
+      "test_acc": 0.9843
+    },
+    {
+      "samples_seen": 600000,
+      "step": 4690,
+      "test_acc": 0.9843
+    }
+  ],
+  "run_dir": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\baseline_mlp_mnist\\seed1_20261001-010012",
+  "total_train_time_s": 308.3618588447571,
+  "best_test_acc": 0.9843,
+  "final_test_acc": 0.9843,
+  "peak_gpu_mem_mb": 23.41259765625,
+  "train_flops_total": 967680000000.0,
+  "calibration": {
+    "acc": 0.9843,
+    "loss": 0.06023392826318741,
+    "ece": 0.007328050339221906,
+    "mce": 0.14558630837843967,
+    "nll": 0.060233931411441836,
+    "brier": 0.025881348720709855,
+    "auroc": 0.9734351613322798,
+    "aurc": 0.0005592729525937194,
+    "sel_acc@0.9": 0.9988888888888889,
+    "sel_acc@0.8": 0.999875,
+    "sel_acc@0.5": 1.0
+  },
+  "data_efficiency": {
+    "aulc": 0.970904706199461,
+    "samples_to_target": null
+  }
+}

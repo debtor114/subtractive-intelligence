@@ -1,0 +1,452 @@
+{
+  "run_name": "baseline_vit_mnist",
+  "seed": 2,
+  "dataset": "mnist",
+  "model": {
+    "name": "vit",
+    "patch_size": 4,
+    "dim": 128,
+    "depth": 4,
+    "num_heads": 4,
+    "mlp_ratio": 4.0,
+    "dropout": 0.1,
+    "attn_dropout": 0.0,
+    "emb_dropout": 0.1
+  },
+  "device": "NVIDIA GeForce RTX 3060 Ti",
+  "torch": "2.11.0+cu128",
+  "amp": true,
+  "params_total": 803338,
+  "params_active": 803338,
+  "flops_dense_per_sample": 83966464.0,
+  "flops_effective_per_sample": 83966464.0,
+  "flops_leaf_total_per_sample": 78846464.0,
+  "epochs": 10,
+  "history": [
+    {
+      "epoch": 1,
+      "samples_seen": 60000,
+      "train_loss": 1.4798891219774881,
+      "train_acc": 0.4634333333333333,
+      "lr": 0.001,
+      "epoch_time_s": 37.127785444259644,
+      "test_loss": 0.6590321063995361,
+      "test_acc": 0.7821,
+      "ece": 0.03197832171022892,
+      "nll": 0.6590320487263747
+    },
+    {
+      "epoch": 2,
+      "samples_seen": 120000,
+      "train_loss": 0.44677598968346915,
+      "train_acc": 0.8557333333333333,
+      "lr": 0.0009698463103929542,
+      "epoch_time_s": 41.536267042160034,
+      "test_loss": 0.24932856857776642,
+      "test_acc": 0.9244,
+      "ece": 0.010889067500829647,
+      "nll": 0.24932858328748447
+    },
+    {
+      "epoch": 3,
+      "samples_seen": 180000,
+      "train_loss": 0.24362819674015046,
+      "train_acc": 0.9236833333333333,
+      "lr": 0.000883022221559489,
+      "epoch_time_s": 40.156766414642334,
+      "test_loss": 0.1754717081785202,
+      "test_acc": 0.9471,
+      "ece": 0.004903952968120561,
+      "nll": 0.17547169986109398
+    },
+    {
+      "epoch": 4,
+      "samples_seen": 240000,
+      "train_loss": 0.17591376532713573,
+      "train_acc": 0.9448166666666666,
+      "lr": 0.00075,
+      "epoch_time_s": 39.32471799850464,
+      "test_loss": 0.13450342416763306,
+      "test_acc": 0.9607,
+      "ece": 0.005251706683635712,
+      "nll": 0.1345034321904733
+    },
+    {
+      "epoch": 5,
+      "samples_seen": 300000,
+      "train_loss": 0.13511639616092047,
+      "train_acc": 0.9567166666666667,
+      "lr": 0.0005868240888334653,
+      "epoch_time_s": 40.846320152282715,
+      "test_loss": 0.11377616971731186,
+      "test_acc": 0.9652,
+      "ece": 0.004488277730345749,
+      "nll": 0.11377617553338214
+    },
+    {
+      "epoch": 6,
+      "samples_seen": 360000,
+      "train_loss": 0.10273668772776921,
+      "train_acc": 0.9674833333333334,
+      "lr": 0.00041317591116653486,
+      "epoch_time_s": 39.09613227844238,
+      "test_loss": 0.08148009330034256,
+      "test_acc": 0.9759,
+      "ece": 0.004547707924246861,
+      "nll": 0.08148009999530159
+    },
+    {
+      "epoch": 7,
+      "samples_seen": 420000,
+      "train_loss": 0.07684592773914337,
+      "train_acc": 0.9756166666666667,
+      "lr": 0.0002500000000000001,
+      "epoch_time_s": 37.74030137062073,
+      "test_loss": 0.07300648093223572,
+      "test_acc": 0.9775,
+      "ece": 0.005461441364884424,
+      "nll": 0.07300647716890425
+    },
+    {
+      "epoch": 8,
+      "samples_seen": 480000,
+      "train_loss": 0.05855962626338005,
+      "train_acc": 0.9814,
+      "lr": 0.00011697777844051105,
+      "epoch_time_s": 39.375813007354736,
+      "test_loss": 0.06560955941677094,
+      "test_acc": 0.9817,
+      "ece": 0.005916053789854073,
+      "nll": 0.06560956144335418
+    },
+    {
+      "epoch": 9,
+      "samples_seen": 540000,
+      "train_loss": 0.04542886366546154,
+      "train_acc": 0.9857,
+      "lr": 3.0153689607045842e-05,
+      "epoch_time_s": 39.872533559799194,
+      "test_loss": 0.06061876192688942,
+      "test_acc": 0.9819,
+      "ece": 0.005490537309646631,
+      "nll": 0.06061876395048049
+    },
+    {
+      "epoch": 10,
+      "samples_seen": 600000,
+      "train_loss": 0.04000198897520701,
+      "train_acc": 0.98765,
+      "lr": 0.0,
+      "epoch_time_s": 37.661977767944336,
+      "test_loss": 0.061057861894369125,
+      "test_acc": 0.9823,
+      "ece": 0.00500693533122541,
+      "nll": 0.0610578572163081
+    }
+  ],
+  "learning_curve": [
+    {
+      "samples_seen": 12800,
+      "step": 100,
+      "test_acc": 0.3005
+    },
+    {
+      "samples_seen": 25600,
+      "step": 200,
+      "test_acc": 0.4428
+    },
+    {
+      "samples_seen": 38400,
+      "step": 300,
+      "test_acc": 0.5978
+    },
+    {
+      "samples_seen": 51200,
+      "step": 400,
+      "test_acc": 0.6837
+    },
+    {
+      "samples_seen": 60000,
+      "step": 469,
+      "test_acc": 0.7821
+    },
+    {
+      "samples_seen": 63968,
+      "step": 500,
+      "test_acc": 0.794
+    },
+    {
+      "samples_seen": 76768,
+      "step": 600,
+      "test_acc": 0.8474
+    },
+    {
+      "samples_seen": 89568,
+      "step": 700,
+      "test_acc": 0.8854
+    },
+    {
+      "samples_seen": 102368,
+      "step": 800,
+      "test_acc": 0.9122
+    },
+    {
+      "samples_seen": 115168,
+      "step": 900,
+      "test_acc": 0.9105
+    },
+    {
+      "samples_seen": 120000,
+      "step": 938,
+      "test_acc": 0.9244
+    },
+    {
+      "samples_seen": 127936,
+      "step": 1000,
+      "test_acc": 0.9268
+    },
+    {
+      "samples_seen": 140736,
+      "step": 1100,
+      "test_acc": 0.9366
+    },
+    {
+      "samples_seen": 153536,
+      "step": 1200,
+      "test_acc": 0.9224
+    },
+    {
+      "samples_seen": 166336,
+      "step": 1300,
+      "test_acc": 0.9307
+    },
+    {
+      "samples_seen": 179136,
+      "step": 1400,
+      "test_acc": 0.9514
+    },
+    {
+      "samples_seen": 180000,
+      "step": 1407,
+      "test_acc": 0.9471
+    },
+    {
+      "samples_seen": 191904,
+      "step": 1500,
+      "test_acc": 0.9444
+    },
+    {
+      "samples_seen": 204704,
+      "step": 1600,
+      "test_acc": 0.9567
+    },
+    {
+      "samples_seen": 217504,
+      "step": 1700,
+      "test_acc": 0.9545
+    },
+    {
+      "samples_seen": 230304,
+      "step": 1800,
+      "test_acc": 0.9566
+    },
+    {
+      "samples_seen": 240000,
+      "step": 1876,
+      "test_acc": 0.9607
+    },
+    {
+      "samples_seen": 243072,
+      "step": 1900,
+      "test_acc": 0.9625
+    },
+    {
+      "samples_seen": 255872,
+      "step": 2000,
+      "test_acc": 0.9584
+    },
+    {
+      "samples_seen": 268672,
+      "step": 2100,
+      "test_acc": 0.9639
+    },
+    {
+      "samples_seen": 281472,
+      "step": 2200,
+      "test_acc": 0.9636
+    },
+    {
+      "samples_seen": 294272,
+      "step": 2300,
+      "test_acc": 0.9656
+    },
+    {
+      "samples_seen": 300000,
+      "step": 2345,
+      "test_acc": 0.9652
+    },
+    {
+      "samples_seen": 307040,
+      "step": 2400,
+      "test_acc": 0.9694
+    },
+    {
+      "samples_seen": 319840,
+      "step": 2500,
+      "test_acc": 0.9699
+    },
+    {
+      "samples_seen": 332640,
+      "step": 2600,
+      "test_acc": 0.9718
+    },
+    {
+      "samples_seen": 345440,
+      "step": 2700,
+      "test_acc": 0.9718
+    },
+    {
+      "samples_seen": 358240,
+      "step": 2800,
+      "test_acc": 0.974
+    },
+    {
+      "samples_seen": 360000,
+      "step": 2814,
+      "test_acc": 0.9759
+    },
+    {
+      "samples_seen": 371008,
+      "step": 2900,
+      "test_acc": 0.9723
+    },
+    {
+      "samples_seen": 383808,
+      "step": 3000,
+      "test_acc": 0.9765
+    },
+    {
+      "samples_seen": 396608,
+      "step": 3100,
+      "test_acc": 0.9758
+    },
+    {
+      "samples_seen": 409408,
+      "step": 3200,
+      "test_acc": 0.9777
+    },
+    {
+      "samples_seen": 420000,
+      "step": 3283,
+      "test_acc": 0.9775
+    },
+    {
+      "samples_seen": 422176,
+      "step": 3300,
+      "test_acc": 0.9796
+    },
+    {
+      "samples_seen": 434976,
+      "step": 3400,
+      "test_acc": 0.9769
+    },
+    {
+      "samples_seen": 447776,
+      "step": 3500,
+      "test_acc": 0.9796
+    },
+    {
+      "samples_seen": 460576,
+      "step": 3600,
+      "test_acc": 0.9802
+    },
+    {
+      "samples_seen": 473376,
+      "step": 3700,
+      "test_acc": 0.9815
+    },
+    {
+      "samples_seen": 480000,
+      "step": 3752,
+      "test_acc": 0.9817
+    },
+    {
+      "samples_seen": 486144,
+      "step": 3800,
+      "test_acc": 0.9807
+    },
+    {
+      "samples_seen": 498944,
+      "step": 3900,
+      "test_acc": 0.9815
+    },
+    {
+      "samples_seen": 511744,
+      "step": 4000,
+      "test_acc": 0.9817
+    },
+    {
+      "samples_seen": 524544,
+      "step": 4100,
+      "test_acc": 0.982
+    },
+    {
+      "samples_seen": 537344,
+      "step": 4200,
+      "test_acc": 0.9821
+    },
+    {
+      "samples_seen": 540000,
+      "step": 4221,
+      "test_acc": 0.9819
+    },
+    {
+      "samples_seen": 550112,
+      "step": 4300,
+      "test_acc": 0.9816
+    },
+    {
+      "samples_seen": 562912,
+      "step": 4400,
+      "test_acc": 0.9821
+    },
+    {
+      "samples_seen": 575712,
+      "step": 4500,
+      "test_acc": 0.9822
+    },
+    {
+      "samples_seen": 588512,
+      "step": 4600,
+      "test_acc": 0.9822
+    },
+    {
+      "samples_seen": 600000,
+      "step": 4690,
+      "test_acc": 0.9823
+    }
+  ],
+  "run_dir": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\baseline_vit_mnist\\seed2_20261001-012548",
+  "total_train_time_s": 416.99321818351746,
+  "best_test_acc": 0.9823,
+  "final_test_acc": 0.9823,
+  "peak_gpu_mem_mb": 213.146484375,
+  "train_flops_total": 151139635200000.0,
+  "calibration": {
+    "acc": 0.9823,
+    "loss": 0.061057861894369125,
+    "ece": 0.00500693533122541,
+    "mce": 0.3178756833076477,
+    "nll": 0.0610578572163081,
+    "brier": 0.027549156838008935,
+    "auroc": 0.96740844012467,
+    "aurc": 0.0007753062213071042,
+    "sel_acc@0.9": 0.998,
+    "sel_acc@0.8": 0.99925,
+    "sel_acc@0.5": 1.0
+  },
+  "data_efficiency": {
+    "aulc": 0.9240960953678473,
+    "samples_to_target": null
+  }
+}

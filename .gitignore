@@ -1,0 +1,32 @@
+# environments
+.venv/
+.venv_pod/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# datasets (downloaded by the scripts; see README)
+data/
+
+# large or local-only artefacts
+results/_pod_logs/
+results/*.log
+results/_local_*.log
+results/smoke_*/
+results/**/*.pth
+
+# LaTeX build files
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/arxiv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
