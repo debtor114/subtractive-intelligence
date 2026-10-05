@@ -1,0 +1,211 @@
+==== p2 chain2 waiting for chain1 2026-10-06  1:20:49.17 
+==== chain1 done, chain2 start 2026-10-06  2:46:49.15 
+{'gpu': 'NVIDIA GeForce RTX 3060 Ti', 'torch': '2.11.0+cu128', 'cuda': '12.8'}
+C:\Users\KDI\Downloads\Projects\subtractive-intelligence\experiments\p2\e1_micro.py:84: UserWarning: Sparse CSR tensor support is in beta state. If you miss a functionality in the sparse tensor support, please submit a feature request to https://github.com/pytorch/pytorch/issues. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\SparseCsrTensorImpl.cpp:51.)
+  formats["csr"] = W.to_sparse_csr()
+  size 1024 unstructured d=1 done (1s)
+C:\Users\KDI\Downloads\Projects\subtractive-intelligence\.venv\lib\site-packages\torch\sparse\semi_structured.py:421: UserWarning: The PyTorch API of SparseSemiStructuredTensor is in prototype stage and will change in the near future. Please open a Github issue for features requests and see our documentation on the torch.sparse module for further information about the project.
+  return cls(
+  size 1024 unstructured d=0.5 done (3s)
+  size 1024 unstructured d=0.1 done (3s)
+  size 1024 unstructured d=0.05 done (3s)
+  size 1024 unstructured d=0.02 done (4s)
+  size 1024 unstructured d=0.01 done (4s)
+  size 1024 unstructured d=0.005 done (4s)
+  size 1024 block16 d=1 done (8s)
+  size 1024 block16 d=0.5 done (10s)
+  size 1024 block16 d=0.1 done (11s)
+  size 1024 block16 d=0.05 done (12s)
+  size 1024 block16 d=0.02 done (13s)
+  size 1024 block16 d=0.01 done (13s)
+  size 1024 block16 d=0.005 done (14s)
+  size 4096 unstructured d=1 done (22s)
+  size 4096 unstructured d=0.5 done (26s)
+  size 4096 unstructured d=0.1 done (28s)
+  size 4096 unstructured d=0.05 done (29s)
+  size 4096 unstructured d=0.02 done (31s)
+  size 4096 unstructured d=0.01 done (32s)
+  size 4096 unstructured d=0.005 done (33s)
+  size 4096 block16 d=1 done (154s)
+  size 4096 block16 d=0.5 done (171s)
+  size 4096 block16 d=0.1 done (179s)
+  size 4096 block16 d=0.05 done (185s)
+  size 4096 block16 d=0.02 done (188s)
+  size 4096 block16 d=0.01 done (190s)
+  size 4096 block16 d=0.005 done (191s)
+[done] e1_micro: 680 rows -> C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p2\e1_micro.csv (191s)
+C:\Users\KDI\Downloads\Projects\subtractive-intelligence\experiments\p2\e1_real.py:103: UserWarning: Sparse CSR tensor support is in beta state. If you miss a functionality in the sparse tensor support, please submit a feature request to https://github.com/pytorch/pytorch/issues. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\SparseCsrTensorImpl.cpp:51.)
+  fmts = {"csr": [w.to_sparse_csr() for w in ws]}
+  latency mnist_d0.01_learned done
+  latency mnist_d0.01_block16 done
+  latency mnist_d0.005_learned done
+  latency mnist_d0.005_block16 done
+  latency cnn_d0.03_learned done
+  latency cnn_d0.03_block16 done
+  latency cnn_d0.01_learned done
+  latency cnn_d0.01_block16 done
+[done] e1_real: 132 occupancy rows, 196 latency rows
+W1006 02:50:11.550000 45668 .venv\Lib\site-packages\torch\utils\flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+[fastslow_decay s0] task 0: 0.999 | avg 0.9991
+[fastslow_decay s0] task 1: 0.000 0.992 | avg 0.4961
+[fastslow_decay s0] task 2: 0.000 0.000 0.998 | avg 0.3328
+[fastslow_decay s0] task 3: 0.000 0.000 0.000 0.995 | avg 0.2487
+[fastslow_decay s0] task 4: 0.000 0.000 0.000 0.010 0.988 | avg 0.1997
+[done] split_mnist/fastslow_decay seed 0: avg_acc 0.1997 () forgetting 0.9936 retention 0.003 ece 0.712 train_flops 2.903e+11 (4s)
+  (4s)
+[fastslow_merge s0] task 0: 0.999 | avg 0.9991
+[fastslow_merge s0] task 1: 0.000 0.993 | avg 0.4963
+[fastslow_merge s0] task 2: 0.000 0.000 0.998 | avg 0.3328
+[fastslow_merge s0] task 3: 0.000 0.000 0.000 0.995 | avg 0.2487
+[fastslow_merge s0] task 4: 0.000 0.000 0.000 0.017 0.989 | avg 0.2012
+[done] split_mnist/fastslow_merge seed 0: avg_acc 0.2012 () forgetting 0.9921 retention 0.004 ece 0.711 train_flops 2.903e+11 (3s)
+  (3s)
+[fastslow_decay s1] task 0: 0.999 | avg 0.9991
+[fastslow_decay s1] task 1: 0.000 0.988 | avg 0.4941
+[fastslow_decay s1] task 2: 0.000 0.000 0.997 | avg 0.3323
+[fastslow_decay s1] task 3: 0.000 0.000 0.001 0.997 | avg 0.2496
+[fastslow_decay s1] task 4: 0.000 0.000 0.000 0.000 0.983 | avg 0.1966
+[done] split_mnist/fastslow_decay seed 1: avg_acc 0.1966 () forgetting 0.9954 retention 0.000 ece 0.719 train_flops 2.903e+11 (3s)
+  (3s)
+[fastslow_merge s1] task 0: 0.999 | avg 0.9991
+[fastslow_merge s1] task 1: 0.000 0.988 | avg 0.4941
+[fastslow_merge s1] task 2: 0.000 0.000 0.997 | avg 0.3324
+[fastslow_merge s1] task 3: 0.000 0.000 0.001 0.997 | avg 0.2496
+[fastslow_merge s1] task 4: 0.000 0.000 0.000 0.000 0.984 | avg 0.1969
+[done] split_mnist/fastslow_merge seed 1: avg_acc 0.1969 () forgetting 0.9955 retention 0.000 ece 0.719 train_flops 2.903e+11 (3s)
+  (3s)
+[fastslow_decay s2] task 0: 1.000 | avg 1.0000
+[fastslow_decay s2] task 1: 0.000 0.992 | avg 0.4961
+[fastslow_decay s2] task 2: 0.000 0.000 0.997 | avg 0.3324
+[fastslow_decay s2] task 3: 0.000 0.000 0.000 0.996 | avg 0.2491
+[fastslow_decay s2] task 4: 0.000 0.000 0.000 0.011 0.987 | avg 0.1997
+[done] split_mnist/fastslow_decay seed 2: avg_acc 0.1997 () forgetting 0.9937 retention 0.003 ece 0.705 train_flops 2.903e+11 (3s)
+  (3s)
+[fastslow_merge s2] task 0: 1.000 | avg 1.0000
+[fastslow_merge s2] task 1: 0.000 0.992 | avg 0.4961
+[fastslow_merge s2] task 2: 0.000 0.000 0.997 | avg 0.3324
+[fastslow_merge s2] task 3: 0.000 0.000 0.000 0.997 | avg 0.2492
+[fastslow_merge s2] task 4: 0.000 0.000 0.000 0.016 0.986 | avg 0.2004
+[done] split_mnist/fastslow_merge seed 2: avg_acc 0.2004 () forgetting 0.9927 retention 0.004 ece 0.709 train_flops 2.903e+11 (3s)
+  (3s)
+[fastslow_decay s0] task 0: 0.964 | avg 0.9641
+[fastslow_decay s0] task 1: 0.935 0.970 | avg 0.9527
+[fastslow_decay s0] task 2: 0.900 0.947 0.973 | avg 0.9403
+[fastslow_decay s0] task 3: 0.743 0.905 0.956 0.975 | avg 0.8949
+[fastslow_decay s0] task 4: 0.598 0.828 0.929 0.963 0.973 | avg 0.8586
+[fastslow_decay s0] task 5: 0.506 0.627 0.876 0.949 0.962 0.974 | avg 0.8156
+[fastslow_decay s0] task 6: 0.331 0.490 0.805 0.895 0.938 0.955 0.974 | avg 0.7696
+[fastslow_decay s0] task 7: 0.389 0.391 0.637 0.846 0.832 0.911 0.952 0.971 | avg 0.7411
+[fastslow_decay s0] task 8: 0.257 0.294 0.531 0.647 0.750 0.788 0.909 0.955 0.971 | avg 0.6779
+[fastslow_decay s0] task 9: 0.187 0.309 0.438 0.614 0.636 0.706 0.744 0.924 0.925 0.973 | avg 0.6454
+[done] permuted_mnist/fastslow_decay seed 0: avg_acc 0.6454 () forgetting 0.3627 retention 0.626 ece 0.667 train_flops 2.903e+12 (30s)
+  (31s)
+[fastslow_merge s0] task 0: 0.964 | avg 0.9641
+[fastslow_merge s0] task 1: 0.935 0.970 | avg 0.9528
+[fastslow_merge s0] task 2: 0.891 0.943 0.974 | avg 0.9361
+[fastslow_merge s0] task 3: 0.746 0.896 0.958 0.973 | avg 0.8933
+[fastslow_merge s0] task 4: 0.615 0.828 0.926 0.962 0.974 | avg 0.8611
+[fastslow_merge s0] task 5: 0.510 0.644 0.878 0.949 0.967 0.973 | avg 0.8200
+[fastslow_merge s0] task 6: 0.330 0.484 0.816 0.882 0.946 0.955 0.971 | avg 0.7692
+[fastslow_merge s0] task 7: 0.396 0.386 0.641 0.826 0.872 0.905 0.939 0.971 | avg 0.7421
+[fastslow_merge s0] task 8: 0.252 0.316 0.574 0.624 0.797 0.785 0.914 0.954 0.970 | avg 0.6877
+[fastslow_merge s0] task 9: 0.209 0.300 0.492 0.581 0.698 0.705 0.804 0.922 0.949 0.972 | avg 0.6633
+[done] permuted_mnist/fastslow_merge seed 0: avg_acc 0.6633 () forgetting 0.3423 retention 0.647 ece 0.645 train_flops 2.903e+12 (31s)
+  (31s)
+[fastslow_decay s1] task 0: 0.965 | avg 0.9653
+[fastslow_decay s1] task 1: 0.937 0.971 | avg 0.9538
+[fastslow_decay s1] task 2: 0.873 0.952 0.974 | avg 0.9329
+[fastslow_decay s1] task 3: 0.694 0.899 0.948 0.973 | avg 0.8784
+[fastslow_decay s1] task 4: 0.493 0.836 0.896 0.947 0.973 | avg 0.8291
+[fastslow_decay s1] task 5: 0.350 0.728 0.828 0.923 0.963 0.972 | avg 0.7940
+[fastslow_decay s1] task 6: 0.257 0.555 0.667 0.803 0.922 0.951 0.972 | avg 0.7325
+[fastslow_decay s1] task 7: 0.268 0.566 0.653 0.731 0.914 0.934 0.964 0.973 | avg 0.7506
+[fastslow_decay s1] task 8: 0.270 0.475 0.530 0.656 0.872 0.853 0.954 0.960 0.973 | avg 0.7269
+[fastslow_decay s1] task 9: 0.281 0.400 0.477 0.568 0.762 0.775 0.912 0.935 0.958 0.974 | avg 0.7042
+[done] permuted_mnist/fastslow_decay seed 1: avg_acc 0.7042 () forgetting 0.2975 retention 0.693 ece 0.574 train_flops 2.903e+12 (30s)
+  (30s)
+[fastslow_merge s1] task 0: 0.965 | avg 0.9653
+[fastslow_merge s1] task 1: 0.937 0.971 | avg 0.9540
+[fastslow_merge s1] task 2: 0.886 0.956 0.974 | avg 0.9385
+[fastslow_merge s1] task 3: 0.720 0.908 0.950 0.971 | avg 0.8875
+[fastslow_merge s1] task 4: 0.499 0.838 0.886 0.946 0.974 | avg 0.8288
+[fastslow_merge s1] task 5: 0.353 0.723 0.809 0.920 0.960 0.972 | avg 0.7895
+[fastslow_merge s1] task 6: 0.284 0.546 0.661 0.809 0.920 0.947 0.971 | avg 0.7342
+[fastslow_merge s1] task 7: 0.284 0.560 0.615 0.701 0.908 0.941 0.959 0.974 | avg 0.7427
+[fastslow_merge s1] task 8: 0.274 0.410 0.478 0.578 0.846 0.801 0.947 0.956 0.972 | avg 0.6959
+[fastslow_merge s1] task 9: 0.259 0.350 0.438 0.504 0.735 0.716 0.890 0.934 0.949 0.974 | avg 0.6750
+[done] permuted_mnist/fastslow_merge seed 1: avg_acc 0.6750 () forgetting 0.3299 retention 0.660 ece 0.632 train_flops 2.903e+12 (31s)
+  (31s)
+[fastslow_decay s2] task 0: 0.964 | avg 0.9643
+[fastslow_decay s2] task 1: 0.939 0.973 | avg 0.9557
+[fastslow_decay s2] task 2: 0.888 0.960 0.975 | avg 0.9407
+[fastslow_decay s2] task 3: 0.754 0.935 0.949 0.972 | avg 0.9026
+[fastslow_decay s2] task 4: 0.615 0.877 0.922 0.948 0.975 | avg 0.8672
+[fastslow_decay s2] task 5: 0.552 0.830 0.850 0.917 0.961 0.972 | avg 0.8471
+[fastslow_decay s2] task 6: 0.444 0.719 0.763 0.855 0.917 0.950 0.973 | avg 0.8031
+[fastslow_decay s2] task 7: 0.394 0.594 0.658 0.683 0.889 0.927 0.966 0.974 | avg 0.7606
+[fastslow_decay s2] task 8: 0.320 0.471 0.541 0.551 0.851 0.880 0.959 0.966 0.972 | avg 0.7235
+[fastslow_decay s2] task 9: 0.336 0.395 0.428 0.560 0.741 0.823 0.931 0.940 0.955 0.975 | avg 0.7085
+[done] permuted_mnist/fastslow_decay seed 2: avg_acc 0.7085 () forgetting 0.2933 retention 0.698 ece 0.494 train_flops 2.903e+12 (31s)
+  (31s)
+[fastslow_merge s2] task 0: 0.964 | avg 0.9643
+[fastslow_merge s2] task 1: 0.938 0.972 | avg 0.9551
+[fastslow_merge s2] task 2: 0.887 0.959 0.974 | avg 0.9403
+[fastslow_merge s2] task 3: 0.746 0.929 0.951 0.972 | avg 0.8994
+[fastslow_merge s2] task 4: 0.601 0.881 0.922 0.952 0.975 | avg 0.8662
+[fastslow_merge s2] task 5: 0.538 0.816 0.837 0.917 0.962 0.972 | avg 0.8404
+[fastslow_merge s2] task 6: 0.432 0.714 0.747 0.853 0.926 0.950 0.972 | avg 0.7991
+[fastslow_merge s2] task 7: 0.368 0.615 0.643 0.709 0.886 0.924 0.965 0.974 | avg 0.7605
+[fastslow_merge s2] task 8: 0.308 0.461 0.537 0.588 0.830 0.872 0.956 0.962 0.973 | avg 0.7207
+[fastslow_merge s2] task 9: 0.296 0.348 0.431 0.488 0.701 0.788 0.903 0.931 0.952 0.975 | avg 0.6814
+[done] permuted_mnist/fastslow_merge seed 2: avg_acc 0.6814 () forgetting 0.3233 retention 0.667 ece 0.537 train_flops 2.903e+12 (30s)
+  (30s)
+{
+ "P1": "틀림 (최대 3.00x)",
+ "P2": "맞음 (4096, N=128, 밀도<=2% 최대 3.83x; N=1: 2.47x)",
+ "P3": "틀림 (mnist net.0: 학습 0.35 vs 무작위 0.12; mnist net.2: 학습 0.12 vs 무작위 0.065; mnist net.4: 학습 0.00 vs 무작위 0.0; mnist net.0: 학습 0.53 vs 무작위 0.353)",
+ "P4": {
+  "cnn_d0.01": "bottom_up OK (sync 85.35, bu 85.46), top_down X (td 85.48, 차이 불확실)",
+  "mnist_d0.005": "bottom_up OK (sync 98.12, bu 97.90), top_down OK (td 97.43, 확실히 낮음)"
+ },
+ "P5": {
+  "mnist_d0.01": "맞음 (격차 during 2.02 vs oneshot 86.17)",
+  "mnist_d0.005": "맞음 (격차 during 5.13 vs oneshot 83.16)",
+  "cnn_d0.03": "맞음 (격차 during 6.72 vs oneshot 78.37)",
+  "cnn_d0.01": "맞음 (격차 during 11.73 vs oneshot 71.13)"
+ },
+ "P6": {
+  "mnist_d0.005": "two_waves OK (97.85 vs sync 98.12), gated X (97.79, 확실히 낮음, start 0.12485193082208007)",
+  "cnn_d0.01": "two_waves OK (85.49 vs sync 85.35), gated OK (85.48, 차이 불확실, start 0.21219096334185847)"
+ },
+ "X1": "맞음 (가지치기망 k=5%: 97.09, k=100%: 97.82, 손실 0.73; 작은 dense k=5%: 87.34)",
+ "X2": "틀림 (Split: finetune 19.7, fast/slow decay 19.9, merge 19.9, ER 85.1)"
+}
+--- e2
+  mnist_d0.01: global=98.38±0.03, sync=98.47±0.03, bottom_up=98.41±0.04, top_down=98.13±0.05
+  mnist_d0.005: global=97.82±0.07, sync=98.12±0.10, bottom_up=97.90±0.01, top_down=97.43±0.06
+  cnn_d0.03: global=89.08±0.17, sync=88.09±0.26, bottom_up=89.07±0.02, top_down=88.80±0.27
+  cnn_d0.01: global=85.70±0.20, sync=85.35±0.04, bottom_up=85.46±0.14, top_down=85.48±0.15
+--- e3
+  mnist_d0.005: sync=98.12±0.10, two_waves=97.85±0.03, progress_gated=97.79±0.06
+  cnn_d0.01: sync=85.35±0.04, two_waves=85.49±0.15, progress_gated=85.48±0.21
+--- e4
+  mnist_d0.01: unstructured_during=98.44±0.03, unstructured_oneshot=97.52±0.20, block16_during=96.42±0.25, block16_oneshot=11.35±0.00, gap_during=2.02, gap_oneshot=86.17
+  mnist_d0.005: unstructured_during=97.81±0.02, unstructured_oneshot=94.51±0.60, block16_during=92.68±1.15, block16_oneshot=11.35±0.00, gap_during=5.13, gap_oneshot=83.16
+  cnn_d0.03: unstructured_during=89.08±0.17, unstructured_oneshot=88.37±0.12, block16_during=82.36±0.20, block16_oneshot=10.00±0.00, gap_during=6.72, gap_oneshot=78.37
+  cnn_d0.01: unstructured_during=85.70±0.20, unstructured_oneshot=81.13±0.26, block16_during=73.98±1.67, block16_oneshot=10.00±0.00, gap_during=11.73, gap_oneshot=71.13
+--- x1
+  dense_k1: 98.71 ± 0.03 (n=3)
+  dense_k0.1: 98.56 ± 0.09 (n=3)
+  dense_k0.05: 98.33 ± 0.14 (n=3)
+  dense_small_k1: 94.07 ± 0.10 (n=3)
+  dense_small_k0.1: 87.34 ± 0.16 (n=3)
+  dense_small_k0.05: 87.34 ± 0.16 (n=3)
+  global_k1: 97.82 ± 0.07 (n=3)
+  global_k0.1: 97.56 ± 0.03 (n=3)
+  global_k0.05: 97.09 ± 0.05 (n=3)
+--- x2
+  split_mnist: finetune=19.69±0.04, er=85.15±0.43, fastslow_decay=19.87±0.15, fastslow_merge=19.95±0.19
+  permuted_mnist: finetune=48.94±1.51, er=87.39±1.03, fastslow_decay=68.61±2.88, fastslow_merge=67.32±0.75
+--- e1 ['semi24 fp16: RuntimeError: sparse_semi_structured_mad_op : CUTLASS not supported'] [(10.74350708163313, '4096', '1024', '0.005', 'block16', 'csr', 'fp32'), (7.737183551158299, '4096', '1024', '0.005', 'unstructured', 'csr', 'fp32'), (6.604790874153636, '4096', '1024', '0.005', 'block16', 'bsr16', 'fp32'), (6.13174083747099, '4096', '1024', '0.01', 'block16', 'csr', 'fp32'), (5.478063285902457, '4096', '1024', '0.01', 'unstructured', 'csr', 'fp32')]
+P2_CHAIN2_DONE 2026-10-06  2:53:40.57 

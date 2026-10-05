@@ -272,3 +272,7 @@
   기여 2·4 절 분해 단락·Scope 를 세 모델로, 다섯 곳 수치를 '가장 빡빡한 예산에서 0.7–0.9' 로 통일 (초록·결론은 'up to a point', 'a quarter to a third' 로 이미 포함). 표 3 행·캡션, 부록 표 9 자동, README 명령.
 - 19:31 arXiv 업로드 전 점검: 제목 블록 'Draft, October 2026' → 'October 2026', README 'draft' → 'preprint'. 번들 검증 컴파일을 latexmk -bibtex- 로 바꿔 arXiv 처럼 동봉 main.bbl (30 항목) 만 쓰게 함 — 33 쪽, 미해결 0.
   메타데이터 초록 1,918 자·ASCII 전용·TeX 마크업 없음, 제목 ASCII. 교수님 메일의 ResNet 비교 범위는 81~86% 로 (prune-after 85.6).
+- 2026-10-06 01:14–04:00 밤샘 논문 2 탐색 (OVERNIGHT_P2.md, 자율 실행): 예측 등록 e828e5b → E1-micro/real, E2, E3, E4(+층별 예산), X1, X2(+lr 대조군) 147 run, 오류 0. 보고서 results/p2/REPORT_MORNING.md.
+  핵심: 4096² CSR fp32 5%부터 dense 추월, 1% 3.5–5.5x, 0.5% 7.7x (fp16 약함, 2:4 미지원) → 'LLM 경로 열림'; 학습 마스크 빈 16x16 타일 무작위의 1.3–7x (죽은 뉴런·입력 40–56%);
+  타일 one-shot 은 전역 점수로 중간 층 통째로 비워 우연 수준, 층별 예산이면 회복하되 prune-during (격차 1.6–8.9) 보다 손실 큼 (9.6–35.5); 발달 순서는 정확도 중립·비용 차이 (top_down 2x);
+  k-WTA 5% 는 가지치기망에 −0.7 (작은 dense 망은 −6.7); 빠른/느린 가중치는 Split 무효, Permuted +3 (lr 대조군 안). 함정: findstr 대기 루프가 멈춤 → 대기 없는 체인으로 재실행, 메모리 부족으로 Claude 대기 프로세스 2 회 중단 (실험 무관).
