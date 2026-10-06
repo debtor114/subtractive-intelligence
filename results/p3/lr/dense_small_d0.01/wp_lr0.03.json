@@ -1,0 +1,119 @@
+{
+ "cfg": {
+  "company": "dense_small",
+  "density": 0.01,
+  "seed": 0,
+  "learner": "wp",
+  "lr": 0.03,
+  "epochs": 3,
+  "probe_every": 0,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p3\\lr\\dense_small_d0.01\\wp_lr0.03.json"
+ },
+ "info": {
+  "company": "dense_small",
+  "density": 0.01,
+  "hidden": 23
+ },
+ "final_acc": 0.098,
+ "best_acc": 0.098,
+ "last3_mean": 0.09800000000000002,
+ "active_weights": 18791,
+ "hidden_neurons": 46,
+ "alive_hidden": 46,
+ "n_params": 18847,
+ "curve": [
+  {
+   "step": 100,
+   "samples": 12800,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 300,
+   "samples": 38400,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 400,
+   "samples": 51200,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 500,
+   "samples": 63968,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 600,
+   "samples": 76768,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 700,
+   "samples": 89568,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 800,
+   "samples": 102368,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 900,
+   "samples": 115168,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 1000,
+   "samples": 127936,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 1100,
+   "samples": 140736,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 1200,
+   "samples": 153536,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 1300,
+   "samples": 166336,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 1400,
+   "samples": 179136,
+   "test_acc": 0.098,
+   "loss": NaN
+  },
+  {
+   "step": 1407,
+   "samples": 180000,
+   "test_acc": 0.098,
+   "loss": NaN
+  }
+ ],
+ "probes": [],
+ "elapsed_s": 18.75098991394043,
+ "total_steps": 1407
+}

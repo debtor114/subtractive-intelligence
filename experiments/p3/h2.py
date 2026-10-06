@@ -32,18 +32,31 @@ def out_path(company: str, density: float, learner: str, seed: int, sub: str = "
     return os.path.join(RES_P3, sub, f"{company}_d{density:g}", learner, f"seed{seed}.json")
 
 
+def cosine_lr(step: int, total: int, warmup: int, base: float) -> float:
+    if step < warmup:
+        return base * (step + 1) / warmup
+    return 0.5 * base * (1.0 + math.cos(math.pi * (step - warmup) / max(total - warmup, 1)))
+
+
+def params_finite(model) -> bool:
+    return all(torch.isfinite(p).all().item() for p in model.parameters())
+
+
 def run_h2(cfg: dict, log=print) -> dict:
     company, density = cfg["company"], float(cfg.get("density", 1.0))
     seed, lname, lr = int(cfg["seed"]), cfg["learner"], float(cfg["lr"])
     epochs = int(cfg.get("epochs", 15))
     probe_every = int(cfg.get("probe_every", 300))
+    sched = cfg.get("sched", "const")            # v1: const. v2: cosine (1 에폭 워밍업) — 상수 lr 로는 섭동 학습기가 뒤늦게 발산
+    diverged, diverged_step = False, None
     device = torch.device("cuda")
     x_tr, y_tr, x_te, y_te = get_mnist(device)
     model, info = build_company(company, density, seed, device)
     set_seed(seed * 1000 + 7)                     # 학습기 난수(섭동·DFA 행렬·배치 순서)는 초기화와 분리
     learner = make_learner(lname, model, lr, dict(cfg, seed=seed))
     n_train = x_tr.shape[0]
-    total = epochs * math.ceil(n_train / BS)
+    steps_per_epoch = math.ceil(n_train / BS)
+    total = epochs * steps_per_epoch
     curve: List[Dict] = []
     probes: List[Dict] = []
     step, samples, t0 = 0, 0, time.time()
@@ -56,21 +69,29 @@ def run_h2(cfg: dict, log=print) -> dict:
                 pr = probe(learner, xb, yb)
                 pr["step"] = step
                 probes.append(pr)
+            if sched == "cosine":
+                for g in learner.opt.param_groups:
+                    g["lr"] = cosine_lr(step, total, steps_per_epoch, lr)
             loss = learner.step(xb, yb)
             step += 1
             samples += int(idx.numel())
-            if step % EVAL_EVERY == 0 or step == total:
-                acc = evaluate(model, x_te, y_te)
+            if not math.isfinite(loss):
+                diverged, diverged_step = True, step
+            if step % EVAL_EVERY == 0 or step == total or diverged:
+                if not diverged and not params_finite(model):
+                    diverged, diverged_step = True, step
+                acc = evaluate(model, x_te, y_te) if not diverged else 0.0
                 curve.append({"step": step, "samples": samples, "test_acc": acc, "loss": loss})
-                if step % (EVAL_EVERY * 10) == 0 or step == total:
+                if step % (EVAL_EVERY * 10) == 0 or step == total or diverged:
                     log(f"  [{company} d={density:g} {lname} lr={lr:g} s{seed}] step {step}/{total} acc {acc:.4f} "
-                        f"loss {loss:.3f} ({time.time() - t0:.0f}s)")
-            if step >= total:
+                        f"loss {loss:.3f} ({time.time() - t0:.0f}s)" + (" DIVERGED" if diverged else ""))
+            if step >= total or diverged:
                 done = True
                 break
     final = curve[-1]["test_acc"]
     res = {
         "cfg": dict(cfg), "info": info, "final_acc": final, "best_acc": max(c["test_acc"] for c in curve),
+        "diverged": diverged, "diverged_step": diverged_step,
         "last3_mean": sum(c["test_acc"] for c in curve[-3:]) / len(curve[-3:]),
         "active_weights": count_active(model), "hidden_neurons": hidden_neurons(model),
         "alive_hidden": alive_hidden_neurons(model), "n_params": sum(p.numel() for p in model.parameters()),

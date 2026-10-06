@@ -1,0 +1,161 @@
+{
+ "cfg": {
+  "company": "random_mask",
+  "density": 0.01,
+  "seed": 0,
+  "learner": "wp",
+  "lr": 0.01,
+  "sched": "cosine",
+  "attempt": 1,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p3\\h2v2\\random_mask_d0.01\\wp\\seed0_try1.json"
+ },
+ "info": {
+  "company": "random_mask",
+  "density": 0.01,
+  "mask_src": "results\\p2\\masks\\e2_mnist_d0.01_global_s0.pt"
+ },
+ "final_acc": 0.0,
+ "best_acc": 0.6675,
+ "diverged": true,
+ "diverged_step": 1374,
+ "last3_mean": 0.40253333333333335,
+ "active_weights": 18616,
+ "hidden_neurons": 2048,
+ "alive_hidden": 1696,
+ "n_params": 1863690,
+ "curve": [
+  {
+   "step": 100,
+   "samples": 12800,
+   "test_acc": 0.0958,
+   "loss": 2.3023548126220703
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "test_acc": 0.1135,
+   "loss": 2.2922887802124023
+  },
+  {
+   "step": 300,
+   "samples": 38400,
+   "test_acc": 0.1135,
+   "loss": 2.3063251972198486
+  },
+  {
+   "step": 400,
+   "samples": 51200,
+   "test_acc": 0.1135,
+   "loss": 2.300477981567383
+  },
+  {
+   "step": 500,
+   "samples": 63968,
+   "test_acc": 0.101,
+   "loss": 2.2966713905334473
+  },
+  {
+   "step": 600,
+   "samples": 76768,
+   "test_acc": 0.1135,
+   "loss": 2.300445079803467
+  },
+  {
+   "step": 700,
+   "samples": 89568,
+   "test_acc": 0.1135,
+   "loss": 2.2919793128967285
+  },
+  {
+   "step": 800,
+   "samples": 102368,
+   "test_acc": 0.1977,
+   "loss": 2.25494384765625
+  },
+  {
+   "step": 900,
+   "samples": 115168,
+   "test_acc": 0.4631,
+   "loss": 2.1410703659057617
+  },
+  {
+   "step": 1000,
+   "samples": 127936,
+   "test_acc": 0.5784,
+   "loss": 1.6934198141098022
+  },
+  {
+   "step": 1100,
+   "samples": 140736,
+   "test_acc": 0.6666,
+   "loss": 1.2566332817077637
+  },
+  {
+   "step": 1200,
+   "samples": 153536,
+   "test_acc": 0.6675,
+   "loss": 1.1338489055633545
+  },
+  {
+   "step": 1300,
+   "samples": 166336,
+   "test_acc": 0.5401,
+   "loss": 1.659989356994629
+  },
+  {
+   "step": 1374,
+   "samples": 175808,
+   "test_acc": 0.0,
+   "loss": NaN
+  }
+ ],
+ "probes": [
+  {
+   "loss": 2.302999496459961,
+   "cos_each": 0.01681910827755928,
+   "cos_mean": 0.048663534224033356,
+   "norm_ratio": 15.890581130981445,
+   "K": 8,
+   "snr": 0.14341993027308414,
+   "step": 0
+  },
+  {
+   "loss": 2.3025975227355957,
+   "cos_each": 0.01586730405688286,
+   "cos_mean": 0.04598746821284294,
+   "norm_ratio": 14.817001342773438,
+   "K": 8,
+   "snr": 0.14400848539193212,
+   "step": 300
+  },
+  {
+   "loss": 2.2964649200439453,
+   "cos_each": 0.017150361090898514,
+   "cos_mean": 0.048643458634614944,
+   "norm_ratio": 15.923685073852539,
+   "K": 8,
+   "snr": 0.1451217217931531,
+   "step": 600
+  },
+  {
+   "loss": 2.1098289489746094,
+   "cos_each": 0.02141590230166912,
+   "cos_mean": 0.06124774366617203,
+   "norm_ratio": 19.57827377319336,
+   "K": 8,
+   "snr": 0.14093212396076937,
+   "step": 900
+  },
+  {
+   "loss": 1.0289638042449951,
+   "cos_each": 0.018502425402402878,
+   "cos_mean": 0.055247168987989426,
+   "norm_ratio": 18.031147003173828,
+   "K": 8,
+   "snr": 0.14427648004221488,
+   "step": 1200
+  }
+ ],
+ "elapsed_s": 20.317563772201538,
+ "total_steps": 7035
+}

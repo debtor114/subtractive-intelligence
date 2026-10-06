@@ -1,0 +1,118 @@
+{
+ "cfg": {
+  "company": "dense",
+  "density": 1.0,
+  "seed": 0,
+  "learner": "dfa",
+  "lr": 0.03,
+  "epochs": 3,
+  "probe_every": 0,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p3\\lr\\dense_d1\\dfa_lr0.03.json"
+ },
+ "info": {
+  "company": "dense",
+  "density": 1.0
+ },
+ "final_acc": 0.9268,
+ "best_acc": 0.9363,
+ "last3_mean": 0.9198666666666666,
+ "active_weights": 1861632,
+ "hidden_neurons": 2048,
+ "alive_hidden": 2048,
+ "n_params": 1863690,
+ "curve": [
+  {
+   "step": 100,
+   "samples": 12800,
+   "test_acc": 0.7419,
+   "loss": 1103902464.0
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "test_acc": 0.8478,
+   "loss": 1081428096.0
+  },
+  {
+   "step": 300,
+   "samples": 38400,
+   "test_acc": 0.7722,
+   "loss": 936713152.0
+  },
+  {
+   "step": 400,
+   "samples": 51200,
+   "test_acc": 0.902,
+   "loss": 663909760.0
+  },
+  {
+   "step": 500,
+   "samples": 63968,
+   "test_acc": 0.886,
+   "loss": 730894848.0
+  },
+  {
+   "step": 600,
+   "samples": 76768,
+   "test_acc": 0.8644,
+   "loss": 399458944.0
+  },
+  {
+   "step": 700,
+   "samples": 89568,
+   "test_acc": 0.9006,
+   "loss": 565235520.0
+  },
+  {
+   "step": 800,
+   "samples": 102368,
+   "test_acc": 0.901,
+   "loss": 358370336.0
+  },
+  {
+   "step": 900,
+   "samples": 115168,
+   "test_acc": 0.9039,
+   "loss": 180078800.0
+  },
+  {
+   "step": 1000,
+   "samples": 127936,
+   "test_acc": 0.911,
+   "loss": 2114096128.0
+  },
+  {
+   "step": 1100,
+   "samples": 140736,
+   "test_acc": 0.9293,
+   "loss": 592939136.0
+  },
+  {
+   "step": 1200,
+   "samples": 153536,
+   "test_acc": 0.9005,
+   "loss": 476987776.0
+  },
+  {
+   "step": 1300,
+   "samples": 166336,
+   "test_acc": 0.8965,
+   "loss": 452204640.0
+  },
+  {
+   "step": 1400,
+   "samples": 179136,
+   "test_acc": 0.9363,
+   "loss": 363420128.0
+  },
+  {
+   "step": 1407,
+   "samples": 180000,
+   "test_acc": 0.9268,
+   "loss": 313819520.0
+  }
+ ],
+ "probes": [],
+ "elapsed_s": 1.7241828441619873,
+ "total_steps": 1407
+}

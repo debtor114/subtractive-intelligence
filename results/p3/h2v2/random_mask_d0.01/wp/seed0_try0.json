@@ -1,0 +1,80 @@
+{
+ "cfg": {
+  "company": "random_mask",
+  "density": 0.01,
+  "seed": 0,
+  "learner": "wp",
+  "lr": 0.03,
+  "sched": "cosine",
+  "attempt": 0,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p3\\h2v2\\random_mask_d0.01\\wp\\seed0_try0.json"
+ },
+ "info": {
+  "company": "random_mask",
+  "density": 0.01,
+  "mask_src": "results\\p2\\masks\\e2_mnist_d0.01_global_s0.pt"
+ },
+ "final_acc": 0.0,
+ "best_acc": 0.3421,
+ "diverged": true,
+ "diverged_step": 489,
+ "last3_mean": 0.17803333333333335,
+ "active_weights": 18616,
+ "hidden_neurons": 2048,
+ "alive_hidden": 1696,
+ "n_params": 1863690,
+ "curve": [
+  {
+   "step": 100,
+   "samples": 12800,
+   "test_acc": 0.1135,
+   "loss": 2.3025147914886475
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "test_acc": 0.1135,
+   "loss": 2.2858386039733887
+  },
+  {
+   "step": 300,
+   "samples": 38400,
+   "test_acc": 0.192,
+   "loss": 2.3026552200317383
+  },
+  {
+   "step": 400,
+   "samples": 51200,
+   "test_acc": 0.3421,
+   "loss": 2.1617937088012695
+  },
+  {
+   "step": 489,
+   "samples": 62560,
+   "test_acc": 0.0,
+   "loss": Infinity
+  }
+ ],
+ "probes": [
+  {
+   "loss": 2.302999496459961,
+   "cos_each": 0.01681910827755928,
+   "cos_mean": 0.048663534224033356,
+   "norm_ratio": 15.890581130981445,
+   "K": 8,
+   "snr": 0.14341993027308414,
+   "step": 0
+  },
+  {
+   "loss": 2.2903037071228027,
+   "cos_each": 0.01663709618151188,
+   "cos_mean": 0.048538826406002045,
+   "norm_ratio": 15.48009204864502,
+   "K": 8,
+   "snr": 0.14424230360374934,
+   "step": 300
+  }
+ ],
+ "elapsed_s": 7.19126296043396,
+ "total_steps": 7035
+}

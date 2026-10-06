@@ -123,7 +123,40 @@ def stage_h1(st: Stage):
         st.run_one(run_h1, {"seed": seed}, os.path.join(RES_P3, "h1", f"seed{seed}.json"))
 
 
-STAGES = {"lr": stage_lr, "h2": stage_h2, "h1": stage_h1}
+V2_ARMS = [("pruned", 0.005), ("dense_small", 0.005), ("random_mask", 0.005), ("dense", 1.0),
+           ("pruned", 0.01), ("dense_small", 0.01), ("random_mask", 0.01)]
+V2_LEARNERS = ["bp", "dfa", "np", "fg", "wp"]
+
+
+def stage_h2v2(st: Stage):
+    """v2 프로토콜 (2026-10-07 06:15): v1 은 상수 lr 로 섭동 학습기가 2,500~6,700 스텝에서 NaN 발산.
+    코사인 스케줄(1 에폭 워밍업) + 발산 시 lr/3, lr/10 로 재시도(최대 3 회). 결과는 results/p3/h2v2/."""
+    import shutil
+    sel = json.load(open(LR_FILE, encoding="utf-8")) if os.path.exists(LR_FILE) else {}
+    for seed in SEEDS:
+        for company, d in V2_ARMS:
+            for lname in V2_LEARNERS:
+                out = out_path(company, d, lname, seed, sub="h2v2")
+                if os.path.exists(out):
+                    continue
+                lr0 = sel.get(lr_key(company, d, lname), {}).get("lr", LR_GRID[lname][len(LR_GRID[lname]) // 2])
+                for attempt, lr in enumerate([lr0, lr0 / 3.0, lr0 / 10.0]):
+                    tmp = out.replace(".json", f"_try{attempt}.json")
+                    if not os.path.exists(tmp):
+                        status = st.run_one(run_h2, {"company": company, "density": d, "seed": seed, "learner": lname,
+                                                     "lr": lr, "sched": "cosine", "attempt": attempt}, tmp)
+                        if status in ("deadline", "stage-skipped", "error"):
+                            break
+                    r = json.load(open(tmp, encoding="utf-8"))
+                    ok = (not r.get("diverged")) and (r["final_acc"] >= 0.15 or r["best_acc"] < 0.3)
+                    if ok or attempt == 2:
+                        shutil.copyfile(tmp, out)
+                        log(f"[v2] {lr_key(company, d, lname)} s{seed}: lr {lr:g} (attempt {attempt}) final {r['final_acc']:.4f}"
+                            + (" diverged" if r.get("diverged") else ""))
+                        break
+
+
+STAGES = {"lr": stage_lr, "h2": stage_h2, "h1": stage_h1, "h2v2": stage_h2v2}
 
 if __name__ == "__main__":
     for name in sys.argv[1:]:
