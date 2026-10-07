@@ -1,0 +1,108 @@
+{
+ "cfg": {
+  "company": "dense",
+  "density": 1.0,
+  "seed": 0,
+  "learner": "np",
+  "lr": 0.03,
+  "epochs": 5,
+  "probe_every": 0,
+  "rownorm": true,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p4\\npb\\lr\\rownorm\\lr0.03.json"
+ },
+ "info": {
+  "company": "dense",
+  "density": 1.0
+ },
+ "protocol": "v3",
+ "acc0_val": 0.1032,
+ "acc0_test": 0.1086,
+ "last3_val": 0.3612,
+ "last3_test": 0.3621666666666667,
+ "final_val": 0.3136,
+ "final_test": 0.3133,
+ "best_val": 0.4708,
+ "test_at_best_val": 0.4785,
+ "backoffs": 6,
+ "lr_selected": 0.03,
+ "lr_final": 0.0009375,
+ "failed": true,
+ "backoff_log": [
+  {
+   "diverged_at": 43,
+   "restored_to": 0,
+   "new_base_lr": 0.015
+  },
+  {
+   "diverged_at": 63,
+   "restored_to": 0,
+   "new_base_lr": 0.0075
+  },
+  {
+   "diverged_at": 98,
+   "restored_to": 0,
+   "new_base_lr": 0.00375
+  },
+  {
+   "diverged_at": 143,
+   "restored_to": 0,
+   "new_base_lr": 0.001875
+  },
+  {
+   "diverged_at": 228,
+   "restored_to": 0,
+   "new_base_lr": 0.0009375
+  }
+ ],
+ "protocol_rev": "v3.1",
+ "active_weights": 1861632,
+ "hidden_neurons": 2048,
+ "alive_hidden": 2048,
+ "n_params": 1863690,
+ "n_perturbed": 1863690,
+ "curve": [
+  {
+   "step": 0,
+   "samples": 0,
+   "val_acc": 0.1032,
+   "test_acc": 0.1086,
+   "loss": NaN,
+   "base_lr": 0.03
+  },
+  {
+   "step": 100,
+   "samples": 12800,
+   "val_acc": 0.223,
+   "test_acc": 0.2287,
+   "loss": 2.23704195022583,
+   "base_lr": 0.0009375
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "val_acc": 0.4708,
+   "test_acc": 0.4785,
+   "loss": 2.0786170959472656,
+   "base_lr": 0.0009375
+  },
+  {
+   "step": 300,
+   "samples": 38400,
+   "val_acc": 0.2992,
+   "test_acc": 0.2947,
+   "loss": 2.121817111968994,
+   "base_lr": 0.0009375
+  },
+  {
+   "step": 400,
+   "samples": 51200,
+   "val_acc": 0.3136,
+   "test_acc": 0.3133,
+   "loss": 10.232076644897461,
+   "base_lr": 0.0009375
+  }
+ ],
+ "probes": [],
+ "elapsed_s": 2.3206357955932617,
+ "total_steps": 2150
+}

@@ -1,0 +1,114 @@
+{
+ "cfg": {
+  "budget": 524288,
+  "net": "sparse10",
+  "learner": "np",
+  "seed": 0,
+  "lr": 0.0003,
+  "policy": "max_buffer",
+  "max_per_task": 2000,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p4\\iso\\512KB\\sparse10\\np\\seed0.json"
+ },
+ "param_stats": {
+  "values": 15066,
+  "bitmap_bytes": 17254,
+  "max_layer_values": 6618
+ },
+ "plan": {
+  "b": 1,
+  "r": 1,
+  "replay_cap": 8,
+  "params": 77518,
+  "extra": 26472,
+  "per_sample": 196616,
+  "work": 419704,
+  "total_wo_replay": 497222,
+  "replay_bytes": 24584
+ },
+ "fits": true,
+ "a_last": 0.0969,
+ "a_auc": 0.13146666666666668,
+ "forgetting": 0.13275,
+ "final_task_acc": [
+  0.4665,
+  0.0,
+  0.0,
+  0.018,
+  0.0
+ ],
+ "curve": [
+  {
+   "samples": 1000,
+   "task": 0,
+   "acc_seen": 0.0,
+   "loss": 2.357022285461426,
+   "lr": 0.00015
+  },
+  {
+   "samples": 2000,
+   "task": 0,
+   "acc_seen": 0.0,
+   "loss": 2.385394334793091,
+   "lr": 7.5e-05
+  },
+  {
+   "samples": 3000,
+   "task": 1,
+   "acc_seen": 0.25,
+   "loss": 2.295764446258545,
+   "lr": 7.5e-05
+  },
+  {
+   "samples": 4000,
+   "task": 1,
+   "acc_seen": 0.25,
+   "loss": 2.26082706451416,
+   "lr": 7.5e-05
+  },
+  {
+   "samples": 5000,
+   "task": 2,
+   "acc_seen": 0.16666666666666666,
+   "loss": 2.254059314727783,
+   "lr": 7.5e-05
+  },
+  {
+   "samples": 6000,
+   "task": 2,
+   "acc_seen": 0.16683333333333333,
+   "loss": 2.0985193252563477,
+   "lr": 7.5e-05
+  },
+  {
+   "samples": 7000,
+   "task": 3,
+   "acc_seen": 0.125,
+   "loss": 1.3491876125335693,
+   "lr": 7.5e-05
+  },
+  {
+   "samples": 8000,
+   "task": 3,
+   "acc_seen": 0.12,
+   "loss": 2.027547836303711,
+   "lr": 7.5e-05
+  },
+  {
+   "samples": 9000,
+   "task": 4,
+   "acc_seen": 0.1047,
+   "loss": 0.7966234683990479,
+   "lr": 3.75e-05
+  }
+ ],
+ "steps": 9531,
+ "backoffs": 6,
+ "failed": true,
+ "lr_final": 9.375e-06,
+ "fwd_eq_per_update": 4.0,
+ "samples_per_update": 2,
+ "fwd_eq_total": 76248.0,
+ "gpu_peak_minus_base_bytes": 308628992,
+ "elapsed_s": 98.92317342758179,
+ "eval_on": "test"
+}

@@ -1,0 +1,19 @@
+{
+ "cfg": {
+  "budget": 393216,
+  "net": "sparse10",
+  "learner": "fg",
+  "seed": 0,
+  "lr": 0.003,
+  "policy": "max_buffer",
+  "max_per_task": 2000,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p4\\iso\\384KB\\sparse10\\fg\\seed0.json"
+ },
+ "param_stats": {
+  "values": 15066,
+  "bitmap_bytes": 17254,
+  "max_layer_values": 6618
+ },
+ "plan": null,
+ "fits": false
+}

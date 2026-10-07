@@ -1,0 +1,78 @@
+{
+ "cfg": {
+  "budget": 1048576,
+  "net": "sparse10",
+  "learner": "fg",
+  "seed": 0,
+  "lr": 0.0003,
+  "n_tasks": 2,
+  "eval_on": "val",
+  "policy": "max_buffer",
+  "max_per_task": 2000,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p4\\iso_lr\\fg_lr0.0003.json"
+ },
+ "param_stats": {
+  "values": 15066,
+  "bitmap_bytes": 17254,
+  "max_layer_values": 6618
+ },
+ "plan": {
+  "b": 1,
+  "r": 1,
+  "replay_cap": 106,
+  "params": 77518,
+  "extra": 120528,
+  "per_sample": 262144,
+  "work": 644816,
+  "total_wo_replay": 722334,
+  "replay_bytes": 325738
+ },
+ "fits": true,
+ "a_last": 0.25,
+ "a_auc": 0.375,
+ "forgetting": 0.0,
+ "final_task_acc": [
+  0.5,
+  0.0
+ ],
+ "curve": [
+  {
+   "samples": 1000,
+   "task": 0,
+   "acc_seen": 0.5,
+   "loss": 2.2134361267089844,
+   "lr": 0.0003
+  },
+  {
+   "samples": 2000,
+   "task": 0,
+   "acc_seen": 0.5,
+   "loss": 2.1049442291259766,
+   "lr": 0.0003
+  },
+  {
+   "samples": 3000,
+   "task": 1,
+   "acc_seen": 0.25,
+   "loss": 2.2864959239959717,
+   "lr": 0.0003
+  },
+  {
+   "samples": 4000,
+   "task": 1,
+   "acc_seen": 0.25,
+   "loss": 2.0806984901428223,
+   "lr": 0.0003
+  }
+ ],
+ "steps": 4000,
+ "backoffs": 0,
+ "failed": false,
+ "lr_final": 0.0003,
+ "fwd_eq_per_update": 12.0,
+ "samples_per_update": 2,
+ "fwd_eq_total": 96000.0,
+ "gpu_peak_minus_base_bytes": 282935296,
+ "elapsed_s": 141.21923661231995,
+ "eval_on": "val"
+}

@@ -1,0 +1,121 @@
+{
+ "cfg": {
+  "budget": 4194304,
+  "net": "sparse10",
+  "learner": "bp",
+  "seed": 0,
+  "lr": 0.1,
+  "policy": "max_buffer",
+  "max_per_task": 2000,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p4\\iso\\4096KB\\sparse10\\bp\\seed0.json"
+ },
+ "param_stats": {
+  "values": 15066,
+  "bitmap_bytes": 17254,
+  "max_layer_values": 6618
+ },
+ "plan": {
+  "b": 1,
+  "r": 1,
+  "replay_cap": 1123,
+  "params": 77518,
+  "extra": 60264,
+  "per_sample": 301320,
+  "work": 662904,
+  "total_wo_replay": 740422,
+  "replay_bytes": 3450979
+ },
+ "fits": true,
+ "a_last": 0.2013,
+ "a_auc": 0.3433783333333333,
+ "forgetting": 0.585375,
+ "final_task_acc": [
+  0.0005,
+  0.032,
+  0.189,
+  0.0715,
+  0.7135
+ ],
+ "curve": [
+  {
+   "samples": 1000,
+   "task": 0,
+   "acc_seen": 0.5,
+   "loss": 0.71819007396698,
+   "lr": 0.1
+  },
+  {
+   "samples": 2000,
+   "task": 0,
+   "acc_seen": 0.685,
+   "loss": 0.6924092173576355,
+   "lr": 0.1
+  },
+  {
+   "samples": 3000,
+   "task": 1,
+   "acc_seen": 0.45025,
+   "loss": 1.204974889755249,
+   "lr": 0.1
+  },
+  {
+   "samples": 4000,
+   "task": 1,
+   "acc_seen": 0.3635,
+   "loss": 0.5341200828552246,
+   "lr": 0.1
+  },
+  {
+   "samples": 5000,
+   "task": 2,
+   "acc_seen": 0.30266666666666664,
+   "loss": 1.6897459030151367,
+   "lr": 0.1
+  },
+  {
+   "samples": 6000,
+   "task": 2,
+   "acc_seen": 0.24866666666666667,
+   "loss": 1.7317497730255127,
+   "lr": 0.1
+  },
+  {
+   "samples": 7000,
+   "task": 3,
+   "acc_seen": 0.24725,
+   "loss": 2.624586582183838,
+   "lr": 0.1
+  },
+  {
+   "samples": 8000,
+   "task": 3,
+   "acc_seen": 0.18575,
+   "loss": 0.7294818162918091,
+   "lr": 0.1
+  },
+  {
+   "samples": 9000,
+   "task": 4,
+   "acc_seen": 0.2494,
+   "loss": 1.657254934310913,
+   "lr": 0.1
+  },
+  {
+   "samples": 10000,
+   "task": 4,
+   "acc_seen": 0.2013,
+   "loss": 1.3875700235366821,
+   "lr": 0.1
+  }
+ ],
+ "steps": 10000,
+ "backoffs": 0,
+ "failed": false,
+ "lr_final": 0.1,
+ "fwd_eq_per_update": 3.0,
+ "samples_per_update": 2,
+ "fwd_eq_total": 60000.0,
+ "gpu_peak_minus_base_bytes": 309185536,
+ "elapsed_s": 50.712427854537964,
+ "eval_on": "test"
+}

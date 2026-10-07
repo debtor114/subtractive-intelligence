@@ -1,0 +1,191 @@
+==== p4 chain2 waiting for _done 2026-10-08  3:54:45.81 
+==== p4 chain2 start 2026-10-08  5:22:38.81 
+W1008 05:22:41.811000 183188 .venv\Lib\site-packages\torch\utils\flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+==== stage npb2 start 05:22:41
+  [pruned d=0.01 np s0] diverged at step 258: restore to 0 + lr -> 0.015 (backoff 1)
+  [pruned d=0.01 np s0] diverged at step 400: restore to 100 + lr -> 0.0075 (backoff 2)
+  [pruned d=0.01 np s0] diverged at step 801: restore to 600 + lr -> 0.00375 (backoff 3)
+  [pruned d=0.01 np lr=0.00375 s0] step 1000/2150 val 0.7558 test 0.7521 loss 0.873 bo 3 (4s)
+  [pruned d=0.01 np lr=0.00375 s0] step 2000/2150 val 0.8752 test 0.8761 loss 0.381 bo 3 (6s)
+  [pruned d=0.01 np lr=0.00375 s0] step 2150/2150 val 0.8758 test 0.8762 loss 0.649 bo 3 (6s)
+  -> results\p4\npb\lr\wd_pruned\lr0.03.json val 0.8757 test 0.8762 acc0 0.196 backoffs 3 perturbed 20,051 (6s)
+  [pruned d=0.01 np s0] diverged at step 392: restore to 100 + lr -> 0.0075 (backoff 1)
+  [pruned d=0.01 np s0] diverged at step 771: restore to 500 + lr -> 0.00375 (backoff 2)
+  [pruned d=0.01 np lr=0.00375 s0] step 1000/2150 val 0.7516 test 0.7620 loss 0.783 bo 2 (3s)
+  [pruned d=0.01 np lr=0.00375 s0] step 2000/2150 val 0.8670 test 0.8720 loss 0.417 bo 2 (6s)
+  [pruned d=0.01 np lr=0.00375 s0] step 2150/2150 val 0.8672 test 0.8734 loss 0.436 bo 2 (6s)
+  -> results\p4\npb\lr\wd_pruned\lr0.015.json val 0.8671 test 0.8730 acc0 0.196 backoffs 2 perturbed 20,051 (6s)
+  [pruned d=0.01 np s0] diverged at step 809: restore to 600 + lr -> 0.0035 (backoff 1)
+  [pruned d=0.01 np lr=0.0035 s0] step 1000/2150 val 0.7228 test 0.7349 loss 0.614 bo 1 (2s)
+  [pruned d=0.01 np lr=0.0035 s0] step 2000/2150 val 0.8702 test 0.8758 loss 0.469 bo 1 (5s)
+  [pruned d=0.01 np lr=0.0035 s0] step 2150/2150 val 0.8694 test 0.8771 loss 0.350 bo 1 (5s)
+  -> results\p4\npb\lr\wd_pruned\lr0.007.json val 0.8696 test 0.8765 acc0 0.196 backoffs 1 perturbed 20,051 (5s)
+  [pruned d=0.01 np lr=0.0035 s0] step 1000/2150 val 0.6894 test 0.7079 loss 1.059 bo 0 (2s)
+  [pruned d=0.01 np lr=0.0035 s0] step 2000/2150 val 0.8230 test 0.8301 loss 0.598 bo 0 (4s)
+  [pruned d=0.01 np lr=0.0035 s0] step 2150/2150 val 0.8234 test 0.8315 loss 0.606 bo 0 (4s)
+  -> results\p4\npb\lr\wd_pruned\lr0.0035.json val 0.8233 test 0.8310 acc0 0.196 backoffs 0 perturbed 20,051 (4s)
+  [pruned d=0.01 np lr=0.0017 s0] step 1000/2150 val 0.2884 test 0.2969 loss 2.254 bo 0 (2s)
+  [pruned d=0.01 np lr=0.0017 s0] step 2000/2150 val 0.4192 test 0.4202 loss 2.066 bo 0 (4s)
+  [pruned d=0.01 np lr=0.0017 s0] step 2150/2150 val 0.4190 test 0.4204 loss 2.067 bo 0 (5s)
+  -> results\p4\npb\lr\wd_pruned\lr0.0017.json val 0.4191 test 0.4203 acc0 0.196 backoffs 0 perturbed 20,051 (5s)
+  [pruned d=0.01 np lr=0.0008 s0] step 1000/2150 val 0.1094 test 0.1135 loss 2.293 bo 0 (2s)
+  [pruned d=0.01 np lr=0.0008 s0] step 2000/2150 val 0.1094 test 0.1135 loss 2.292 bo 0 (4s)
+  [pruned d=0.01 np lr=0.0008 s0] step 2150/2150 val 0.1094 test 0.1135 loss 2.293 bo 0 (5s)
+  -> results\p4\npb\lr\wd_pruned\lr0.0008.json val 0.1094 test 0.1135 acc0 0.196 backoffs 0 perturbed 20,051 (5s)
+  [pruned d=0.01 np lr=0.0004 s0] step 1000/2150 val 0.1094 test 0.1135 loss 2.294 bo 0 (2s)
+  [pruned d=0.01 np lr=0.0004 s0] step 2000/2150 val 0.1094 test 0.1135 loss 2.295 bo 0 (4s)
+  [pruned d=0.01 np lr=0.0004 s0] step 2150/2150 val 0.1094 test 0.1135 loss 2.296 bo 0 (4s)
+  -> results\p4\npb\lr\wd_pruned\lr0.0004.json val 0.1094 test 0.1135 acc0 0.196 backoffs 0 perturbed 20,051 (4s)
+  [pruned d=0.01 np lr=0.0002 s0] step 1000/2150 val 0.1094 test 0.1135 loss 2.295 bo 0 (2s)
+  [pruned d=0.01 np lr=0.0002 s0] step 2000/2150 val 0.1094 test 0.1135 loss 2.296 bo 0 (4s)
+  [pruned d=0.01 np lr=0.0002 s0] step 2150/2150 val 0.1094 test 0.1135 loss 2.297 bo 0 (4s)
+  -> results\p4\npb\lr\wd_pruned\lr0.0002.json val 0.1094 test 0.1135 acc0 0.196 backoffs 0 perturbed 20,051 (4s)
+  [pruned d=0.01 np lr=0.0001 s0] step 1000/2150 val 0.2416 test 0.2522 loss 2.295 bo 0 (2s)
+  [pruned d=0.01 np lr=0.0001 s0] step 2000/2150 val 0.2048 test 0.2178 loss 2.296 bo 0 (5s)
+  [pruned d=0.01 np lr=0.0001 s0] step 2150/2150 val 0.2048 test 0.2178 loss 2.297 bo 0 (5s)
+  -> results\p4\npb\lr\wd_pruned\lr0.0001.json val 0.2048 test 0.2179 acc0 0.196 backoffs 0 perturbed 20,051 (5s)
+[npb2] wd_pruned lr -> (0.03, 0.8757333333333333)
+  [pruned d=0.01 np s0] diverged at step 258: restore to 0 + lr -> 0.015 (backoff 1)
+  [pruned d=0.01 np s0] diverged at step 400: restore to 100 + lr -> 0.0075 (backoff 2)
+  [pruned d=0.01 np s0] diverged at step 733: restore to 500 + lr -> 0.00375 (backoff 3)
+  [pruned d=0.01 np lr=0.00375 s0] step 1000/6450 val 0.7046 test 0.7096 loss 0.981 bo 3 (4s)
+  [pruned d=0.01 np s0] diverged at step 1645: restore to 1400 + lr -> 0.001875 (backoff 4)
+  [pruned d=0.01 np lr=0.001875 s0] step 2000/6450 val 0.8060 test 0.8193 loss 0.929 bo 4 (7s)
+  [pruned d=0.01 np lr=0.001875 s0] step 3000/6450 val 0.8272 test 0.8382 loss 1.302 bo 4 (9s)
+  [pruned d=0.01 np lr=0.001875 s0] step 4000/6450 val 0.8584 test 0.8671 loss 0.510 bo 4 (11s)
+  [pruned d=0.01 np lr=0.001875 s0] step 5000/6450 val 0.8936 test 0.9024 loss 0.277 bo 4 (13s)
+  [pruned d=0.01 np lr=0.001875 s0] step 6000/6450 val 0.8974 test 0.9091 loss 0.342 bo 4 (15s)
+  [pruned d=0.01 np lr=0.001875 s0] step 6450/6450 val 0.8980 test 0.9093 loss 0.399 bo 4 (16s)
+  -> results\p4\npb\wd_pruned\seed0.json val 0.8980 test 0.9092 acc0 0.196 backoffs 4 perturbed 20,051 (16s)
+  [pruned d=0.01 np s1] diverged at step 272: restore to 0 + lr -> 0.015 (backoff 1)
+  [pruned d=0.01 np s1] diverged at step 410: restore to 200 + lr -> 0.0075 (backoff 2)
+  [pruned d=0.01 np s1] diverged at step 678: restore to 400 + lr -> 0.00375 (backoff 3)
+  [pruned d=0.01 np lr=0.00375 s1] step 1000/6450 val 0.7622 test 0.7783 loss 0.709 bo 3 (4s)
+  [pruned d=0.01 np lr=0.00375 s1] step 2000/6450 val 0.7752 test 0.7705 loss 0.940 bo 3 (6s)
+  [pruned d=0.01 np s1] diverged at step 2327: restore to 2100 + lr -> 0.001875 (backoff 4)
+  [pruned d=0.01 np lr=0.001875 s1] step 3000/6450 val 0.7954 test 0.8082 loss 1.229 bo 4 (9s)
+  [pruned d=0.01 np lr=0.001875 s1] step 4000/6450 val 0.8424 test 0.8477 loss 0.948 bo 4 (11s)
+  [pruned d=0.01 np lr=0.001875 s1] step 5000/6450 val 0.8882 test 0.8976 loss 0.593 bo 4 (13s)
+  [pruned d=0.01 np lr=0.001875 s1] step 6000/6450 val 0.8932 test 0.9044 loss 0.501 bo 4 (15s)
+  [pruned d=0.01 np lr=0.001875 s1] step 6450/6450 val 0.8954 test 0.9034 loss 0.455 bo 4 (16s)
+  -> results\p4\npb\wd_pruned\seed1.json val 0.8953 test 0.9036 acc0 0.278 backoffs 4 perturbed 20,011 (16s)
+  [pruned d=0.01 np s2] diverged at step 249: restore to 0 + lr -> 0.015 (backoff 1)
+  [pruned d=0.01 np s2] diverged at step 411: restore to 200 + lr -> 0.0075 (backoff 2)
+  [pruned d=0.01 np s2] diverged at step 689: restore to 400 + lr -> 0.00375 (backoff 3)
+  [pruned d=0.01 np lr=0.00375 s2] step 1000/6450 val 0.7226 test 0.7329 loss 1.017 bo 3 (4s)
+  [pruned d=0.01 np lr=0.00375 s2] step 2000/6450 val 0.6470 test 0.6350 loss 4.076 bo 3 (6s)
+  [pruned d=0.01 np s2] diverged at step 2181: restore to 1900 + lr -> 0.001875 (backoff 4)
+  [pruned d=0.01 np lr=0.001875 s2] step 2000/6450 val 0.5970 test 0.6117 loss 3.590 bo 4 (7s)
+  [pruned d=0.01 np lr=0.001875 s2] step 3000/6450 val 0.8312 test 0.8297 loss 0.762 bo 4 (9s)
+  [pruned d=0.01 np lr=0.001875 s2] step 4000/6450 val 0.8470 test 0.8582 loss 0.880 bo 4 (11s)
+  [pruned d=0.01 np lr=0.001875 s2] step 5000/6450 val 0.8856 test 0.8900 loss 0.814 bo 4 (13s)
+  [pruned d=0.01 np lr=0.001875 s2] step 6000/6450 val 0.8940 test 0.8988 loss 0.573 bo 4 (15s)
+  [pruned d=0.01 np lr=0.001875 s2] step 6450/6450 val 0.8958 test 0.9003 loss 0.331 bo 4 (16s)
+  -> results\p4\npb\wd_pruned\seed2.json val 0.8957 test 0.9003 acc0 0.378 backoffs 4 perturbed 20,031 (16s)
+  [dense_small d=0.01 np s0] diverged at step 170: restore to 0 + lr -> 0.015 (backoff 1)
+  [dense_small d=0.01 np s0] diverged at step 339: restore to 100 + lr -> 0.0075 (backoff 2)
+  [dense_small d=0.01 np s0] diverged at step 654: restore to 400 + lr -> 0.00375 (backoff 3)
+  [dense_small d=0.01 np lr=0.00375 s0] step 1000/2150 val 0.7738 test 0.7844 loss 0.992 bo 3 (3s)
+  [dense_small d=0.01 np lr=0.00375 s0] step 2000/2150 val 0.8574 test 0.8599 loss 0.520 bo 3 (4s)
+  [dense_small d=0.01 np lr=0.00375 s0] step 2150/2150 val 0.8614 test 0.8606 loss 0.460 bo 3 (5s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.03.json val 0.8599 test 0.8603 acc0 0.095 backoffs 3 perturbed 18,847 (5s)
+  [dense_small d=0.01 np s0] diverged at step 322: restore to 100 + lr -> 0.0075 (backoff 1)
+  [dense_small d=0.01 np lr=0.0075 s0] step 1000/2150 val 0.4990 test 0.5164 loss 2.624 bo 1 (2s)
+  [dense_small d=0.01 np lr=0.0075 s0] step 2000/2150 val 0.5656 test 0.5857 loss 1.226 bo 1 (4s)
+  [dense_small d=0.01 np lr=0.0075 s0] step 2150/2150 val 0.5652 test 0.5854 loss 1.198 bo 1 (4s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.015.json val 0.5653 test 0.5854 acc0 0.095 backoffs 1 perturbed 18,847 (4s)
+  [dense_small d=0.01 np lr=0.007 s0] step 1000/2150 val 0.1084 test 0.1010 loss 2.309 bo 0 (2s)
+  [dense_small d=0.01 np s0] diverged at step 1047: restore to 800 + lr -> 0.0035 (backoff 1)
+  [dense_small d=0.01 np lr=0.0035 s0] step 1000/2150 val 0.1094 test 0.1135 loss 2.299 bo 1 (2s)
+  [dense_small d=0.01 np lr=0.0035 s0] step 2000/2150 val 0.2080 test 0.2236 loss 2.123 bo 1 (4s)
+  [dense_small d=0.01 np lr=0.0035 s0] step 2150/2150 val 0.2196 test 0.2337 loss 2.248 bo 1 (4s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.007.json val 0.2156 test 0.2304 acc0 0.095 backoffs 1 perturbed 18,847 (4s)
+  [dense_small d=0.01 np lr=0.0035 s0] step 1000/2150 val 0.7764 test 0.7864 loss 1.099 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0035 s0] step 2000/2150 val 0.8768 test 0.8833 loss 0.385 bo 0 (3s)
+  [dense_small d=0.01 np lr=0.0035 s0] step 2150/2150 val 0.8762 test 0.8864 loss 0.602 bo 0 (4s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.0035.json val 0.8765 test 0.8853 acc0 0.095 backoffs 0 perturbed 18,847 (4s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 1000/2150 val 0.8100 test 0.8133 loss 0.662 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 2000/2150 val 0.8894 test 0.8929 loss 0.354 bo 0 (3s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 2150/2150 val 0.8886 test 0.8926 loss 0.408 bo 0 (4s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.0017.json val 0.8889 test 0.8927 acc0 0.095 backoffs 0 perturbed 18,847 (4s)
+  [dense_small d=0.01 np lr=0.0008 s0] step 1000/2150 val 0.8378 test 0.8450 loss 0.630 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0008 s0] step 2000/2150 val 0.8816 test 0.8771 loss 0.425 bo 0 (3s)
+  [dense_small d=0.01 np lr=0.0008 s0] step 2150/2150 val 0.8816 test 0.8769 loss 0.474 bo 0 (4s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.0008.json val 0.8815 test 0.8770 acc0 0.095 backoffs 0 perturbed 18,847 (4s)
+  [dense_small d=0.01 np lr=0.0004 s0] step 1000/2150 val 0.7450 test 0.7466 loss 0.981 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0004 s0] step 2000/2150 val 0.8228 test 0.8246 loss 0.656 bo 0 (4s)
+  [dense_small d=0.01 np lr=0.0004 s0] step 2150/2150 val 0.8224 test 0.8247 loss 0.706 bo 0 (4s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.0004.json val 0.8225 test 0.8247 acc0 0.095 backoffs 0 perturbed 18,847 (4s)
+  [dense_small d=0.01 np lr=0.0002 s0] step 1000/2150 val 0.5090 test 0.5175 loss 1.775 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0002 s0] step 2000/2150 val 0.6958 test 0.7063 loss 1.247 bo 0 (3s)
+  [dense_small d=0.01 np lr=0.0002 s0] step 2150/2150 val 0.6954 test 0.7063 loss 1.285 bo 0 (4s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.0002.json val 0.6955 test 0.7063 acc0 0.095 backoffs 0 perturbed 18,847 (4s)
+  [dense_small d=0.01 np lr=0.0001 s0] step 1000/2150 val 0.2938 test 0.2987 loss 2.151 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0001 s0] step 2000/2150 val 0.4638 test 0.4699 loss 1.971 bo 0 (3s)
+  [dense_small d=0.01 np lr=0.0001 s0] step 2150/2150 val 0.4638 test 0.4702 loss 1.975 bo 0 (4s)
+  -> results\p4\npb\lr\wd_dense_small\lr0.0001.json val 0.4638 test 0.4701 acc0 0.095 backoffs 0 perturbed 18,847 (4s)
+[npb2] wd_dense_small lr -> (0.0017, 0.8888666666666666)
+  [dense_small d=0.01 np lr=0.0017 s0] step 1000/6450 val 0.7940 test 0.7856 loss 0.770 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 2000/6450 val 0.8488 test 0.8540 loss 0.391 bo 0 (3s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 3000/6450 val 0.8590 test 0.8593 loss 0.473 bo 0 (5s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 4000/6450 val 0.8906 test 0.8877 loss 0.477 bo 0 (7s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 5000/6450 val 0.8982 test 0.9047 loss 0.427 bo 0 (9s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 6000/6450 val 0.9076 test 0.9099 loss 0.368 bo 0 (11s)
+  [dense_small d=0.01 np lr=0.0017 s0] step 6450/6450 val 0.9076 test 0.9102 loss 0.314 bo 0 (11s)
+  -> results\p4\npb\wd_dense_small\seed0.json val 0.9076 test 0.9102 acc0 0.095 backoffs 0 perturbed 18,847 (11s)
+  [dense_small d=0.01 np lr=0.0017 s1] step 1000/6450 val 0.8374 test 0.8479 loss 0.632 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0017 s1] step 2000/6450 val 0.8854 test 0.8837 loss 0.374 bo 0 (4s)
+  [dense_small d=0.01 np lr=0.0017 s1] step 3000/6450 val 0.8946 test 0.8976 loss 0.348 bo 0 (5s)
+  [dense_small d=0.01 np lr=0.0017 s1] step 4000/6450 val 0.9058 test 0.9062 loss 0.276 bo 0 (7s)
+  [dense_small d=0.01 np lr=0.0017 s1] step 5000/6450 val 0.9158 test 0.9124 loss 0.321 bo 0 (9s)
+  [dense_small d=0.01 np lr=0.0017 s1] step 6000/6450 val 0.9198 test 0.9168 loss 0.308 bo 0 (10s)
+  [dense_small d=0.01 np lr=0.0017 s1] step 6450/6450 val 0.9204 test 0.9172 loss 0.360 bo 0 (11s)
+  -> results\p4\npb\wd_dense_small\seed1.json val 0.9205 test 0.9172 acc0 0.078 backoffs 0 perturbed 18,847 (11s)
+  [dense_small d=0.01 np lr=0.0017 s2] step 1000/6450 val 0.7740 test 0.7703 loss 0.767 bo 0 (2s)
+  [dense_small d=0.01 np lr=0.0017 s2] step 2000/6450 val 0.8510 test 0.8460 loss 0.619 bo 0 (4s)
+  [dense_small d=0.01 np lr=0.0017 s2] step 3000/6450 val 0.8834 test 0.8796 loss 0.485 bo 0 (5s)
+  [dense_small d=0.01 np lr=0.0017 s2] step 4000/6450 val 0.8956 test 0.8948 loss 0.365 bo 0 (7s)
+  [dense_small d=0.01 np lr=0.0017 s2] step 5000/6450 val 0.9154 test 0.9141 loss 0.215 bo 0 (9s)
+  [dense_small d=0.01 np lr=0.0017 s2] step 6000/6450 val 0.9186 test 0.9147 loss 0.244 bo 0 (11s)
+  [dense_small d=0.01 np lr=0.0017 s2] step 6450/6450 val 0.9192 test 0.9157 loss 0.232 bo 0 (12s)
+  -> results\p4\npb\wd_dense_small\seed2.json val 0.9193 test 0.9157 acc0 0.088 backoffs 0 perturbed 18,847 (12s)
+==== stage npb2 end 05:25:27
+==== stage summarize start 05:25:27
+## P4-A 같은 메모리 상한 (Split CIFAR-10 온라인 클래스 증분, CNN16; 시험 정확도 %, 시드 평균±표준편차)
+
+| 상한 | 망 | 학습기 | 들어감 | 배치 b / 재현 r / 버퍼 | A_AUC | A_last | 망각 | 순전파 등가/표본 | 시간(초) |
+|---|---|---|---|---|---|---|---|---|---|
+| 384KB | sparse10 | bp_mem | 예 | 1 / 0 / 0 | 22.8±0.0 (n3) | 10.0±0.0 | 50.0 | 4.0 | 84 |
+| 384KB | sparse10 | fg | 아니오 | - | - | - | - | - | - |
+| 384KB | sparse10 | np | 예 | 1 / 0 / 0 | 12.8±3.7 (n3) | 10.8±1.1 | 33.2 | 4.0 | 94 |
+| 512KB | sparse10 | bp_mem | 예 | 1 / 0 / 0 | 22.8±0.0 (n3) | 10.0±0.0 | 50.0 | 4.0 | 83 |
+| 512KB | sparse10 | fg | 예 | 1 / 0 / 0 | 19.6±2.5 (n3) | 11.2±1.7 | 50.0 | 12.0 | 355 |
+| 512KB | sparse10 | np | 예 (실패 1) | 1 / 1 / 8 | 13.9±5.7 (n3) | 8.9±1.1 | 10.6 | 2.0 | 99 |
+| 1024KB | dense | bp | 아니오 | - | - | - | - | - | - |
+| 1024KB | dense | bp_mem | 아니오 | - | - | - | - | - | - |
+| 1024KB | dense | fg | 아니오 | - | - | - | - | - | - |
+| 1024KB | dense | np | 예 | 1 / 0 / 0 | 8.6±4.5 (n3) | 10.0±0.0 | 24.4 | 4.0 | 97 |
+| 1024KB | sparse10 | bp | 예 | 1 / 1 / 100 | 33.0±1.7 (n3) | 14.8±3.2 | 52.5 | 1.5 | 50 |
+| 1024KB | sparse10 | bp_mem | 예 | 1 / 1 / 147 | 34.5±2.3 (n3) | 17.1±0.4 | 56.2 | 2.0 | 86 |
+| 1024KB | sparse10 | fg | 예 | 1 / 1 / 106 | 23.1±0.4 (n3) | 10.5±0.7 | 46.9 | 6.0 | 360 |
+| 1024KB | sparse10 | np | 예 | 1 / 1 / 179 | 10.9±5.0 (n3) | 9.6±0.9 | 20.6 | 2.0 | 102 |
+| 4096KB | dense | bp | 예 | 1 / 1 / 808 | 23.4±0.7 (n3) | 11.8±2.5 | 47.7 | 1.5 | 51 |
+| 4096KB | dense | bp_mem | 예 | 1 / 1 / 939 | 22.8±0.0 (n3) | 10.0±0.0 | 50.0 | 2.0 | 87 |
+| 4096KB | dense | fg | 예 | 1 / 1 / 654 | 22.8±0.0 (n3) | 10.0±0.0 | 20.7 | 6.0 | 362 |
+| 4096KB | dense | np | 예 (실패 1) | 1 / 1 / 971 | 10.3±6.5 (n3) | 10.0±0.0 | 18.6 | 2.0 | 101 |
+| 4096KB | sparse10 | bp | 예 | 1 / 1 / 1123 | 34.3±2.0 (n3) | 21.3±0.9 | 51.9 | 1.5 | 51 |
+| 4096KB | sparse10 | bp_mem | 예 | 1 / 1 / 1170 | 35.2±0.5 (n3) | 21.2±4.0 | 52.1 | 2.0 | 87 |
+| 4096KB | sparse10 | fg | 예 | 1 / 1 / 1129 | 23.0±0.2 (n3) | 10.9±1.0 | 50.9 | 6.0 | 362 |
+| 4096KB | sparse10 | np | 예 | 1 / 1 / 1203 | 12.5±4.3 (n3) | 10.2±0.6 | 23.9 | 2.0 | 102 |
+
+## P4-B 노드 섭동 안정성 대조 (MNIST 밀집 MLP, v3 프로토콜, 시험 정확도 %)
+
+| 조건 | 정확도 | 실패 | 학습률 |
+|---|---|---|---|
+| 밀집 + 행별 가중치 정규화 | 91.2±0.4 (n3) | 0/3 | 0.0035 |
+| 밀집 + 가중치 감쇠 5e-4 | 92.3±0.1 (n3) | 0/3 | 0.007 |
+| 학습 마스크 1% + 가중치 감쇠 5e-4 | 90.4±0.4 (n3) | 0/3 | 0.03 |
+| 같은 예산 작은 밀집망 1% + 가중치 감쇠 5e-4 | 91.4±0.3 (n3) | 0/3 | 0.0017 |
+| (참고, p3 v3) 밀집 / 학습 마스크 1% / 작은 밀집망 1%, 감쇠 없음 | 63.4 (실패 3/3) / 91.1 / 91.6 | | |
+==== stage summarize end 05:25:27
+P4_CHAIN2_DONE 2026-10-08  5:25:28.28 

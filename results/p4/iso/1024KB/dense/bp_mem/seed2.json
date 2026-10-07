@@ -1,0 +1,19 @@
+{
+ "cfg": {
+  "budget": 1048576,
+  "net": "dense",
+  "learner": "bp_mem",
+  "seed": 2,
+  "lr": 0.1,
+  "policy": "max_buffer",
+  "max_per_task": 2000,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p4\\iso\\1024KB\\dense\\bp_mem\\seed2.json"
+ },
+ "param_stats": {
+  "values": 138330,
+  "bitmap_bytes": 0,
+  "max_layer_values": 65600
+ },
+ "plan": null,
+ "fits": false
+}

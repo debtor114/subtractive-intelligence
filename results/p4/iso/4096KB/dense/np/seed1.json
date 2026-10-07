@@ -1,0 +1,114 @@
+{
+ "cfg": {
+  "budget": 4194304,
+  "net": "dense",
+  "learner": "np",
+  "seed": 1,
+  "lr": 0.0003,
+  "policy": "max_buffer",
+  "max_per_task": 2000,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p4\\iso\\4096KB\\dense\\np\\seed1.json"
+ },
+ "param_stats": {
+  "values": 138330,
+  "bitmap_bytes": 0,
+  "max_layer_values": 65600
+ },
+ "plan": {
+  "b": 1,
+  "r": 1,
+  "replay_cap": 971,
+  "params": 553320,
+  "extra": 262400,
+  "per_sample": 196616,
+  "work": 655632,
+  "total_wo_replay": 1208952,
+  "replay_bytes": 2983883
+ },
+ "fits": true,
+ "a_last": 0.1,
+ "a_auc": 0.18224722222222223,
+ "forgetting": 0.36975,
+ "final_task_acc": [
+  0.0,
+  0.0,
+  0.0,
+  0.5,
+  0.0
+ ],
+ "curve": [
+  {
+   "samples": 1000,
+   "task": 0,
+   "acc_seen": 0.0,
+   "loss": 2.307210922241211,
+   "lr": 3.75e-05
+  },
+  {
+   "samples": 2000,
+   "task": 0,
+   "acc_seen": 0.481,
+   "loss": 2.326383590698242,
+   "lr": 3.75e-05
+  },
+  {
+   "samples": 3000,
+   "task": 1,
+   "acc_seen": 0.25,
+   "loss": 2.1260528564453125,
+   "lr": 3.75e-05
+  },
+  {
+   "samples": 4000,
+   "task": 1,
+   "acc_seen": 0.22925,
+   "loss": 2.221818447113037,
+   "lr": 1.875e-05
+  },
+  {
+   "samples": 5000,
+   "task": 2,
+   "acc_seen": 0.1665,
+   "loss": 2.32016658782959,
+   "lr": 1.875e-05
+  },
+  {
+   "samples": 6000,
+   "task": 2,
+   "acc_seen": 0.159,
+   "loss": 2.319761037826538,
+   "lr": 1.875e-05
+  },
+  {
+   "samples": 7000,
+   "task": 3,
+   "acc_seen": 0.124875,
+   "loss": 2.250779628753662,
+   "lr": 9.375e-06
+  },
+  {
+   "samples": 8000,
+   "task": 3,
+   "acc_seen": 0.125,
+   "loss": 1.7492799758911133,
+   "lr": 9.375e-06
+  },
+  {
+   "samples": 9000,
+   "task": 4,
+   "acc_seen": 0.1046,
+   "loss": 2.0935585498809814,
+   "lr": 9.375e-06
+  }
+ ],
+ "steps": 9943,
+ "backoffs": 6,
+ "failed": true,
+ "lr_final": 9.375e-06,
+ "fwd_eq_per_update": 4.0,
+ "samples_per_update": 2,
+ "fwd_eq_total": 79544.0,
+ "gpu_peak_minus_base_bytes": 308628992,
+ "elapsed_s": 104.27062916755676,
+ "eval_on": "test"
+}
