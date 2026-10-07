@@ -1,0 +1,227 @@
+{
+ "cfg": {
+  "company": "pruned_reinit",
+  "density": 0.01,
+  "seed": 0,
+  "learner": "bp",
+  "lr": 0.07,
+  "epochs": 5,
+  "probe_every": 0,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p3\\h3lr\\pruned_reinit_d0.01\\bp_lr0.07.json"
+ },
+ "info": {
+  "company": "pruned_reinit",
+  "density": 0.01,
+  "init_seed": 500,
+  "mask_src": "results\\p2\\masks\\e2_mnist_d0.01_global_s0.pt"
+ },
+ "protocol": "v3",
+ "acc0_val": 0.1448,
+ "acc0_test": 0.1423,
+ "last3_val": 0.9648666666666667,
+ "last3_test": 0.9672000000000001,
+ "final_val": 0.9648,
+ "final_test": 0.9673,
+ "best_val": 0.965,
+ "test_at_best_val": 0.9671,
+ "backoffs": 0,
+ "lr_selected": 0.07,
+ "lr_final": 0.07,
+ "failed": false,
+ "backoff_log": [],
+ "protocol_rev": "v3.1",
+ "active_weights": 18616,
+ "hidden_neurons": 2048,
+ "alive_hidden": 1150,
+ "n_params": 1863690,
+ "n_perturbed": 20051,
+ "curve": [
+  {
+   "step": 0,
+   "samples": 0,
+   "val_acc": 0.1448,
+   "test_acc": 0.1423,
+   "loss": NaN,
+   "base_lr": 0.07
+  },
+  {
+   "step": 100,
+   "samples": 12800,
+   "val_acc": 0.1094,
+   "test_acc": 0.1135,
+   "loss": 2.302161693572998,
+   "base_lr": 0.07
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "val_acc": 0.1094,
+   "test_acc": 0.1135,
+   "loss": 2.287647008895874,
+   "base_lr": 0.07
+  },
+  {
+   "step": 300,
+   "samples": 38400,
+   "val_acc": 0.6008,
+   "test_acc": 0.6226,
+   "loss": 1.3840663433074951,
+   "base_lr": 0.07
+  },
+  {
+   "step": 400,
+   "samples": 51200,
+   "val_acc": 0.8752,
+   "test_acc": 0.8758,
+   "loss": 0.5507873296737671,
+   "base_lr": 0.07
+  },
+  {
+   "step": 500,
+   "samples": 63960,
+   "val_acc": 0.9122,
+   "test_acc": 0.9089,
+   "loss": 0.3076057434082031,
+   "base_lr": 0.07
+  },
+  {
+   "step": 600,
+   "samples": 76760,
+   "val_acc": 0.9332,
+   "test_acc": 0.9319,
+   "loss": 0.33669358491897583,
+   "base_lr": 0.07
+  },
+  {
+   "step": 700,
+   "samples": 89560,
+   "val_acc": 0.9404,
+   "test_acc": 0.9415,
+   "loss": 0.12631528079509735,
+   "base_lr": 0.07
+  },
+  {
+   "step": 800,
+   "samples": 102360,
+   "val_acc": 0.9466,
+   "test_acc": 0.9491,
+   "loss": 0.2329479157924652,
+   "base_lr": 0.07
+  },
+  {
+   "step": 900,
+   "samples": 115120,
+   "val_acc": 0.9482,
+   "test_acc": 0.9528,
+   "loss": 0.2154623568058014,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1000,
+   "samples": 127920,
+   "val_acc": 0.9538,
+   "test_acc": 0.958,
+   "loss": 0.08912333101034164,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1100,
+   "samples": 140720,
+   "val_acc": 0.9562,
+   "test_acc": 0.9596,
+   "loss": 0.15418875217437744,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1200,
+   "samples": 153520,
+   "val_acc": 0.9588,
+   "test_acc": 0.963,
+   "loss": 0.1031690165400505,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1300,
+   "samples": 166280,
+   "val_acc": 0.9626,
+   "test_acc": 0.9635,
+   "loss": 0.049960337579250336,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1400,
+   "samples": 179080,
+   "val_acc": 0.9628,
+   "test_acc": 0.9625,
+   "loss": 0.13562583923339844,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1500,
+   "samples": 191880,
+   "val_acc": 0.9646,
+   "test_acc": 0.9641,
+   "loss": 0.10901404172182083,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1600,
+   "samples": 204680,
+   "val_acc": 0.9638,
+   "test_acc": 0.9649,
+   "loss": 0.1093401238322258,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1700,
+   "samples": 217480,
+   "val_acc": 0.9642,
+   "test_acc": 0.9658,
+   "loss": 0.060021281242370605,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1800,
+   "samples": 230240,
+   "val_acc": 0.9648,
+   "test_acc": 0.9668,
+   "loss": 0.09668026119470596,
+   "base_lr": 0.07
+  },
+  {
+   "step": 1900,
+   "samples": 243040,
+   "val_acc": 0.965,
+   "test_acc": 0.9671,
+   "loss": 0.09602003544569016,
+   "base_lr": 0.07
+  },
+  {
+   "step": 2000,
+   "samples": 255840,
+   "val_acc": 0.965,
+   "test_acc": 0.967,
+   "loss": 0.13473191857337952,
+   "base_lr": 0.07
+  },
+  {
+   "step": 2100,
+   "samples": 268640,
+   "val_acc": 0.9648,
+   "test_acc": 0.9673,
+   "loss": 0.12259241938591003,
+   "base_lr": 0.07
+  },
+  {
+   "step": 2150,
+   "samples": 275000,
+   "val_acc": 0.9648,
+   "test_acc": 0.9673,
+   "loss": 0.09446592628955841,
+   "base_lr": 0.07
+  }
+ ],
+ "probes": [],
+ "elapsed_s": 3.7213287353515625,
+ "total_steps": 2150
+}

@@ -1,0 +1,126 @@
+==== p3 chain3 start 2026-10-07 14:12:14.87 
+W1007 14:12:16.540000 70552 .venv\Lib\site-packages\torch\utils\flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+==== stage h1b start 14:12:17
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h1b\seed0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h1b\seed1.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h1b\seed2.json
+==== stage h1b end 14:12:17
+==== stage h2deg start 14:12:17
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\bp_lr0.3.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\bp_lr0.1.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\bp_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\bp_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\bp_lr0.003.json
+[lr] random_degree_d0.005/bp -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\dfa_lr0.3.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\dfa_lr0.1.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\dfa_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\dfa_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\dfa_lr0.003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\dfa_lr0.001.json
+[lr] random_degree_d0.005/dfa -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\fg_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\fg_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\fg_lr0.003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\fg_lr0.001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\fg_lr0.0003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\fg_lr0.0001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\fg_lr3e-05.json
+[lr] random_degree_d0.005/fg -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\wp_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\wp_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\wp_lr0.003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\wp_lr0.001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\wp_lr0.0003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\wp_lr0.0001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\wp_lr3e-05.json
+[lr] random_degree_d0.005/wp -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\np_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\np_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\np_lr0.003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\np_lr0.001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\np_lr0.0003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\np_lr0.0001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.005\np_lr3e-05.json
+[lr] random_degree_d0.005/np -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\bp_lr0.3.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\bp_lr0.1.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\bp_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\bp_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\bp_lr0.003.json
+[lr] random_degree_d0.01/bp -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\dfa_lr0.3.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\dfa_lr0.1.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\dfa_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\dfa_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\dfa_lr0.003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\dfa_lr0.001.json
+[lr] random_degree_d0.01/dfa -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\fg_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\fg_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\fg_lr0.003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\fg_lr0.001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\fg_lr0.0003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\fg_lr0.0001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\fg_lr3e-05.json
+[lr] random_degree_d0.01/fg -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\wp_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\wp_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\wp_lr0.003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\wp_lr0.001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\wp_lr0.0003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\wp_lr0.0001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\wp_lr3e-05.json
+[lr] random_degree_d0.01/wp -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\np_lr0.03.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\np_lr0.01.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\np_lr0.003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\np_lr0.001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\np_lr0.0003.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\np_lr0.0001.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\lr\random_degree_d0.01\np_lr3e-05.json
+[lr] random_degree_d0.01/np -> None
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\bp\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\dfa\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\np\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\fg\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\wp\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\bp\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\dfa\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\np\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\fg\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\wp\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\bp\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\dfa\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\np\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\fg\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\wp\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\bp\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\dfa\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\np\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\fg\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\wp\seed1_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\bp\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\dfa\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\np\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\fg\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.005\wp\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\bp\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\dfa\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\np\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\fg\seed2_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2v2\random_degree_d0.01\wp\seed2_try0.json
+==== stage h2deg end 14:12:17
+==== stage h2long start 14:12:17
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\pruned_d0.005\fg\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\pruned_d0.005\np\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\dense_small_d0.005\fg\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\dense_small_d0.005\np\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\random_degree_d0.005\fg\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\random_degree_d0.005\np\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\random_mask_d0.005\fg\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\random_mask_d0.005\np\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\dense_d1\fg\seed0_try0.json
+[deadline] skip C:\Users\KDI\Downloads\Projects\subtractive-intelligence\results\p3\h2long\dense_d1\np\seed0_try0.json
+==== stage h2long end 14:12:17
+P3_CHAIN3_DONE 2026-10-07 14:12:18.15 

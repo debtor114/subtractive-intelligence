@@ -138,5 +138,41 @@
  "dense_small_d0.005/np": {
   "lr": 0.001,
   "acc3ep": 0.8374333333333333
+ },
+ "random_degree_d0.005/bp": {
+  "lr": 0.3,
+  "acc3ep": 0.9477000000000001
+ },
+ "random_degree_d0.005/dfa": {
+  "lr": 0.01,
+  "acc3ep": 0.908
+ },
+ "random_degree_d0.005/fg": {
+  "lr": 0.01,
+  "acc3ep": 0.26286666666666664
+ },
+ "random_degree_d0.005/wp": {
+  "lr": 0.003,
+  "acc3ep": 0.12933333333333333
+ },
+ "random_degree_d0.005/np": {
+  "lr": 0.003,
+  "acc3ep": 0.6058666666666667
+ },
+ "random_degree_d0.01/bp": {
+  "lr": 0.3,
+  "acc3ep": 0.9595333333333333
+ },
+ "random_degree_d0.01/dfa": {
+  "lr": 0.01,
+  "acc3ep": 0.9169666666666667
+ },
+ "random_degree_d0.01/fg": {
+  "lr": 0.003,
+  "acc3ep": 0.5977
+ },
+ "random_degree_d0.01/wp": {
+  "lr": 0.003,
+  "acc3ep": 0.5952666666666667
  }
 }

@@ -1,0 +1,67 @@
+{
+ "cfg": {
+  "company": "random_degree",
+  "density": 0.005,
+  "seed": 0,
+  "learner": "np",
+  "lr": 0.01,
+  "epochs": 3,
+  "probe_every": 0,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p3\\lr\\random_degree_d0.005\\np_lr0.01.json"
+ },
+ "info": {
+  "company": "random_degree",
+  "density": 0.005,
+  "mask_src": "results\\p2\\masks\\e2_mnist_d0.005_global_s0.pt"
+ },
+ "final_acc": 0.0,
+ "best_acc": 0.6347,
+ "diverged": true,
+ "diverged_step": 566,
+ "last3_mean": 0.30963333333333337,
+ "active_weights": 9308,
+ "hidden_neurons": 2048,
+ "alive_hidden": 861,
+ "n_params": 1863690,
+ "curve": [
+  {
+   "step": 100,
+   "samples": 12800,
+   "test_acc": 0.1269,
+   "loss": 2.2862720489501953
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "test_acc": 0.4335,
+   "loss": 1.4981553554534912
+  },
+  {
+   "step": 300,
+   "samples": 38400,
+   "test_acc": 0.5801,
+   "loss": 1.364397644996643
+  },
+  {
+   "step": 400,
+   "samples": 51200,
+   "test_acc": 0.6347,
+   "loss": 1.2468359470367432
+  },
+  {
+   "step": 500,
+   "samples": 63968,
+   "test_acc": 0.2942,
+   "loss": 10.285590171813965
+  },
+  {
+   "step": 566,
+   "samples": 72416,
+   "test_acc": 0.0,
+   "loss": NaN
+  }
+ ],
+ "probes": [],
+ "elapsed_s": 1.0998632907867432,
+ "total_steps": 1407
+}

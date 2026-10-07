@@ -1,0 +1,91 @@
+{
+ "cfg": {
+  "company": "dense",
+  "density": 1.0,
+  "seed": 0,
+  "learner": "fg",
+  "lr": 0.03,
+  "epochs": 5,
+  "probe_every": 0,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p3\\h3lr\\dense_d1\\fg_lr0.03.json"
+ },
+ "info": {
+  "company": "dense",
+  "density": 1.0
+ },
+ "protocol": "v3",
+ "acc0_val": 0.1032,
+ "acc0_test": 0.1086,
+ "last3_val": 0.30106666666666665,
+ "last3_test": 0.31133333333333335,
+ "final_val": 0.5484,
+ "final_test": 0.559,
+ "best_val": 0.5484,
+ "test_at_best_val": 0.559,
+ "backoffs": 6,
+ "lr_selected": 0.03,
+ "lr_final": 0.0009375,
+ "failed": true,
+ "backoff_log": [
+  {
+   "diverged_at": 43,
+   "restored_to": 0,
+   "new_base_lr": 0.015
+  },
+  {
+   "diverged_at": 59,
+   "restored_to": 0,
+   "new_base_lr": 0.0075
+  },
+  {
+   "diverged_at": 86,
+   "restored_to": 0,
+   "new_base_lr": 0.00375
+  },
+  {
+   "diverged_at": 129,
+   "restored_to": 0,
+   "new_base_lr": 0.001875
+  },
+  {
+   "diverged_at": 198,
+   "restored_to": 0,
+   "new_base_lr": 0.0009375
+  }
+ ],
+ "protocol_rev": "v3.1",
+ "active_weights": 1861632,
+ "hidden_neurons": 2048,
+ "alive_hidden": 2048,
+ "n_params": 1863690,
+ "n_perturbed": 1863690,
+ "curve": [
+  {
+   "step": 0,
+   "samples": 0,
+   "val_acc": 0.1032,
+   "test_acc": 0.1086,
+   "loss": NaN,
+   "base_lr": 0.03
+  },
+  {
+   "step": 100,
+   "samples": 12800,
+   "val_acc": 0.2516,
+   "test_acc": 0.2664,
+   "loss": 2.2451863288879395,
+   "base_lr": 0.0009375
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "val_acc": 0.5484,
+   "test_acc": 0.559,
+   "loss": 1.9772934913635254,
+   "base_lr": 0.0009375
+  }
+ ],
+ "probes": [],
+ "elapsed_s": 11.31118631362915,
+ "total_steps": 2150
+}

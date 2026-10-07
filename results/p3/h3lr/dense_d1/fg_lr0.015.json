@@ -1,0 +1,107 @@
+{
+ "cfg": {
+  "company": "dense",
+  "density": 1.0,
+  "seed": 0,
+  "learner": "fg",
+  "lr": 0.015,
+  "epochs": 5,
+  "probe_every": 0,
+  "out": "C:\\Users\\KDI\\Downloads\\Projects\\subtractive-intelligence\\results\\p3\\h3lr\\dense_d1\\fg_lr0.015.json"
+ },
+ "info": {
+  "company": "dense",
+  "density": 1.0
+ },
+ "protocol": "v3",
+ "acc0_val": 0.1032,
+ "acc0_test": 0.1086,
+ "last3_val": 0.5469333333333334,
+ "last3_test": 0.5613,
+ "final_val": 0.602,
+ "final_test": 0.6238,
+ "best_val": 0.6314,
+ "test_at_best_val": 0.6348,
+ "backoffs": 6,
+ "lr_selected": 0.015,
+ "lr_final": 0.00046875,
+ "failed": true,
+ "backoff_log": [
+  {
+   "diverged_at": 59,
+   "restored_to": 0,
+   "new_base_lr": 0.0075
+  },
+  {
+   "diverged_at": 90,
+   "restored_to": 0,
+   "new_base_lr": 0.00375
+  },
+  {
+   "diverged_at": 129,
+   "restored_to": 0,
+   "new_base_lr": 0.001875
+  },
+  {
+   "diverged_at": 191,
+   "restored_to": 0,
+   "new_base_lr": 0.0009375
+  },
+  {
+   "diverged_at": 299,
+   "restored_to": 0,
+   "new_base_lr": 0.00046875
+  }
+ ],
+ "protocol_rev": "v3.1",
+ "active_weights": 1861632,
+ "hidden_neurons": 2048,
+ "alive_hidden": 2048,
+ "n_params": 1863690,
+ "n_perturbed": 1863690,
+ "curve": [
+  {
+   "step": 0,
+   "samples": 0,
+   "val_acc": 0.1032,
+   "test_acc": 0.1086,
+   "loss": NaN,
+   "base_lr": 0.015
+  },
+  {
+   "step": 100,
+   "samples": 12800,
+   "val_acc": 0.1546,
+   "test_acc": 0.1631,
+   "loss": 2.270073890686035,
+   "base_lr": 0.00046875
+  },
+  {
+   "step": 200,
+   "samples": 25600,
+   "val_acc": 0.4074,
+   "test_acc": 0.4253,
+   "loss": 2.16752290725708,
+   "base_lr": 0.00046875
+  },
+  {
+   "step": 300,
+   "samples": 38400,
+   "val_acc": 0.6314,
+   "test_acc": 0.6348,
+   "loss": 1.881239414215088,
+   "base_lr": 0.00046875
+  },
+  {
+   "step": 400,
+   "samples": 51200,
+   "val_acc": 0.602,
+   "test_acc": 0.6238,
+   "loss": 1.1824740171432495,
+   "base_lr": 0.00046875
+  }
+ ],
+ "probes": [],
+ "elapsed_s": 17.41943883895874,
+ "total_steps": 2150
+}
