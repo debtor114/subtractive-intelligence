@@ -31,7 +31,8 @@ KB = 1024
 SEEDS = [0, 1, 2]
 BUDGETS_PRIORITY = [384 * KB, 512 * KB, 4096 * KB, 1024 * KB]           # 결정 실험(A2) 먼저, 다음 A1
 LEARNERS = ["bp_mem", "np", "bp", "fg"]
-LR_GRID = {"bp": [0.1, 0.03, 0.01], "np": [0.03, 0.01, 0.003, 0.001], "fg": [0.01, 0.003, 0.001, 0.0003]}
+LR_GRID = {"bp": [0.1, 0.03, 0.01], "np": [0.01, 0.003, 0.001, 0.0003, 0.0001], "fg": [0.01, 0.003, 0.001, 0.0003]}
+PER_TASK = 2000          # 수정(실행 전): 표본당 갱신 1 회라 파이썬 오버헤드로 느려 과제당 2,000 장(총 1 만 장)으로 줄임
 NPB_GRID = [3e-2, 1.5e-2, 7e-3, 3.5e-3, 1.7e-3, 8e-4, 4e-4, 2e-4, 1e-4]
 
 
@@ -94,7 +95,7 @@ def stage_lr():
         for lr in LR_GRID[lname]:
             out = os.path.join(RES, "iso_lr", f"{lname}_lr{lr:g}.json")
             guarded(iso.run_one, {"budget": 1024 * KB, "net": "sparse10", "learner": lname, "seed": 0, "lr": lr, "n_tasks": 2,
-                                  "eval_on": "val", "policy": "max_buffer"}, out)
+                                  "eval_on": "val", "policy": "max_buffer", "max_per_task": PER_TASK}, out)
             if os.path.exists(out):
                 r = json.load(open(out, encoding="utf-8"))
                 if r.get("fits") and not r.get("failed") and (best is None or r["a_auc"] > best[1]):
@@ -113,9 +114,12 @@ def stage_main():
     for budget, net in combos:
         for s in SEEDS:
             for lname in LEARNERS:
+                if lname == "bp" and budget <= 512 * KB:
+                    continue                    # 384KB 는 안 들어가고, 512KB 는 bp_mem 과 같은 배치·같은 버퍼(0)라 같은 결과
                 lr = sel.get(lname, {}).get("lr", LR_GRID["bp" if lname == "bp_mem" else lname][1])
                 out = os.path.join(RES, "iso", f"{budget // KB}KB", net, lname, f"seed{s}.json")
-                guarded(iso.run_one, {"budget": budget, "net": net, "learner": lname, "seed": s, "lr": lr, "policy": "max_buffer"}, out)
+                guarded(iso.run_one, {"budget": budget, "net": net, "learner": lname, "seed": s, "lr": lr, "policy": "max_buffer",
+                                      "max_per_task": PER_TASK}, out)
 
 
 # ---------------------------------------------------------------------------
