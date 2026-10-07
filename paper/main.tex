@@ -413,7 +413,10 @@ and the failure propagates downstream, a known hazard of activity-dependent prun
 neuron's drive by its mean removes the collapse but the rule still falls from parity with the dense baseline at 10\% to 17
 points behind it at 1\%. A local criterion can stand in for the magnitude criterion on the MLP at a cost of 1.0 point at
 0.5\% against the per-layer magnitude criterion (1.8 against the global one); on the convolutional network, in this form,
-it cannot.
+it cannot. Activity-dependent local criteria have a direct precedent: \citet{scholl2021} estimated synaptic importance in
+Boltzmann machines from pre- and post-synaptic activity and the weight, and showed that pruning by these local estimates
+removes whole units and optimises the global architecture. Our drive rule belongs to that family; what is new here is the
+test on discriminative networks trained by back-propagation at 0.5--10\% of the connections.
 
 \paragraph{Transfer: pruning a pre-trained network during adaptation.} The over-parameterised starting point that
 prune-during needs is, in practice, often inherited: pre-trained networks are published with their training cost already

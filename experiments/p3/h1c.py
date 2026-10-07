@@ -93,8 +93,18 @@ def hub_stats(model, traces: NeuronTraces) -> dict:
     return out
 
 
+EXTRA_CRIT = {"ria_row": (None, "row"), "ria_layer": (None, "layer")}   # Zhang 등 2024 RIA (허브의 반대 방향 대조, 2026-10-07 추가)
+
+
 @torch.no_grad()
 def compute_scores(model, crit: str, traces, tracker, gen) -> Dict[str, torch.Tensor]:
+    if crit in EXTRA_CRIT:
+        out = {}
+        for name, m in masked_modules(model):
+            w = m.weight.abs()
+            s = (w / (w.sum(1, keepdim=True) + 1e-12) + w / (w.sum(0, keepdim=True) + 1e-12)) * traces.sq_in[name].sqrt().pow(0.5)[None, :]
+            out[name] = torch.nan_to_num(s, nan=0.0, posinf=0.0, neginf=0.0)
+        return out
     base, _ = CRIT[crit]
     if base is not None:
         return scores_for(model, base, traces, tracker, gen)
@@ -377,9 +387,63 @@ def run_deadend(seeds=(0, 1, 2), log=print) -> dict:
     return S
 
 
+def run_extra(seeds=(0, 1, 2), log=print) -> dict:
+    """RIA(행별·층 순위)를 같은 스윕(은닉 균일+머리 유지)과 학습 배분 1%·0.5% 에서. 결과 h1c/extra.json, 표는 tables_h1c.md 에 덧붙임."""
+    from experiments.p3.h1 import per_layer_targets
+    device = torch.device("cuda")
+    x_tr, y_tr, x_te, y_te = get_mnist(device)
+    out = {}
+    for seed in seeds:
+        dense = train_dense(seed, device, log)
+        dense_state = copy.deepcopy(dense.state_dict())
+        model = fresh_masked(dense_state, seed, device)
+        traces, tracker = NeuronTraces(model), ActivityTracker(model, momentum=0.99)
+        set_seed(seed + 11)
+        stream(model, x_tr, y_tr, traces, tracker, device)
+        traces.remove()
+        tracker.remove()
+        names = [n for n, _ in masked_modules(model)]
+        gen = torch.Generator(device="cpu").manual_seed(seed + 4242)
+        for crit, (_, gran) in EXTRA_CRIT.items():
+            for D in DENSITIES:
+                m = fresh_masked(dense_state, seed, device)
+                (prune_rowwise if gran == "row" else prune_layerwise)(m, compute_scores(m, crit, traces, tracker, gen), targets_for(D))
+                out.setdefault("uniform", {}).setdefault(crit, {}).setdefault(f"{D:g}", []).append(
+                    {"acc": evaluate(m, x_te, y_te), "alive_hidden": alive_hidden_neurons(m), **dead_end_stats(m)})
+            for D in (0.01, 0.005):
+                m = fresh_masked(dense_state, seed, device)
+                (prune_rowwise if gran == "row" else prune_layerwise)(m, compute_scores(m, crit, traces, tracker, gen),
+                                                                     per_layer_targets(D, seed, names))
+                out.setdefault("learned", {}).setdefault(crit, {}).setdefault(f"{D:g}", []).append(
+                    {"acc": evaluate(m, x_te, y_te), "alive_hidden": alive_hidden_neurons(m), **dead_end_stats(m)})
+        log(f"  [h1c extra s{seed}] done")
+    S = {sch: {c: {D: {"acc": float(np.mean([r["acc"] for r in rs])), "acc_std": float(np.std([r["acc"] for r in rs])),
+                       "alive_hidden": float(np.mean([r["alive_hidden"] for r in rs])),
+                       "wasted_frac": float(np.mean([r["wasted_frac"] for r in rs]))} for D, rs in dd.items()}
+               for c, dd in cc.items()} for sch, cc in out.items()}
+    with open(os.path.join(OUT_DIR, "extra.json"), "w", encoding="utf-8") as f:
+        json.dump({"per_seed": out, "summary": S}, f, ensure_ascii=False, indent=1)
+    L = ["", "## H1c 추가: RIA (Zhang 등 2024, 행합·열합 정규화 — 허브 반대 방향) — 정확도 % ± 표준편차 / 살아 있는 은닉 뉴런", "",
+         "| 기준 | " + " | ".join(f"{100 * D:g}%" for D in DENSITIES) + " | 학습 배분 1% | 학습 배분 0.5% |",
+         "|---|" + "---|" * (len(DENSITIES) + 2)]
+    for c in EXTRA_CRIT:
+        cells = [f"{100 * S['uniform'][c][f'{D:g}']['acc']:.1f}±{100 * S['uniform'][c][f'{D:g}']['acc_std']:.1f} / {S['uniform'][c][f'{D:g}']['alive_hidden']:.0f}"
+                 for D in DENSITIES]
+        cells += [f"{100 * S['learned'][c][D]['acc']:.1f}±{100 * S['learned'][c][D]['acc_std']:.1f} / {S['learned'][c][D]['alive_hidden']:.0f}"
+                  for D in ("0.01", "0.005")]
+        L.append(f"| {c} | " + " | ".join(cells) + " |")
+    md = "\n".join(L)
+    with open(os.path.join(RES_P3, "tables_h1c.md"), "a", encoding="utf-8") as f:
+        f.write(md + "\n")
+    print(md)
+    return S
+
+
 if __name__ == "__main__":
     args = sys.argv[1:]
-    if args and args[0] == "deadend":
+    if args and args[0] == "extra":
+        run_extra()
+    elif args and args[0] == "deadend":
         run_deadend()
     elif args and args[0] == "summarize":
         summarize()
