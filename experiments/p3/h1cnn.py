@@ -493,7 +493,7 @@ def summarize() -> dict:
     ax[0].set_title("CNN 배포 결산 가지치기 (BN 재보정, 미세조정 없음)")
     ax[1].set_ylabel(f"살아 있는 은닉 단위 수 (최대 {S['uniform']['magnitude'][f'{DENSITIES[0]:g}']['units']})")
     ax[1].set_title("허브 배분: 살아 남은 채널·뉴런 수")
-    ax[0].legend(fontsize=7, loc="lower left")
+    ax[0].legend(fontsize=7, loc="upper right")
     fig.tight_layout()
     fig.savefig(os.path.join(RES_P3, "fig_h1cnn_sweep.png"), dpi=140)
     plt.close(fig)
