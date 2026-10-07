@@ -223,7 +223,69 @@ def stage_h1b(st: Stage):
         st.run_one(_run_h1, {"seed": seed, "criteria": "all"}, os.path.join(RES_P3, "h1b", f"seed{seed}.json"))
 
 
-STAGES = {"lr": stage_lr, "h2": stage_h2, "h1": stage_h1, "h2v2": stage_h2v2, "h2deg": stage_h2deg, "h2long": stage_h2long, "h1b": stage_h1b}
+# ---------------------------------------------------------------------------
+# v3 프로토콜 (코드 검토 반영 2026-10-07 오후): experiments/p3/h3.py 참조
+# ---------------------------------------------------------------------------
+from experiments.p3.h3 import out_path as out_path3, run_h3   # noqa: E402
+
+V3_ARMS = [("pruned", 0.005), ("random_degree", 0.005), ("random_mask", 0.005), ("dense_small", 0.005), ("pruned_reinit", 0.005),
+           ("dense", 1.0), ("pruned", 0.01), ("random_degree", 0.01), ("random_mask", 0.01), ("dense_small", 0.01), ("pruned_reinit", 0.01)]
+V3_LEARNERS = ["bp", "dfa", "np", "fg"]
+LR_GRID_V3 = {
+    "bp": [3e-1, 1.5e-1, 7e-2, 3.5e-2, 1.7e-2, 8e-3, 4e-3, 2e-3, 1e-3],
+    "dfa": [3e-1, 1.5e-1, 7e-2, 3.5e-2, 1.7e-2, 8e-3, 4e-3, 2e-3, 1e-3],
+    "fg": [3e-2, 1.5e-2, 7e-3, 3.5e-3, 1.7e-3, 8e-4, 4e-4, 2e-4, 1e-4],
+    "np": [3e-2, 1.5e-2, 7e-3, 3.5e-3, 1.7e-3, 8e-4, 4e-4, 2e-4, 1e-4],
+}
+LR_FILE_V3 = os.path.join(RES_P3, "lr_select_v3.json")
+
+
+def stage_h3lr(st: Stage):
+    """학습률 선택 v3: 회사·학습기마다 코사인 5 에폭(seed 0) 격자(×2 간격), 검증 last3 최고. 실패(backoff 5 회 초과)는 제외."""
+    sel = json.load(open(LR_FILE_V3, encoding="utf-8")) if os.path.exists(LR_FILE_V3) else {}
+    for company, d in V3_ARMS:
+        for lname in V3_LEARNERS:
+            best = None
+            for lr in LR_GRID_V3[lname]:
+                out = os.path.join(RES_P3, "h3lr", f"{company}_d{d:g}", f"{lname}_lr{lr:g}.json")
+                st.run_one(run_h3, {"company": company, "density": d, "seed": 0, "learner": lname, "lr": lr, "epochs": 5,
+                                    "probe_every": 0}, out)
+                if os.path.exists(out):
+                    r = json.load(open(out, encoding="utf-8"))
+                    if r.get("failed"):
+                        continue
+                    acc = r["last3_val"]
+                    if best is None or acc > best[1]:
+                        best = (lr, acc, r["backoffs"])
+            if best:
+                sel[lr_key(company, d, lname)] = {"lr": best[0], "val5ep": best[1], "backoffs": best[2],
+                                                  "selection_failed": bool(best[1] < 0.15)}
+            with open(LR_FILE_V3, "w", encoding="utf-8") as f:
+                json.dump(sel, f, indent=1)
+            log(f"[lr3] {lr_key(company, d, lname)} -> {best}")
+
+
+def _v3_runs(st: Stage, arms, seeds=SEEDS, learners=V3_LEARNERS, epochs=15, sub="h3"):
+    sel = json.load(open(LR_FILE_V3, encoding="utf-8")) if os.path.exists(LR_FILE_V3) else {}
+    for seed in seeds:
+        for company, d in arms:
+            for lname in learners:
+                out = out_path3(company, d, lname, seed, sub=sub)
+                lr = sel.get(lr_key(company, d, lname), {}).get("lr", LR_GRID_V3[lname][4])
+                st.run_one(run_h3, {"company": company, "density": d, "seed": seed, "learner": lname, "lr": lr, "epochs": epochs}, out)
+
+
+def stage_h3(st: Stage):
+    _v3_runs(st, V3_ARMS)
+
+
+def stage_h3long(st: Stage):
+    arms = [("pruned", 0.005), ("dense_small", 0.005), ("random_degree", 0.005), ("random_mask", 0.005), ("dense", 1.0)]
+    _v3_runs(st, arms, seeds=[0], learners=["fg", "np"], epochs=45, sub="h3long")
+
+
+STAGES = {"lr": stage_lr, "h2": stage_h2, "h1": stage_h1, "h2v2": stage_h2v2, "h2deg": stage_h2deg, "h2long": stage_h2long, "h1b": stage_h1b,
+          "h3lr": stage_h3lr, "h3": stage_h3, "h3long": stage_h3long}
 
 if __name__ == "__main__":
     for name in sys.argv[1:]:

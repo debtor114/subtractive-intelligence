@@ -38,12 +38,15 @@ def manual_forward(model: nn.Module, x: torch.Tensor):
 
 
 def param_masks(model: nn.Module) -> Dict[int, torch.Tensor]:
-    """id(param) -> mask (가중치만, 편향은 없음)."""
+    """id(param) -> mask. 가중치는 weight_mask, 편향은 '들어오는 연결이 하나라도 있는 뉴런' 만 (검토 반영 2026-10-07:
+    죽은 뉴런의 편향까지 흔들고 갱신하면 pruned 의 섭동 차원이 dense_small 보다 10~17% 커진다)."""
     out = {}
     for m in linears(model):
         mk = wmask(m)
         if mk is not None:
             out[id(m.weight)] = mk
+            if m.bias is not None:
+                out[id(m.bias)] = (mk != 0).any(dim=1).to(mk.dtype)
     return out
 
 
@@ -138,6 +141,8 @@ class ForwardGradient(Learner):
         for mod_name, m in model.named_modules():
             if isinstance(m, nn.Linear) and wmask(m) is not None:
                 self.name_mask[mod_name + ".weight"] = wmask(m)
+                if m.bias is not None:
+                    self.name_mask[mod_name + ".bias"] = self.masks[id(m.bias)]
 
     def estimate(self, xb, yb):
         params = {n: p.detach() for n, p in self.model.named_parameters()}
@@ -211,6 +216,9 @@ class NodePerturbation(Learner):
         for i, m in enumerate(L):
             a = F.linear(h, eff_w(m), m.bias)
             xi = torch.randn_like(a) * self.sigma
+            bm = self.masks.get(id(m.bias)) if m.bias is not None else None
+            if bm is not None:
+                xi = xi * bm[None, :]                            # 들어오는 연결이 없는 뉴런은 흔들지 않는다
             a = a + xi
             xis.append(xi)
             h = torch.relu(a) if i < len(L) - 1 else a

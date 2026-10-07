@@ -66,6 +66,18 @@ def get_mnist(device):
     return _DATA["mnist"]
 
 
+def get_mnist_split(device, n_val: int = 5000):
+    """v3 프로토콜 (검토 반영 2026-10-07): 훈련 60k 중 5k 를 고정 검증으로 뗀다. 학습률 선택·수락·마지막 3 평가는 검증으로,
+    시험 집합은 최종 보고에만 쓴다. 분할은 시드와 무관하게 고정(generator 12345)."""
+    if "mnist_split" not in _DATA:
+        x_tr, y_tr, x_te, y_te = get_mnist(device)
+        g = torch.Generator(device="cpu").manual_seed(12345)
+        perm = torch.randperm(x_tr.shape[0], generator=g).to(device)
+        val, tr = perm[:n_val], perm[n_val:]
+        _DATA["mnist_split"] = (x_tr[tr], y_tr[tr], x_tr[val], y_tr[val], x_te, y_te)
+    return _DATA["mnist_split"]
+
+
 def linears(model: nn.Module) -> List[nn.Linear]:
     return [m for m in model.net if isinstance(m, nn.Linear)]
 
@@ -93,6 +105,11 @@ def build_company(company: str, density: float, seed: int, device) -> Tuple[nn.M
     m = MLP((1, 28, 28), 10, hidden=(1024, 1024))
     if company == "dense":
         return m.to(device), info
+    if company == "pruned_reinit":
+        # 학습 마스크는 그대로, 초기값만 다른 시드로 — 마스크가 그 초기값에 맞춰 골라진 '슈퍼마스크' 결합을 끊는다 (검토 반영)
+        set_seed(seed + 500)
+        m = MLP((1, 28, 28), 10, hidden=(1024, 1024))
+        info["init_seed"] = seed + 500
     m = convert_to_masked(m).to(device)
     p = mask_path(density, seed)
     masks = torch.load(p, map_location="cpu")
