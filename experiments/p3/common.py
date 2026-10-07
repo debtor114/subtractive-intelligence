@@ -31,8 +31,32 @@ from utils.tensor_data import load_mnist_tensors                                
 RES_P3 = os.path.join(REPO_ROOT, "results", "p3")
 MASK_DIR = os.path.join(REPO_ROOT, "results", "p2", "masks")
 BIG = n_weights(1024)
-COMPANIES = ("dense", "pruned", "random_mask", "dense_small")
+COMPANIES = ("dense", "pruned", "random_mask", "dense_small", "random_degree")
 _DATA: Dict[str, tuple] = {}
+
+
+def degree_preserving_rewire(mask: torch.Tensor, gen: torch.Generator, rounds: int = 10) -> torch.Tensor:
+    """학습 마스크의 모든 뉴런 차수(행합·열합)를 그대로 두고 '어느 쌍이 연결됐나' 만 섞는다 (Maslov-Sneppen 간선 교환).
+    (i1,j1),(i2,j2) -> (i1,j2),(i2,j1) 교환을 간선 수 x rounds 번 시도. 살아 있는 뉴런 집합이 학습 마스크와 같아진다."""
+    m = mask.clone().bool().cpu()
+    edges = m.nonzero()                                  # (E, 2)
+    E = edges.shape[0]
+    if E < 2:
+        return m
+    for _ in range(rounds):
+        perm = torch.randperm(E, generator=gen)
+        for a, b in zip(perm[0::2].tolist(), perm[1::2].tolist()):
+            i1, j1 = int(edges[a, 0]), int(edges[a, 1])
+            i2, j2 = int(edges[b, 0]), int(edges[b, 1])
+            if i1 == i2 or j1 == j2 or m[i1, j2] or m[i2, j1]:
+                continue
+            m[i1, j1] = False
+            m[i2, j2] = False
+            m[i1, j2] = True
+            m[i2, j1] = True
+            edges[a, 1], edges[b, 1] = j2, j1
+    assert int(m.sum()) == E and torch.equal(m.sum(1), mask.bool().cpu().sum(1)) and torch.equal(m.sum(0), mask.bool().cpu().sum(0))
+    return m
 
 
 def get_mnist(device):
@@ -82,6 +106,8 @@ def build_company(company: str, density: float, seed: int, device) -> Tuple[nn.M
                 flat = torch.zeros(mk.numel(), dtype=torch.bool)
                 flat[torch.randperm(mk.numel(), generator=g)[:k]] = True
                 mk = flat.view_as(mk)
+            elif company == "random_degree":
+                mk = degree_preserving_rewire(mk, g)
             mod.weight_mask.copy_(mk.to(device=device, dtype=mod.weight_mask.dtype))
     apply_masks(m)
     return m, info

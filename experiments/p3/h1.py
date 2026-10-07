@@ -42,6 +42,10 @@ from utils.seed import set_seed                                                 
 from utils.tensor_data import TensorBatches                                      # noqa: E402
 
 CRITERIA = ("magnitude", "rank1_pre", "rank1_prepost", "rank1_now", "conn_drive", "rank1_reward", "rank1_conf", "random")
+# 검토 반영 (2026-10-07 오전): Wanda 충실 재현 — abs(w) x ||X_j||_2 (스트림 전체의 입력 l2 노름), 출력 행별 top-k.
+# wanda_global 은 같은 점수를 층 전역 순위로, rank1_prepost_row 는 우리 기준을 행별로 — '나가는 흐름' 효과와 '행별 입도' 효과를 가른다.
+EXTRA_CRITERIA = ("wanda_row", "wanda_global", "rank1_prepost_row", "magnitude_row")
+ROWWISE = {"wanda_row", "rank1_prepost_row", "magnitude_row"}
 DENSITIES = (0.02, 0.01, 0.005)
 GRADUAL_DENSITIES = (0.01, 0.005)
 STREAM_BS = 500
@@ -91,12 +95,14 @@ class NeuronTraces:
         self.t_out: Dict[str, torch.Tensor] = {}
         self.r_loss: Dict[str, torch.Tensor] = {}
         self.r_conf: Dict[str, torch.Tensor] = {}
+        self.sq_in: Dict[str, torch.Tensor] = {}         # 입력 제곱합 (Wanda 의 ||X_j||_2 용, EMA 아님)
         self.R: Dict[str, torch.Tensor] = {}
         self.handles = []
         mods = masked_modules(model)
         for i, (name, mod) in enumerate(mods):
             dev = mod.weight.device
             self.t_in[name] = torch.zeros(mod.in_features, device=dev)
+            self.sq_in[name] = torch.zeros(mod.in_features, device=dev)
             self.t_out[name] = torch.zeros(mod.out_features, device=dev)
             self.r_loss[name] = torch.zeros(mod.out_features, device=dev)
             self.r_conf[name] = torch.zeros(mod.out_features, device=dev)
@@ -108,6 +114,7 @@ class NeuronTraces:
             with torch.no_grad():
                 x = inp[0].detach().float()
                 post = out.detach().float() if last else torch.relu(out.detach().float())
+                self.sq_in[name].add_((x * x).sum(0))
                 self._pending[name] = (x.abs().mean(0), post.abs().mean(0), post)
         return hook
 
@@ -174,6 +181,12 @@ def scores_for(model: nn.Module, crit: str, traces: NeuronTraces, tracker: Activ
             s = w * tin[None, :] * _rank_factor(traces.r_conf[name])[:, None]
         elif crit == "random":
             s = torch.rand(w.shape, generator=gen, device="cpu").to(w.device)
+        elif crit in ("wanda_row", "wanda_global"):
+            s = w * traces.sq_in[name].sqrt()[None, :]
+        elif crit == "rank1_prepost_row":
+            s = w * tin[None, :] * tout[:, None]
+        elif crit == "magnitude_row":
+            s = w
         else:
             raise KeyError(crit)
         out[name] = torch.nan_to_num(s, nan=0.0, posinf=0.0, neginf=0.0)
@@ -186,6 +199,25 @@ def prune_layerwise(model: nn.Module, scores: Dict[str, torch.Tensor], targets: 
         k = int(round(targets[name] * m.weight_mask.numel()))
         _keep_topk(m, scores[name], k)
     apply_masks(model)
+
+
+@torch.no_grad()
+def prune_rowwise(model: nn.Module, scores: Dict[str, torch.Tensor], targets: Dict[str, float]) -> None:
+    """Wanda 식 입도: 출력 뉴런(행)마다 같은 수 k_row = round(밀도 x in_features) 를 살아 있는 연결 중 점수 상위로 남긴다."""
+    for name, m in masked_modules(model):
+        k_row = max(1, int(round(targets[name] * m.in_features)))
+        alive = m.weight_mask.bool()
+        sc = torch.where(alive, scores[name], torch.full_like(scores[name], float("-inf")))
+        idx = torch.topk(sc, min(k_row, m.in_features), dim=1, largest=True).indices
+        new = torch.zeros_like(alive)
+        new.scatter_(1, idx, True)
+        new &= alive
+        m.weight_mask.copy_(new.to(m.weight_mask.dtype))
+    apply_masks(model)
+
+
+def prune_by(crit: str, model, scores, targets):
+    (prune_rowwise if crit in ROWWISE else prune_layerwise)(model, scores, targets)
 
 
 def cubic_schedule(final: float, n: int = 4) -> List[float]:
@@ -201,6 +233,7 @@ def fresh_masked(dense_state: dict, seed: int, device) -> nn.Module:
 
 def run_h1(cfg: dict, log=print) -> dict:
     seed = int(cfg["seed"])
+    crits = CRITERIA + EXTRA_CRITERIA if cfg.get("criteria") == "all" else CRITERIA
     device = torch.device("cuda")
     x_tr, y_tr, x_te, y_te = get_mnist(device)
     dense = train_dense(seed, device, log)
@@ -221,15 +254,15 @@ def run_h1(cfg: dict, log=print) -> dict:
     for D in DENSITIES:
         targets = per_layer_targets(D, seed, names)
         res["allocation"][f"{D:g}"] = targets
-        for crit in CRITERIA:
+        for crit in crits:
             model.load_state_dict(base_state)
             for _, m in masked_modules(model):
                 m.weight_mask.fill_(1.0)
-            prune_layerwise(model, scores_for(model, crit, traces, tracker, gen), targets)
+            prune_by(crit, model, scores_for(model, crit, traces, tracker, gen), targets)
             acc = evaluate(model, x_te, y_te)
             res["oneshot"].setdefault(crit, {})[f"{D:g}"] = {"acc": acc, "active": count_active(model),
                                                               "alive_hidden": alive_hidden_neurons(model)}
-        log(f"  [h1 s{seed}] one-shot d={D:g}: " + " ".join(f"{c}={res['oneshot'][c][f'{D:g}']['acc']:.3f}" for c in CRITERIA)
+        log(f"  [h1 s{seed}] one-shot d={D:g}: " + " ".join(f"{c}={res['oneshot'][c][f'{D:g}']['acc']:.3f}" for c in crits)
             + f" ({time.time() - t0:.0f}s)")
     traces.remove()
     tracker.remove()
@@ -237,7 +270,7 @@ def run_h1(cfg: dict, log=print) -> dict:
     # gradual: 결산 4 회, 결산마다 가지치기된 망으로 스트림 재적립
     for D in GRADUAL_DENSITIES:
         final_targets = per_layer_targets(D, seed, names)
-        for crit in CRITERIA:
+        for crit in crits:
             model = fresh_masked(dense_state, seed, device)
             traj = []
             for d_k in cubic_schedule(D):
@@ -246,7 +279,7 @@ def run_h1(cfg: dict, log=print) -> dict:
                 traces, tracker = NeuronTraces(model), ActivityTracker(model, momentum=0.99)
                 set_seed(seed + 11)
                 stream(model, x_tr, y_tr, traces, tracker, device)
-                prune_layerwise(model, scores_for(model, crit, traces, tracker, gen), targets)
+                prune_by(crit, model, scores_for(model, crit, traces, tracker, gen), targets)
                 traces.remove()
                 tracker.remove()
                 traj.append({"density": sum(targets[n] * dict(masked_modules(model))[n].weight_mask.numel() for n in names)
@@ -254,7 +287,7 @@ def run_h1(cfg: dict, log=print) -> dict:
                              "acc": evaluate(model, x_te, y_te)})
             res["gradual"].setdefault(crit, {})[f"{D:g}"] = {"acc": traj[-1]["acc"], "traj": traj,
                                                               "active": count_active(model), "alive_hidden": alive_hidden_neurons(model)}
-        log(f"  [h1 s{seed}] gradual d={D:g}: " + " ".join(f"{c}={res['gradual'][c][f'{D:g}']['acc']:.3f}" for c in CRITERIA)
+        log(f"  [h1 s{seed}] gradual d={D:g}: " + " ".join(f"{c}={res['gradual'][c][f'{D:g}']['acc']:.3f}" for c in crits)
             + f" ({time.time() - t0:.0f}s)")
     res["elapsed_s"] = time.time() - t0
     out = cfg.get("out") or os.path.join(H1_DIR, f"seed{seed}.json")

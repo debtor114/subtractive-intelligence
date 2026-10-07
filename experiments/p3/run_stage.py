@@ -156,7 +156,74 @@ def stage_h2v2(st: Stage):
                         break
 
 
-STAGES = {"lr": stage_lr, "h2": stage_h2, "h1": stage_h1, "h2v2": stage_h2v2}
+def _lr_select_for(st: Stage, arms):
+    sel = json.load(open(LR_FILE, encoding="utf-8")) if os.path.exists(LR_FILE) else {}
+    for company, d in arms:
+        for lname in LEARNERS:
+            best = None
+            for lr in LR_GRID[lname]:
+                out = os.path.join(RES_P3, "lr", f"{company}_d{d:g}", f"{lname}_lr{lr:g}.json")
+                st.run_one(run_h2, {"company": company, "density": d, "seed": 0, "learner": lname, "lr": lr, "epochs": 3,
+                                    "probe_every": 0}, out)
+                if os.path.exists(out):
+                    acc = json.load(open(out, encoding="utf-8"))["last3_mean"]
+                    if best is None or acc > best[1]:
+                        best = (lr, acc)
+            if best:
+                sel[lr_key(company, d, lname)] = {"lr": best[0], "acc3ep": best[1]}
+            with open(LR_FILE, "w", encoding="utf-8") as f:
+                json.dump(sel, f, indent=1)
+            log(f"[lr] {lr_key(company, d, lname)} -> {best}")
+
+
+def _v2_runs_for(st: Stage, arms, seeds=SEEDS, learners=V2_LEARNERS, epochs=15, sub="h2v2"):
+    import shutil
+    sel = json.load(open(LR_FILE, encoding="utf-8")) if os.path.exists(LR_FILE) else {}
+    for seed in seeds:
+        for company, d in arms:
+            for lname in learners:
+                out = out_path(company, d, lname, seed, sub=sub)
+                if os.path.exists(out):
+                    continue
+                lr0 = sel.get(lr_key(company, d, lname), {}).get("lr", LR_GRID[lname][len(LR_GRID[lname]) // 2])
+                for attempt, lr in enumerate([lr0, lr0 / 3.0, lr0 / 10.0]):
+                    tmp = out.replace(".json", f"_try{attempt}.json")
+                    if not os.path.exists(tmp):
+                        status = st.run_one(run_h2, {"company": company, "density": d, "seed": seed, "learner": lname,
+                                                     "lr": lr, "sched": "cosine", "attempt": attempt, "epochs": epochs}, tmp)
+                        if status in ("deadline", "stage-skipped", "error"):
+                            break
+                    r = json.load(open(tmp, encoding="utf-8"))
+                    ok = (not r.get("diverged")) and (r["final_acc"] >= 0.15 or r["best_acc"] < 0.3)
+                    if ok or attempt == 2:
+                        shutil.copyfile(tmp, out)
+                        log(f"[v2] {lr_key(company, d, lname)} s{seed} ep{epochs}: lr {lr:g} (attempt {attempt}) final {r['final_acc']:.4f}"
+                            + (" diverged" if r.get("diverged") else ""))
+                        break
+
+
+def stage_h2deg(st: Stage):
+    """검토 반영 (2026-10-07 오전): 차수 보존 무작위 마스크 회사 (random_degree) — 학습 마스크와 모든 뉴런의 입·출력 연결 수가 같고
+    '어느 쌍이 연결됐나' 만 다르다. 끊긴 뉴런 때문에 무작위 마스크가 불리했는지 가른다."""
+    arms = [("random_degree", 0.005), ("random_degree", 0.01)]
+    _lr_select_for(st, arms)
+    _v2_runs_for(st, arms)
+
+
+def stage_h2long(st: Stage):
+    """검토 반영: 수렴 확인 — fg·np 를 45 에폭 (코사인) 으로, 핵심 회사 4 개, seed 0. results/p3/h2long/."""
+    arms = [("pruned", 0.005), ("dense_small", 0.005), ("random_degree", 0.005), ("random_mask", 0.005), ("dense", 1.0)]
+    _v2_runs_for(st, arms, seeds=[0], learners=["fg", "np"], epochs=45, sub="h2long")
+
+
+def stage_h1b(st: Stage):
+    """검토 반영: Wanda 충실 재현 (abs(w) x ||X_j||_2, 출력 행별 top-k) 과 행별 변형을 포함한 H1 재실행. results/p3/h1b/."""
+    from experiments.p3.h1 import run_h1 as _run_h1
+    for seed in SEEDS:
+        st.run_one(_run_h1, {"seed": seed, "criteria": "all"}, os.path.join(RES_P3, "h1b", f"seed{seed}.json"))
+
+
+STAGES = {"lr": stage_lr, "h2": stage_h2, "h1": stage_h1, "h2v2": stage_h2v2, "h2deg": stage_h2deg, "h2long": stage_h2long, "h1b": stage_h1b}
 
 if __name__ == "__main__":
     for name in sys.argv[1:]:
