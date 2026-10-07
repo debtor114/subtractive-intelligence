@@ -82,6 +82,27 @@ def stage_npb():
             guarded(run_h3, {"company": "dense", "density": 1.0, "seed": s, "learner": "np", "lr": best[0], "epochs": 15, **extra}, out)
 
 
+def stage_npb2():
+    """P4-B2 (03:57 추가 등록): 가중치 감쇠를 학습 마스크 1%·같은 예산 작은 밀집망에도 줘서 '희소성 자체' 의 몫을 가른다."""
+    for company in ("pruned", "dense_small"):
+        cond = f"wd_{company}"
+        best = None
+        for lr in NPB_GRID:
+            out = os.path.join(RES, "npb", "lr", cond, f"lr{lr:g}.json")
+            guarded(run_h3, {"company": company, "density": 0.01, "seed": 0, "learner": "np", "lr": lr, "epochs": 5, "probe_every": 0,
+                             "wd": 5e-4}, out)
+            if os.path.exists(out):
+                r = json.load(open(out, encoding="utf-8"))
+                if not r.get("failed") and (best is None or r["last3_val"] > best[1]):
+                    best = (lr, r["last3_val"])
+        log(f"[npb2] {cond} lr -> {best}")
+        if best is None:
+            continue
+        for sd in SEEDS:
+            out = os.path.join(RES, "npb", cond, f"seed{sd}.json")
+            guarded(run_h3, {"company": company, "density": 0.01, "seed": sd, "learner": "np", "lr": best[0], "epochs": 15, "wd": 5e-4}, out)
+
+
 def lr_file():
     return os.path.join(RES, "lr_select.json")
 
@@ -149,18 +170,20 @@ def summarize():
                  f"{np.mean(auc):.1f}±{np.std(auc):.1f} (n{len(fit)}) | {np.mean(last):.1f}±{np.std(last):.1f} | {np.mean(fg_):.1f} | {fe:.1f} | "
                  f"{np.mean([r['elapsed_s'] for r in fit]):.0f} |")
     npb = ["", "## P4-B 노드 섭동 안정성 대조 (MNIST 밀집 MLP, v3 프로토콜, 시험 정확도 %)", "", "| 조건 | 정확도 | 실패 | 학습률 |", "|---|---|---|---|"]
-    for cond in ("rownorm", "wd"):
+    names = {"rownorm": "밀집 + 행별 가중치 정규화", "wd": "밀집 + 가중치 감쇠 5e-4", "wd_pruned": "학습 마스크 1% + 가중치 감쇠 5e-4",
+             "wd_dense_small": "같은 예산 작은 밀집망 1% + 가중치 감쇠 5e-4"}
+    for cond, nm in names.items():
         rs = [json.load(open(p, encoding="utf-8")) for p in sorted(glob.glob(os.path.join(RES, "npb", cond, "seed*.json")))]
         if rs:
             a = [100 * r["last3_test"] for r in rs]
-            npb.append(f"| 밀집 + {'행별 가중치 정규화' if cond == 'rownorm' else '가중치 감쇠 5e-4'} | {np.mean(a):.1f}±{np.std(a):.1f} (n{len(rs)}) | "
-                       f"{sum(r['failed'] for r in rs)}/{len(rs)} | {rs[0]['lr_selected']:g} |")
+            npb.append(f"| {nm} | {np.mean(a):.1f}±{np.std(a):.1f} (n{len(rs)}) | {sum(r['failed'] for r in rs)}/{len(rs)} | {rs[0]['lr_selected']:g} |")
+    npb.append("| (참고, p3 v3) 밀집 / 학습 마스크 1% / 작은 밀집망 1%, 감쇠 없음 | 63.4 (실패 3/3) / 91.1 / 91.6 | | |")
     md = "\n".join(L + npb)
     open(os.path.join(RES, "tables.md"), "w", encoding="utf-8").write(md)
     print(md)
 
 
-STAGES = {"npb": stage_npb, "lr": stage_lr, "main": stage_main, "summarize": summarize}
+STAGES = {"npb": stage_npb, "npb2": stage_npb2, "lr": stage_lr, "main": stage_main, "summarize": summarize}
 
 if __name__ == "__main__":
     os.makedirs(RES, exist_ok=True)
