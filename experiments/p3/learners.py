@@ -74,7 +74,15 @@ class Learner:
         if cfg.get("opt", "sgd") == "adam":
             self.opt = torch.optim.Adam(model.parameters(), lr=lr)
         else:
-            self.opt = torch.optim.SGD(model.parameters(), lr=lr, momentum=float(cfg.get("momentum", 0.9)))
+            self.opt = torch.optim.SGD(model.parameters(), lr=lr, momentum=float(cfg.get("momentum", 0.9)),
+                                       weight_decay=float(cfg.get("wd", 0.0)))
+        # p4 P4-B (2026-10-08): 행별 가중치 정규화 — 매 스텝 뒤 각 출력 뉴런의 입력 가중치 노름을 초기값으로 되돌린다 (가중치 확산 억제)
+        self.rownorm = bool(cfg.get("rownorm", False))
+        self.row0 = {}
+        if self.rownorm:
+            with torch.no_grad():
+                for m in linears(model):
+                    self.row0[id(m)] = eff_w(m).norm(dim=1, keepdim=True).clamp_min(1e-12).clone()
 
     def estimate(self, xb: torch.Tensor, yb: torch.Tensor) -> float:
         raise NotImplementedError
@@ -83,6 +91,11 @@ class Learner:
         loss = self.estimate(xb, yb)
         self.opt.step()
         apply_masks(self.model)
+        if self.rownorm:
+            with torch.no_grad():
+                for m in linears(self.model):
+                    n = eff_w(m).norm(dim=1, keepdim=True).clamp_min(1e-12)
+                    m.weight.mul_(self.row0[id(m)] / n)
         return loss
 
 
