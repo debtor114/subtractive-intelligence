@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import copy
 import json
+from collections import deque
 import math
 import os
 import sys
@@ -35,6 +36,8 @@ from utils.tensor_data import TensorBatches                                     
 BS = 128
 EVAL_EVERY = 100
 MAX_BACKOFF = 5
+LOSS_BLOWUP = 20.0       # MNIST CE 는 우연 수준에서 2.3. 배치 손실이 20 을 넘으면 발산으로 본다 (v3.1)
+RING = 3                 # 체크포인트 3 개(최대 300 스텝 전)를 들고 있다가 가장 오래된 것으로 되돌린다 (v3.1)
 
 
 def out_path(company: str, density: float, learner: str, seed: int, sub: str = "h3") -> str:
@@ -68,7 +71,9 @@ def run_h3(cfg: dict, log=print) -> dict:
         return va, te
 
     record(0, 0, float("nan"))                                       # 학습 0걸음
-    ckpt = snapshot()
+    ckpts = deque(maxlen=RING)
+    ckpts.append((0, 0, snapshot()))
+    backoff_log: List[Dict] = []
     step, samples = 0, 0
     model.train()
     while step < total and not failed:
@@ -84,12 +89,12 @@ def run_h3(cfg: dict, log=print) -> dict:
             loss = learner.step(xb, yb)
             step += 1
             samples += int(idx.numel())
-            if not math.isfinite(loss) or (step % EVAL_EVERY == 0 and not params_finite(model)):
+            if (not math.isfinite(loss)) or loss > LOSS_BLOWUP or (step % EVAL_EVERY == 0 and not params_finite(model)):
                 diverged_now = True
                 break
             if step % EVAL_EVERY == 0 or step == total:
                 va, te = record(step, samples, loss)
-                ckpt = snapshot()
+                ckpts.append((step, samples, snapshot()))
                 if step % (EVAL_EVERY * 10) == 0 or step == total:
                     log(f"  [{company} d={density:g} {lname} lr={base_lr:g} s{seed}] step {step}/{total} val {va:.4f} test {te:.4f} "
                         f"loss {loss:.3f} bo {backoffs} ({time.time() - t0:.0f}s)")
@@ -101,11 +106,19 @@ def run_h3(cfg: dict, log=print) -> dict:
                 failed = True
                 log(f"  [{company} d={density:g} {lname} s{seed}] FAILED after {MAX_BACKOFF} backoffs at step {step}")
                 break
-            model.load_state_dict(ckpt[0])
-            learner.opt.load_state_dict(ckpt[1])
-            step, samples = curve[-1]["step"], curve[-1]["samples"]
+            # v3.1: 직전 체크포인트는 이미 '터지기 직전(유한하지만 큰 가중치)' 일 수 있어 가장 오래된 링 체크포인트로 되돌린다
+            div_step = step
+            s0, n0, (ms, os_) = ckpts[0]
+            model.load_state_dict(ms)
+            learner.opt.load_state_dict(os_)
+            step, samples = s0, n0
+            while len(curve) > 1 and curve[-1]["step"] > s0:
+                curve.pop()
+            ckpts.clear()
+            ckpts.append((s0, n0, (ms, os_)))
             base_lr *= 0.5
-            log(f"  [{company} d={density:g} {lname} s{seed}] diverged at step {step}: restore + lr -> {base_lr:g} (backoff {backoffs})")
+            backoff_log.append({"diverged_at": div_step, "restored_to": s0, "new_base_lr": base_lr})
+            log(f"  [{company} d={density:g} {lname} s{seed}] diverged at step {div_step}: restore to {s0} + lr -> {base_lr:g} (backoff {backoffs})")
             model.train()
     last3 = curve[-3:]
     res = {
@@ -114,7 +127,8 @@ def run_h3(cfg: dict, log=print) -> dict:
         "last3_val": sum(c["val_acc"] for c in last3) / len(last3), "last3_test": sum(c["test_acc"] for c in last3) / len(last3),
         "final_val": curve[-1]["val_acc"], "final_test": curve[-1]["test_acc"],
         "best_val": max(c["val_acc"] for c in curve), "test_at_best_val": max(curve, key=lambda c: c["val_acc"])["test_acc"],
-        "backoffs": backoffs, "lr_selected": lr0, "lr_final": base_lr, "failed": failed,
+        "backoffs": backoffs, "lr_selected": lr0, "lr_final": base_lr, "failed": failed, "backoff_log": backoff_log,
+        "protocol_rev": "v3.1",
         "active_weights": count_active(model), "hidden_neurons": hidden_neurons(model), "alive_hidden": alive_hidden_neurons(model),
         "n_params": sum(p.numel() for p in model.parameters()),
         "n_perturbed": int(sum((learner.masks[id(p)] != 0).sum().item() if id(p) in learner.masks else p.numel() for p in model.parameters())),
